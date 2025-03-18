@@ -29,7 +29,9 @@ class TestContactListPage:
         page.open()
         page.should_be_contact_list_page()
 
-    def test_logout(self, browser: webdriver.Firefox | webdriver.Chrome, setup_user):
+    def test_logout(
+        self, browser: webdriver.Firefox | webdriver.Chrome, setup_user
+    ):
         logger.info("Starting Test: logout.")
 
         link = base_url + "contactList"
@@ -71,9 +73,13 @@ class TestContactListPage:
 
         page.add_new_contact(*create_contact_info)
 
-        WebDriverWait(browser, 10).until(EC.url_to_be(base_url + "contactList"))
+        WebDriverWait(browser, 10).until(
+            EC.url_to_be(base_url + "contactList")
+        )
 
-        contact_list_page = ContactListPage(browser=browser, url=browser.current_url)
+        contact_list_page = ContactListPage(
+            browser=browser, url=browser.current_url
+        )
 
         contact_list_page.go_to_contact_details_by_full_name(
             first_name=create_contact_info[0], last_name=create_contact_info[1]

@@ -51,10 +51,13 @@ def auth_headers():
 
     logger.info("Login with My Email.")
     response_json = request_utility.post(
-        endpoint="users/login", payload={"email": my_email, "password": my_pass}
+        endpoint="users/login",
+        payload={"email": my_email, "password": my_pass},
     )
 
-    assert response_json is not None, "Response is None, but expected JSON response."
+    assert (
+        response_json is not None
+    ), "Response is None, but expected JSON response."
     token = response_json["token"]
 
     yield {"Authorization": f"Bearer {token}"}
@@ -95,9 +98,13 @@ def manage_contacts(auth_headers, pytestconfig):
                     )
                     logger.info(f"Deleted contact: {contact_id}")
             except AssertionError as e:
-                logger.info(f"Contact {contact_id} already deleted or not found: {e}")
+                logger.info(
+                    f"Contact {contact_id} already deleted or not found: {e}"
+                )
             except Exception as e:
-                logger.error(f"Error while trying to delete contact {contact_id}: {e}")
+                logger.error(
+                    f"Error while trying to delete contact {contact_id}: {e}"
+                )
 
 
 @pytest.fixture
@@ -140,7 +147,9 @@ def browser(pytestconfig):
 
 
 @pytest.fixture(autouse=True)
-def del_all_contacts(browser: webdriver.Firefox | webdriver.Chrome, pytestconfig):
+def del_all_contacts(
+    browser: webdriver.Firefox | webdriver.Chrome, pytestconfig
+):
     yield
     if pytestconfig.getoption("--rm"):
         logger.info("Delete all contacts.")
@@ -181,7 +190,9 @@ def setup_user(browser: webdriver.Firefox | webdriver.Chrome):
 
 
 @pytest.fixture(scope="function")
-def create_contact_info(browser: webdriver.Firefox | webdriver.Chrome, setup_user):
+def create_contact_info(
+    browser: webdriver.Firefox | webdriver.Chrome, setup_user
+):
     logger.info("Create contact.")
     link = base_url + "addContact"
     page = AddNewContactPage(browser=browser, url=link)
@@ -224,7 +235,8 @@ def created_contact(
 ):
     logger.info(
         f"Creating contact wit\n"
-        f"contact first name: {create_contact_info[0]}, last name: {create_contact_info[1]}"
+        f"contact first name: {create_contact_info[0]}, "
+        f"last name: {create_contact_info[1]}"
     )
     add_new_contact_link = base_url + "addContact"
     page = AddNewContactPage(browser=browser, url=add_new_contact_link)
@@ -234,12 +246,16 @@ def created_contact(
 
     WebDriverWait(browser, 10).until(EC.url_to_be(base_url + "contactList"))
 
-    contact_list_page = ContactListPage(browser=browser, url=browser.current_url)
+    contact_list_page = ContactListPage(
+        browser=browser, url=browser.current_url
+    )
 
     contact_list_page.go_to_contact_details_by_full_name(
         first_name=create_contact_info[0], last_name=create_contact_info[1]
     )
 
-    contact_details_page = ContactDetailsPage(browser=browser, url=browser.current_url)
+    contact_details_page = ContactDetailsPage(
+        browser=browser, url=browser.current_url
+    )
 
     return contact_details_page, create_contact_info

@@ -4,7 +4,6 @@ from selenium.webdriver.common.by import By
 
 from src.requests_utilities import RequestUtilities
 
-# from src.host_config import base_url
 
 base_url = RequestUtilities.get_base_url()
 

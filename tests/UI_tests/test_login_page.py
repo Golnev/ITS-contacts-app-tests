@@ -31,7 +31,9 @@ class TestLoginPage:
         page.open()
         page.should_be_login_page()
 
-    def test_login(self, browser: webdriver.Firefox | webdriver.Chrome, setup_user):
+    def test_login(
+        self, browser: webdriver.Firefox | webdriver.Chrome, setup_user
+    ):
         logger.info("Starting Test: login")
         link = base_url + "login"
         page = LoginPage(browser=browser, url=link)
@@ -43,7 +45,9 @@ class TestLoginPage:
         if email and password:
             page.login(email=email, password=password)
 
-        WebDriverWait(browser, 10).until(EC.url_to_be(base_url + "contactList"))
+        WebDriverWait(browser, 10).until(
+            EC.url_to_be(base_url + "contactList")
+        )
 
         assert (
             page.browser.current_url == base_url + "contactList"

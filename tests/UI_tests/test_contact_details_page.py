@@ -61,7 +61,9 @@ class TestContactDetailsPage:
 
         page.return_to_contact_list()
 
-        contact_list_page = ContactListPage(browser=browser, url=browser.current_url)
+        contact_list_page = ContactListPage(
+            browser=browser, url=browser.current_url
+        )
         contact_list_page.should_be_contact_list_page()
 
     def test_delete_contact(
@@ -76,9 +78,13 @@ class TestContactDetailsPage:
 
         page.delete_contact()
 
-        WebDriverWait(browser, 10).until(EC.url_to_be(base_url + "contactList"))
+        WebDriverWait(browser, 10).until(
+            EC.url_to_be(base_url + "contactList")
+        )
 
-        contact_list_page = ContactListPage(browser=browser, url=browser.current_url)
+        contact_list_page = ContactListPage(
+            browser=browser, url=browser.current_url
+        )
         contact_list_page.should_be_contact_list_page()
         contact_list_page.contact_is_not_present_in_contact_list(
             first_name=contact_info[0], last_name=contact_info[1]
@@ -96,7 +102,11 @@ class TestContactDetailsPage:
 
         page.go_to_edit_contact_page()
 
-        WebDriverWait(browser, 10).until(EC.url_to_be(base_url + "editContact"))
+        WebDriverWait(browser, 10).until(
+            EC.url_to_be(base_url + "editContact")
+        )
 
-        edit_contact_page = EditContactPage(browser=browser, url=browser.current_url)
+        edit_contact_page = EditContactPage(
+            browser=browser, url=browser.current_url
+        )
         edit_contact_page.should_be_edit_contact_page()

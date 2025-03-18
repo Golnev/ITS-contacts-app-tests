@@ -8,7 +8,7 @@ from src.requests_utilities import RequestUtilities
 class ContactsHelper:
     def __init__(self):
         self.request_utility = RequestUtilities()
-        self.FULL_CONTACT: int = 11
+        self.full_contact: int = 11
 
     def create_contact(self, auth_headers: dict):
         logger.info("Create new contact.")
@@ -81,7 +81,7 @@ class ContactsHelper:
         contact_id: str,
         expected_status_code: int = 200,
     ):
-        if len(payload) == self.FULL_CONTACT:
+        if len(payload) == self.full_contact:
             logger.info("Update contact with PUT.")
 
             rs_update_contact = self.request_utility.put(
@@ -92,7 +92,7 @@ class ContactsHelper:
             )
             return rs_update_contact
 
-        if len(payload) < self.FULL_CONTACT:
+        if len(payload) < self.full_contact:
             logger.info("Update contact with PATCH.")
 
             rs_update_contact = self.request_utility.patch(

@@ -61,7 +61,9 @@ class TestEditContactPage:
         setup_user,
         created_contact: tuple[ContactDetailsPage, tuple],
     ):
-        logger.info("Starting Test: return to contact details from edit contact page.")
+        logger.info(
+            "Starting Test: return to contact details from edit contact page."
+        )
 
         contact_page, _ = created_contact
         contact_page.go_to_edit_contact_page()

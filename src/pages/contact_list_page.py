@@ -16,7 +16,8 @@ class ContactListPage(BasePage):
         logger.info("Check contact list url.")
 
         assert (
-            self.browser.current_url == ContactListPageLocators.CONTACT_LIST_PAGE_URL
+            self.browser.current_url
+            == ContactListPageLocators.CONTACT_LIST_PAGE_URL
         ), "URL address is not correct."
 
     def should_be_add_new_contact_button(self):
@@ -53,7 +54,9 @@ class ContactListPage(BasePage):
         logger.info("Find contact by full name.")
 
         full_name = " ".join([first_name, last_name])
-        rows = self.browser.find_elements(*ContactListPageLocators.FULL_NAME_CONTACTS)
+        rows = self.browser.find_elements(
+            *ContactListPageLocators.FULL_NAME_CONTACTS
+        )
 
         list_of_all_full_names = [row.text for row in rows]
 
@@ -61,10 +64,14 @@ class ContactListPage(BasePage):
             full_name in list_of_all_full_names
         ), f"{first_name} {last_name} not in the contact list."
 
-    def contact_is_not_present_in_contact_list(self, first_name: str, last_name: str):
+    def contact_is_not_present_in_contact_list(
+        self, first_name: str, last_name: str
+    ):
         full_name = " ".join([first_name, last_name])
 
-        rows = self.browser.find_elements(*ContactListPageLocators.FULL_NAME_CONTACTS)
+        rows = self.browser.find_elements(
+            *ContactListPageLocators.FULL_NAME_CONTACTS
+        )
 
         list_of_all_full_names = [row.text for row in rows]
 
@@ -72,7 +79,9 @@ class ContactListPage(BasePage):
             full_name not in list_of_all_full_names
         ), f"{first_name} {last_name} in the contact list."
 
-    def go_to_contact_details_by_full_name(self, first_name: str, last_name: str):
+    def go_to_contact_details_by_full_name(
+        self, first_name: str, last_name: str
+    ):
         logger.info("Go to contact details by full name.")
 
         full_name = " ".join([first_name, last_name])

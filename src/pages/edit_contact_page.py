@@ -18,7 +18,8 @@ class EditContactPage(BasePage):
         logger.info("Check edit contact page url.")
 
         assert (
-            self.browser.current_url == EditContactPageLocators.EDIT_CONTACT_PAGE_URL
+            self.browser.current_url
+            == EditContactPageLocators.EDIT_CONTACT_PAGE_URL
         ), "URL address is not correct."
 
     def should_be_edit_contact_form(self):

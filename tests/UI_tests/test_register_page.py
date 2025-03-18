@@ -28,7 +28,9 @@ class TestRegisterPage:
         page.open()
         page.should_be_register_page()
 
-    def test_register_new_user(self, browser: webdriver.Firefox | webdriver.Chrome):
+    def test_register_new_user(
+        self, browser: webdriver.Firefox | webdriver.Chrome
+    ):
         logger.info("Starting Test: register new user.")
         link = base_url + "addUser"
         page = RegisterPage(browser=browser, url=link)
@@ -41,7 +43,10 @@ class TestRegisterPage:
         user_password = fake.password(length=8, special_chars=False)
         logger.info(
             f"Create fake user with\n"
-            f"first name: {user_first_name}, last name: {user_last_name}, email: {user_email}, password: {user_password}"
+            f"first name: {user_first_name}, "
+            f"last name: {user_last_name}, "
+            f"email: {user_email}, "
+            f"password: {user_password}"
         )
 
         page.register_new_user(
@@ -51,7 +56,9 @@ class TestRegisterPage:
             password=user_password,
         )
 
-        WebDriverWait(browser, 10).until(EC.url_to_be(base_url + "contactList"))
+        WebDriverWait(browser, 10).until(
+            EC.url_to_be(base_url + "contactList")
+        )
 
         assert (
             page.browser.current_url == base_url + "contactList"
@@ -73,7 +80,10 @@ class TestRegisterPage:
         user_password = fake.password(length=4, special_chars=False)
         logger.info(
             f"Create fake user with\n"
-            f"first name: {user_first_name}, last name: {user_last_name}, email: {user_email}, password: {user_password}"
+            f"first name: {user_first_name}, "
+            f"last name: {user_last_name}, "
+            f"email: {user_email}, "
+            f"password: {user_password}"
         )
 
         page.register_new_user(

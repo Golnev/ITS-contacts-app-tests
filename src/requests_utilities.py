@@ -32,12 +32,18 @@ class RequestUtilities:
     def __assert_status_code(self):
         logger.info("Status code check.")
         assert self.status_code == self.expected_status_code, (
-            f"Bad status code. Expected status code: {self.expected_status_code}, "
+            f"Bad status code. "
+            f"Expected status code: {self.expected_status_code}, "
             f"actual status code: {self.status_code}"
         )
         logger.info(f"Status is {self.status_code}")
 
-    def get(self, endpoint: str, headers: dict | None = None, expected_status_code=200):
+    def get(
+        self,
+        endpoint: str,
+        headers: dict | None = None,
+        expected_status_code=200,
+    ):
         logger.info("Starting GET method.")
 
         if not headers:
@@ -57,7 +63,10 @@ class RequestUtilities:
         self.status_code = self.response_api.status_code
         self.__assert_status_code()
 
-        if self.response_api.headers.get("Content-Length") == self.EMPTY_CONTENT_LENGTH:
+        if (
+            self.response_api.headers.get("Content-Length")
+            == self.EMPTY_CONTENT_LENGTH
+        ):
             logger.info("Response has empty body (Content-Length: 0)")
             return None
 
@@ -96,7 +105,10 @@ class RequestUtilities:
 
         self.__assert_status_code()
 
-        if self.response_api.headers.get("Content-Length") == self.EMPTY_CONTENT_LENGTH:
+        if (
+            self.response_api.headers.get("Content-Length")
+            == self.EMPTY_CONTENT_LENGTH
+        ):
             logger.info("Response has empty body (Content-Length: 0)")
             return None
 
@@ -138,7 +150,10 @@ class RequestUtilities:
 
         self.__assert_status_code()
 
-        if self.response_api.headers.get("Content-Length") == self.EMPTY_CONTENT_LENGTH:
+        if (
+            self.response_api.headers.get("Content-Length")
+            == self.EMPTY_CONTENT_LENGTH
+        ):
             logger.info("Response has empty body (Content-Length: 0)")
             return None
 
@@ -180,7 +195,10 @@ class RequestUtilities:
 
         self.__assert_status_code()
 
-        if self.response_api.headers.get("Content-Length") == self.EMPTY_CONTENT_LENGTH:
+        if (
+            self.response_api.headers.get("Content-Length")
+            == self.EMPTY_CONTENT_LENGTH
+        ):
             logger.info("Response has empty body (Content-Length: 0)")
             return None
 
@@ -194,7 +212,10 @@ class RequestUtilities:
         return self.response_json
 
     def delete(
-        self, endpoint: str, headers: dict | None = None, expected_status_code=200
+        self,
+        endpoint: str,
+        headers: dict | None = None,
+        expected_status_code=200,
     ):
         logger.info("Starting DELETE method.")
 

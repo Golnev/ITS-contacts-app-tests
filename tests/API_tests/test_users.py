@@ -12,14 +12,20 @@ def test_add_user(auth_headers):
     logger.info("TEST: Add new user.")
     users_helper = UsersHelper()
     user_rs_api, _ = users_helper.create_user(auth_headers)
-    assert user_rs_api is not None, "Response is None, but expected JSON response."
+    assert (
+        user_rs_api is not None
+    ), "Response is None, but expected JSON response."
 
     get_info_user = users_helper.get_user(
         auth_headers={"Authorization": f'Bearer {user_rs_api["token"]}'}
     )
-    assert get_info_user is not None, "Response is None, but expected JSON response."
+    assert (
+        get_info_user is not None
+    ), "Response is None, but expected JSON response."
 
-    assert user_rs_api["user"]["_id"] == get_info_user["_id"], "User Id does not match."
+    assert (
+        user_rs_api["user"]["_id"] == get_info_user["_id"]
+    ), "User Id does not match."
 
     users_helper.delete_user(
         auth_headers={"Authorization": f'Bearer {user_rs_api["token"]}'}
@@ -81,7 +87,9 @@ def test_update_user(auth_headers):
     users_helper = UsersHelper()
     user_rs_api, user_info = users_helper.create_user(auth_headers)
 
-    assert user_rs_api is not None, "Response is None, but expected JSON response."
+    assert (
+        user_rs_api is not None
+    ), "Response is None, but expected JSON response."
 
     update_user_rs_api, update_user_info = users_helper.update_user(
         auth_headers={"Authorization": f'Bearer {user_rs_api["token"]}'}
@@ -136,7 +144,9 @@ def test_update_user_without_email_or_password(
     users_helper = UsersHelper()
     user_rs_api, _ = users_helper.create_user(auth_headers)
 
-    assert user_rs_api is not None, "Response is None, but expected JSON response."
+    assert (
+        user_rs_api is not None
+    ), "Response is None, but expected JSON response."
 
     request_utility = RequestUtilities()
 
@@ -168,7 +178,9 @@ def test_delete_new_user(auth_headers):
     users_helper = UsersHelper()
     user_rs_api, _ = users_helper.create_user(auth_headers)
 
-    assert user_rs_api is not None, "Response is None, but expected JSON response."
+    assert (
+        user_rs_api is not None
+    ), "Response is None, but expected JSON response."
 
     users_helper.get_user(
         auth_headers={"Authorization": f'Bearer {user_rs_api["token"]}'}

@@ -18,11 +18,18 @@ def test_login_and_logout(auth_headers):
     logger.info(f"Login with user email: {user_info['email']}")
     rs_login_json = request_utility.post(
         endpoint="users/login",
-        payload={"email": user_info["email"], "password": user_info["password"]},
+        payload={
+            "email": user_info["email"],
+            "password": user_info["password"],
+        },
     )
 
-    assert rs_login_json is not None, "Response is None but expected JSON response"
-    assert user_rs_api is not None, "Response is None but expected JSON response"
+    assert (
+        rs_login_json is not None
+    ), "Response is None but expected JSON response"
+    assert (
+        user_rs_api is not None
+    ), "Response is None but expected JSON response"
     assert (
         rs_login_json["user"]["_id"] == user_rs_api["user"]["_id"]
     ), "The IDs of the new user and the registered user do not match."
@@ -38,10 +45,15 @@ def test_login_and_logout(auth_headers):
     logger.info("Deleting a new user")
     rs_login_json = request_utility.post(
         endpoint="users/login",
-        payload={"email": user_info["email"], "password": user_info["password"]},
+        payload={
+            "email": user_info["email"],
+            "password": user_info["password"],
+        },
     )
 
-    assert rs_login_json is not None, "Response is None but expected JSON response"
+    assert (
+        rs_login_json is not None
+    ), "Response is None but expected JSON response"
     users_helper.delete_user(
         auth_headers={"Authorization": f"Bearer {rs_login_json['token']}"}
     )

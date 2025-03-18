@@ -58,7 +58,9 @@ class TestAddNewContactPage:
 
         WebDriverWait(browser, 5).until(EC.url_changes(link))
 
-        contact_list_page = ContactListPage(browser=browser, url=browser.current_url)
+        contact_list_page = ContactListPage(
+            browser=browser, url=browser.current_url
+        )
         contact_list_page.should_be_contact_list_page()
 
     def test_add_new_contact(
@@ -75,13 +77,17 @@ class TestAddNewContactPage:
 
         page.add_new_contact(*create_contact_info)
 
-        WebDriverWait(browser, 10).until(EC.url_to_be(base_url + "contactList"))
+        WebDriverWait(browser, 10).until(
+            EC.url_to_be(base_url + "contactList")
+        )
 
         assert (
             page.browser.current_url == base_url + "contactList"
         ), f"Wrong URL after add new contact. URL: {page.browser.current_url}"
 
-        contact_list_page = ContactListPage(browser=browser, url=browser.current_url)
+        contact_list_page = ContactListPage(
+            browser=browser, url=browser.current_url
+        )
         contact_list_page.find_contact_by_full_name(
             first_name=create_contact_info[0], last_name=create_contact_info[1]
         )

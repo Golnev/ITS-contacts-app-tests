@@ -34,11 +34,17 @@ class LoginPage(BasePage):
 
     def login(self, email: str, password: str):
         logger.info("Starting login")
-        email_form = self.browser.find_element(*LoginPageLocators.REGISTER_EMAIL)
+        email_form = self.browser.find_element(
+            *LoginPageLocators.REGISTER_EMAIL
+        )
         email_form.send_keys(email)
 
-        password_form = self.browser.find_element(*LoginPageLocators.REGISTER_PASSWORD)
+        password_form = self.browser.find_element(
+            *LoginPageLocators.REGISTER_PASSWORD
+        )
         password_form.send_keys(password)
 
-        login_button = self.browser.find_element(*LoginPageLocators.LOGIN_BUTTON)
+        login_button = self.browser.find_element(
+            *LoginPageLocators.LOGIN_BUTTON
+        )
         login_button.click()

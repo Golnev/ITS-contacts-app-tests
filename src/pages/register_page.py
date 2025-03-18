@@ -36,7 +36,9 @@ class RegisterPage(BasePage):
         )
         last_name_form.send_keys(last_name)
 
-        email_form = self.browser.find_element(*RegisterPageLocators.REGISTER_EMAIL)
+        email_form = self.browser.find_element(
+            *RegisterPageLocators.REGISTER_EMAIL
+        )
         email_form.send_keys(email)
 
         password_form = self.browser.find_element(
@@ -53,10 +55,14 @@ class RegisterPage(BasePage):
         logger.info("Check validation error notification.")
         assert self.get_visible_element(
             *RegisterPageLocators.ERROR_NOTIFICATION
-        ).startswith("User validation failed"), "Error notification is not presented."
+        ).startswith(
+            "User validation failed"
+        ), "Error notification is not presented."
 
     def cancel_from_register_page(self):
         logger.info("Cancel from register page")
 
-        cancel_button = self.browser.find_element(*RegisterPageLocators.CANCEL_BUTTON)
+        cancel_button = self.browser.find_element(
+            *RegisterPageLocators.CANCEL_BUTTON
+        )
         cancel_button.click()
