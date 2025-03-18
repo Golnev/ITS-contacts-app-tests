@@ -1,5 +1,6 @@
 """
-This module contains UI tests for the "Contact Details" page using Selenium WebDriver.
+This module contains UI tests
+for the "Contact Details" page using Selenium WebDriver.
 """
 
 # pylint: disable=unused-argument
@@ -24,7 +25,9 @@ base_url = RequestUtilities.get_base_url()
 @pytest.mark.contact_details_page
 @pytest.mark.usefixtures("del_all_contacts")
 class TestContactDetailsPage:
-    """Test suite for the "Contact Details" page."""
+    """
+    Test suite for the "Contact Details" page.
+    """
 
     logger.info("Starting tests for contact details page.")
 
@@ -34,7 +37,9 @@ class TestContactDetailsPage:
         setup_user,
         created_contact: tuple[ContactDetailsPage, tuple],
     ):
-        """Verifies that the user is on the "Contact Details" page."""
+        """
+        Verifies that the user is on the "Contact Details" page.
+        """
 
         logger.info("Starting Test: user should be in contact details page.")
 
@@ -48,7 +53,10 @@ class TestContactDetailsPage:
         setup_user,
         created_contact: tuple[ContactDetailsPage, tuple],
     ):
-        """Verifies that the user can log out from the "Contact Details" page."""
+        """
+        Verifies that the user can log out
+        from the "Contact Details" page.
+        """
 
         logger.info("Starting Test: logout from contact details page.")
 
@@ -68,7 +76,10 @@ class TestContactDetailsPage:
         setup_user,
         created_contact: tuple[ContactDetailsPage, tuple],
     ):
-        """Verifies that the user can return to the contact list from the "Contact Details" page."""
+        """
+        Verifies that the user can return to the contact list
+        from the "Contact Details" page.
+        """
 
         logger.info("Starting Test: return to contact list.")
 
@@ -87,7 +98,10 @@ class TestContactDetailsPage:
         setup_user,
         created_contact: tuple[ContactDetailsPage, tuple],
     ):
-        """Verifies that a contact can be deleted from the "Contact Details" page."""
+        """
+        Verifies that a contact can be deleted from
+        the "Contact Details" page.
+        """
 
         logger.info("Starting Test: delete contact.")
 

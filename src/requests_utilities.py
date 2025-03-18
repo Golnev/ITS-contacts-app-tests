@@ -15,11 +15,15 @@ load_dotenv()
 
 # pylint: disable=too-many-instance-attributes
 class RequestUtilities:
-    """A utility class for sending HTTP requests and handling API responses."""
+    """
+    A utility class for sending HTTP requests and handling API responses.
+    """
 
     @staticmethod
     def get_base_url():
-        """Retrieve the base URL for API requests based on the environment."""
+        """
+        Retrieve the base URL for API requests based on the environment.
+        """
 
         env = os.getenv("ENV", "test")
         base_url = API_HOSTS[env]
@@ -39,7 +43,9 @@ class RequestUtilities:
         self.EMPTY_CONTENT_LENGTH = "0"  # pylint: disable=invalid-name
 
     def __assert_status_code(self):
-        """Validate the status code of the latest API response."""
+        """
+        Validate the status code of the latest API response.
+        """
 
         logger.info("Status code check.")
         assert self.status_code == self.expected_status_code, (
@@ -55,7 +61,9 @@ class RequestUtilities:
         headers: dict | None = None,
         expected_status_code=200,
     ):
-        """Perform a GET request to the specified API endpoint."""
+        """
+        Perform a GET request to the specified API endpoint.
+        """
 
         logger.info("Starting GET method.")
 
@@ -97,7 +105,9 @@ class RequestUtilities:
         headers: dict | None = None,
         expected_status_code=200,
     ):
-        """Perform a POST request to the specified API endpoint."""
+        """
+        Perform a POST request to the specified API endpoint.
+        """
 
         logger.info("Starting POST method.")
 
@@ -145,7 +155,9 @@ class RequestUtilities:
         headers: dict | None = None,
         expected_status_code=200,
     ):
-        """Perform a PUT request to the specified API endpoint."""
+        """
+        Perform a PUT request to the specified API endpoint.
+        """
 
         logger.info("Starting PUT method.")
 
@@ -193,7 +205,9 @@ class RequestUtilities:
         headers: dict | None = None,
         expected_status_code=200,
     ):
-        """Perform a PATCH request to the specified API endpoint."""
+        """
+        Perform a PATCH request to the specified API endpoint.
+        """
 
         logger.info("Starting PATCH method.")
 
@@ -240,7 +254,9 @@ class RequestUtilities:
         headers: dict | None = None,
         expected_status_code=200,
     ):
-        """Perform a DELETE request to the specified API endpoint."""
+        """
+        Perform a DELETE request to the specified API endpoint.
+        """
 
         logger.info("Starting DELETE method.")
 

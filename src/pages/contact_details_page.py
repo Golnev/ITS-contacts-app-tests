@@ -11,16 +11,24 @@ from src.pages.base_page import BasePage
 
 
 class ContactDetailsPage(BasePage):
-    """Class with methods for verifying and interacting with the 'Contact Details' page."""
+    """
+    Class with methods for verifying and interacting
+    with the 'Contact Details' page.
+    """
 
     def should_be_contact_details_page(self):
-        """Verify that the current page is the 'Contact Details' page."""
+        """
+        Verify that the current page is the 'Contact Details' page.
+        """
 
         self.should_be_contact_details_page_url()
         self.should_be_contact_details_form()
 
     def should_be_contact_details_page_url(self):
-        """Verify that the current page URL matches the expected 'Contact Details' page URL."""
+        """
+        Verify that the current page URL
+        matches the expected 'Contact Details' page URL.
+        """
 
         logger.info("Check contacts details page url.")
 
@@ -30,7 +38,9 @@ class ContactDetailsPage(BasePage):
         ), "URL address is not correct."
 
     def should_be_contact_details_form(self):
-        """Verify the presence of the contact details form on the page."""
+        """
+        Verify the presence of the contact details form on the page.
+        """
 
         logger.info("Check contact details form is present.")
 
@@ -39,7 +49,9 @@ class ContactDetailsPage(BasePage):
         ), "Contact details form is not present."
 
     def logout(self):
-        """Log out the current user from the 'Contact Details' page."""
+        """
+        Log out the current user from the 'Contact Details' page.
+        """
 
         logger.info("Logout.")
 
@@ -49,7 +61,9 @@ class ContactDetailsPage(BasePage):
         logout_button.click()
 
     def return_to_contact_list(self):
-        """Return to the contact list from the 'Contact Details' page."""
+        """
+        Return to the contact list from the 'Contact Details' page.
+        """
 
         logger.info("Return to contact list.")
 
@@ -59,7 +73,9 @@ class ContactDetailsPage(BasePage):
         return_button.click()
 
     def delete_contact(self):
-        """Delete the current contact from the 'Contact Details' page."""
+        """
+        Delete the current contact from the 'Contact Details' page.
+        """
 
         logger.info("Deleting contact.")
 
@@ -72,7 +88,10 @@ class ContactDetailsPage(BasePage):
         alert.accept()
 
     def go_to_edit_contact_page(self):
-        """Navigate to the 'Edit Contact' page from the 'Contact Details' page."""
+        """
+        Navigate to the 'Edit Contact' page
+        from the 'Contact Details' page.
+        """
 
         logger.info("Go to edit contact page.")
 
@@ -97,7 +116,10 @@ class ContactDetailsPage(BasePage):
             "country",
         ],
     ):
-        """Retrieve information from a specified field on the 'Contact Details' page."""
+        """
+        Retrieve information from a specified field
+        on the 'Contact Details' page.
+        """
 
         logger.info("Get info from field.")
 

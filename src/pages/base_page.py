@@ -9,7 +9,9 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 
 class BasePage:
-    """Parent class for page objects."""
+    """
+    Parent class for page objects.
+    """
 
     def __init__(
         self,
@@ -22,7 +24,9 @@ class BasePage:
         self.browser.implicitly_wait(timeout)
 
     def is_element_present(self, how, what):
-        """Check if an element is present on the page."""
+        """
+        Check if an element is present on the page.
+        """
 
         try:
             self.browser.find_element(how, what)
@@ -31,7 +35,9 @@ class BasePage:
         return True
 
     def get_visible_element(self, how, what, timeout: int = 5):
-        """Retrieve the text of a visible element on the page."""
+        """
+        Retrieve the text of a visible element on the page.
+        """
 
         return (
             WebDriverWait(self.browser, timeout)
@@ -40,6 +46,8 @@ class BasePage:
         )
 
     def open(self):
-        """Open the web page using the specified URL."""
+        """
+        Open the web page using the specified URL.
+        """
 
         self.browser.get(self.url)

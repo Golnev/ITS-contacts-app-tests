@@ -17,7 +17,9 @@ pytestmark = pytest.mark.api
 
 @pytest.mark.contacts
 def test_add_contact(auth_headers, manage_contacts):
-    """Test the addition of a new contact."""
+    """
+    Test the addition of a new contact.
+    """
 
     logger.info("TEST: Add new contact")
 
@@ -32,7 +34,9 @@ def test_add_contact(auth_headers, manage_contacts):
 @pytest.mark.contacts
 @pytest.mark.negative
 def test_add_contact_without_mandatory_data(faker: Faker, auth_headers):
-    """Test adding a contact without mandatory data (negative test case)."""
+    """
+    Test adding a contact without mandatory data (negative test case).
+    """
 
     logger.info("TEST: Add new contact without mandatory data.")
 
@@ -71,7 +75,9 @@ def test_add_contact_without_mandatory_data(faker: Faker, auth_headers):
 @pytest.mark.contacts
 @pytest.mark.negative
 def test_contact_with_wrong_phone_number(faker: Faker, auth_headers):
-    """Test adding a contact with an invalid phone number (negative test case)."""
+    """
+    Test adding a contact with an invalid phone number (negative test case).
+    """
 
     logger.info("TEST: Add new contact with wrong phone number.")
 
@@ -115,7 +121,10 @@ def test_contact_with_wrong_phone_number(faker: Faker, auth_headers):
 def test_add_contact_with_existing_last_name_and_first_name(
     faker: Faker, auth_headers, manage_contacts
 ):
-    """Test adding a contact with an existing first and last name (negative test case)."""
+    """
+    Test adding a contact with an existing first
+    and last name (negative test case).
+    """
 
     logger.info("TEST: Add contact with existing last name amd first name")
 
@@ -149,7 +158,9 @@ def test_add_contact_with_existing_last_name_and_first_name(
 
 @pytest.mark.contacts
 def test_get_contacts_list(auth_headers):
-    """Test retrieving the list of all contacts."""
+    """
+    Test retrieving the list of all contacts.
+    """
 
     logger.info("TEST: Get all contacts")
 
@@ -162,7 +173,9 @@ def test_get_contacts_list(auth_headers):
 
 @pytest.mark.contacts
 def test_get_contact(auth_headers, manage_contacts):
-    """Test retrieving a specific contact by ID."""
+    """
+    Test retrieving a specific contact by ID.
+    """
 
     logger.info("TEST: Get contact")
 
@@ -183,7 +196,9 @@ def test_get_contact(auth_headers, manage_contacts):
 @pytest.mark.contacts
 @pytest.mark.negative
 def test_get_not_existing_contact(auth_headers, manage_contacts):
-    """Test retrieving a non-existent contact (negative test case)."""
+    """
+    Test retrieving a non-existent contact (negative test case).
+    """
 
     logger.info("TEST: Get nonexistent contact")
 
@@ -206,7 +221,9 @@ def test_get_not_existing_contact(auth_headers, manage_contacts):
 
 @pytest.mark.contacts
 def test_update_contact(faker: Faker, auth_headers, manage_contacts):
-    """Test updating a contact's details."""
+    """
+    Test updating a contact's details.
+    """
 
     logger.info("TEST: Full update contact.")
 
@@ -257,7 +274,9 @@ def test_update_contact(faker: Faker, auth_headers, manage_contacts):
 def test_update_not_existing_contact(
     faker: Faker, auth_headers, manage_contacts
 ):
-    """Test updating a contact that does not exist (negative test case)."""
+    """
+    Test updating a contact that does not exist (negative test case).
+    """
 
     logger.info("TEST: Update not existing contact")
 
@@ -284,7 +303,10 @@ def test_update_not_existing_contact(
     }
 
     logger.info(
-        "Update contact with id=%s, Update phone=%s, Update street2=%s, Update postalCode=%s.",
+        "Update contact with id=%s, "
+        "Update phone=%s, "
+        "Update street2=%s, "
+        "Update postalCode=%s.",
         contact_id,
         payload["phone"],
         payload["street2"],
@@ -305,7 +327,10 @@ def test_update_not_existing_contact(
 @pytest.mark.contacts
 @pytest.mark.negative
 def test_update_contact_with_wrong_data(auth_headers, manage_contacts):
-    """Test updating a contact with invalid data (negative test case)."""
+    """
+    Test updating a contact with invalid data
+    (negative test case).
+    """
 
     logger.info("TEST: Update not existing contact")
 
@@ -332,7 +357,10 @@ def test_update_contact_with_wrong_data(auth_headers, manage_contacts):
     }
 
     logger.info(
-        "Update contact with id=%s, Update phone=%s, Update street2=%s, Update postalCode=%s.",
+        "Update contact with id=%s, "
+        "Update phone=%s, "
+        "Update street2=%s, "
+        "Update postalCode=%s.",
         contact_id,
         payload["phone"],
         payload["street2"],
@@ -362,7 +390,9 @@ def test_update_contact_with_wrong_data(auth_headers, manage_contacts):
 
 @pytest.mark.contacts
 def test_update_last_name_contact(faker: Faker, auth_headers, manage_contacts):
-    """Test updating the last name of a contact."""
+    """
+    Test updating the last name of a contact.
+    """
 
     logger.info("TEST: Update last name contact")
 
@@ -395,7 +425,9 @@ def test_update_last_name_contact(faker: Faker, auth_headers, manage_contacts):
 
 @pytest.mark.contacts
 def test_update_email_contact(faker: Faker, auth_headers, manage_contacts):
-    """Test updating the email address of a contact."""
+    """
+    Test updating the email address of a contact.
+    """
 
     logger.info("TEST: Update email contact")
 
@@ -430,7 +462,10 @@ def test_update_email_contact(faker: Faker, auth_headers, manage_contacts):
 def test_upgrade_first_name_and_postal_code_together(
     faker: Faker, auth_headers, manage_contacts
 ):
-    """Test updating the first name and postal code of a contact simultaneously."""
+    """
+    Test updating the first name and postal code
+    of a contact simultaneously.
+    """
 
     logger.info("TEST: Update first name and postal code contact")
 
@@ -471,7 +506,10 @@ def test_upgrade_first_name_and_postal_code_together(
 @pytest.mark.negative
 @pytest.mark.parametrize("phone", ["No Phone", 12345678901234567890])
 def test_update_phone_with_wrong_data(auth_headers, manage_contacts, phone):
-    """Test updating a contact with an invalid phone number (negative test case)."""
+    """
+    Test updating a contact with an invalid phone number
+    (negative test case).
+    """
 
     logger.info("TEST: Update contact phone number with wrong data.")
 

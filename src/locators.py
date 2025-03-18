@@ -19,7 +19,9 @@ base_url = RequestUtilities.get_base_url()
 
 @dataclass
 class LoginPageLocators:
-    """Dataclass for storing locators used on the login page."""
+    """
+    Dataclass for storing locators used on the login page.
+    """
 
     LOGIN_PAGE_URL: str = base_url + "login"
     LOGIN_FORM = (By.TAG_NAME, "form")
@@ -31,7 +33,9 @@ class LoginPageLocators:
 
 @dataclass
 class RegisterPageLocators:
-    """Dataclass for storing locators used on the register page."""
+    """
+    Dataclass for storing locators used on the register page.
+    """
 
     REGISTER_PAGE_URL: str = base_url + "addUser"
     REGISTER_FORM = (By.CSS_SELECTOR, "#add-user")
@@ -46,7 +50,9 @@ class RegisterPageLocators:
 
 @dataclass
 class ContactListPageLocators:
-    """Dataclass for storing locators used on the contact list page."""
+    """
+    Dataclass for storing locators used on the contact list page.
+    """
 
     CONTACT_LIST_PAGE_URL: str = base_url + "contactList"
     ADD_NEW_CONTACT_BUTTON = (By.CSS_SELECTOR, "#add-contact")
@@ -58,7 +64,9 @@ class ContactListPageLocators:
 
 @dataclass
 class AddNewContactPageLocators:
-    """ "Dataclass for storing locators used on the add new contact page."""
+    """
+    Dataclass for storing locators used on the add new contact page.
+    """
 
     ADD_NEW_CONTACT_PAGE_URL: str = base_url + "addContact"
     ADD_NEW_CONTACT_FORM = (By.CSS_SELECTOR, "#add-contact")
@@ -79,7 +87,9 @@ class AddNewContactPageLocators:
 
 @dataclass
 class ContactDetailsPageLocators:
-    """Dataclass for storing locators used on the contact details page."""
+    """
+    Dataclass for storing locators used on the contact details page.
+    """
 
     CONTACT_DETAILS_PAGE_URL: str = base_url + "contactDetails"
     CONTACT_DETAILS_FORM = (By.CSS_SELECTOR, "#contactDetails")
@@ -102,7 +112,9 @@ class ContactDetailsPageLocators:
 
 @dataclass
 class EditContactPageLocators:
-    """Dataclass for storing locators used on the edit contact page."""
+    """
+    Dataclass for storing locators used on the edit contact page.
+    """
 
     EDIT_CONTACT_PAGE_URL: str = base_url + "editContact"
     EDIT_CONTACT_FORM = (By.CSS_SELECTOR, "#edit-contact")

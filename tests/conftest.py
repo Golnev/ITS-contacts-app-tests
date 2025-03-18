@@ -61,7 +61,9 @@ def pytest_addoption(parser):
 
 @pytest.fixture(scope="module")
 def auth_headers():
-    """Provides authorization headers for API requests."""
+    """
+    Provides authorization headers for API requests.
+    """
 
     my_email = os.getenv("MY_EMAIL")
     my_pass = os.getenv("MY_PASSWORD")
@@ -89,7 +91,9 @@ def auth_headers():
 
 @pytest.fixture()
 def manage_contacts(auth_headers, pytestconfig):
-    """Manages contact creation and cleanup for API tests."""
+    """
+    Manages contact creation and cleanup for API tests.
+    """
 
     contacts_helper = ContactsHelper()
     created_contacts = []
@@ -134,7 +138,9 @@ def manage_contacts(auth_headers, pytestconfig):
 
 @pytest.fixture
 def browser(pytestconfig):
-    """Initializes a Selenium WebDriver instance for the specified browser."""
+    """
+    Initializes a Selenium WebDriver instance for the specified browser.
+    """
 
     browser_name = pytestconfig.getoption("--browser_name")
     browser_driver = None
@@ -179,7 +185,10 @@ def browser(pytestconfig):
 def del_all_contacts(
     request, pytestconfig, browser: webdriver.Firefox | webdriver.Chrome
 ):
-    """Deletes all test contacts from the contact list page (Selenium-based cleanup)."""
+    """
+    Deletes all test contacts from the contact list page
+    (Selenium-based cleanup).
+    """
 
     yield
     if pytestconfig.getoption("--rm"):
@@ -208,7 +217,9 @@ def del_all_contacts(
 
 @pytest.fixture(scope="function")
 def setup_user(browser: webdriver.Firefox | webdriver.Chrome):
-    """Logs in a user using the login page."""
+    """
+    Logs in a user using the login page.
+    """
 
     logger.info("Setup user with default parameters.")
     link = base_url + "login"
@@ -226,7 +237,9 @@ def setup_user(browser: webdriver.Firefox | webdriver.Chrome):
 def create_contact_info(
     browser: webdriver.Firefox | webdriver.Chrome, setup_user
 ):
-    """Creates contact information using the Faker library."""
+    """
+    Creates contact information using the Faker library.
+    """
 
     logger.info("Create contact.")
     link = base_url + "addContact"
@@ -268,7 +281,9 @@ def created_contact(
     create_contact_info,
     pytestconfig,
 ):
-    """Creates a new contact using Selenium."""
+    """
+    Creates a new contact using Selenium.
+    """
 
     logger.info(
         "Creating contact with Contact first name: %s, last name: %s",

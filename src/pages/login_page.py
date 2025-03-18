@@ -8,17 +8,24 @@ from src.pages.base_page import BasePage
 
 
 class LoginPage(BasePage):
-    """Class for interacting with the 'Login' page."""
+    """
+    Class for interacting with the 'Login' page.
+    """
 
     def should_be_login_page(self):
-        """Verify that the current page is the 'Login' page."""
+        """
+        Verify that the current page is the 'Login' page.
+        """
 
         self.should_be_login_url()
         self.should_be_login_form()
         self.should_be_register_button()
 
     def should_be_login_url(self):
-        """Verify that the URL of the current page matches the expected 'Login' page URL."""
+        """
+        Verify that the URL of the current page
+        matches the expected 'Login' page URL.
+        """
 
         logger.info("Check login url")
         assert (
@@ -26,7 +33,9 @@ class LoginPage(BasePage):
         ), "URL address is not correct."
 
     def should_be_login_form(self):
-        """Verify the presence of the login form on the page."""
+        """
+        Verify the presence of the login form on the page.
+        """
 
         logger.info("Check login from on login page is present.")
         assert self.is_element_present(
@@ -34,7 +43,9 @@ class LoginPage(BasePage):
         ), "Login form is not presented."
 
     def should_be_register_button(self):
-        """Verify the presence of the register button on the 'Login' page."""
+        """
+        Verify the presence of the register button on the 'Login' page.
+        """
 
         logger.info("Check login button on login page is present.")
         assert self.is_element_present(
@@ -42,14 +53,18 @@ class LoginPage(BasePage):
         ), "Sign up button is not presented."
 
     def go_to_register_page(self):
-        """Navigate to the registration page from the 'Login' page."""
+        """
+        Navigate to the registration page from the 'Login' page.
+        """
 
         logger.info("Go to register page")
         link = self.browser.find_element(*LoginPageLocators.SIGN_UP_BUTTON)
         link.click()
 
     def login(self, email: str, password: str):
-        """Perform the login action using the provided email and password."""
+        """
+        Perform the login action using the provided email and password.
+        """
 
         logger.info("Starting login")
         email_form = self.browser.find_element(

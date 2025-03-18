@@ -9,16 +9,23 @@ from src.pages.base_page import BasePage
 
 
 class RegisterPage(BasePage):
-    """Class for interacting with the 'Register' page."""
+    """
+    Class for interacting with the 'Register' page.
+    """
 
     def should_be_register_page(self):
-        """Verify that the current page is the 'Register' page."""
+        """
+        Verify that the current page is the 'Register' page.
+        """
 
         self.should_be_register_url()
         self.should_be_register_form()
 
     def should_be_register_url(self):
-        """Verify that the URL of the current page matches the expected 'Register' page URL."""
+        """
+        Verify that the URL of the current page
+        matches the expected 'Register' page URL.
+        """
 
         logger.info("Check register url.")
         assert (
@@ -26,7 +33,9 @@ class RegisterPage(BasePage):
         ), "URL address is not correct."
 
     def should_be_register_form(self):
-        """Verify the presence of the registration form on the page."""
+        """
+        Verify the presence of the registration form on the page.
+        """
 
         logger.info("Check register form is present.")
         assert self.is_element_present(
@@ -36,7 +45,9 @@ class RegisterPage(BasePage):
     def register_new_user(
         self, first_name: str, last_name: str, email: str, password: str
     ):
-        """Register a new user with the provided credentials."""
+        """
+        Register a new user with the provided credentials.
+        """
 
         logger.info("Starting register new user.")
 
@@ -66,7 +77,10 @@ class RegisterPage(BasePage):
         register_button.click()
 
     def should_be_validation_error(self):
-        """Verify that a validation error notification is displayed on the 'Register' page."""
+        """
+        Verify that a validation error notification
+        is displayed on the 'Register' page.
+        """
 
         logger.info("Check validation error notification.")
         assert self.get_visible_element(
@@ -76,7 +90,10 @@ class RegisterPage(BasePage):
         ), "Error notification is not presented."
 
     def cancel_from_register_page(self):
-        """Cancel the registration process and navigate away from the 'Register' page."""
+        """
+        Cancel the registration process
+        and navigate away from the 'Register' page.
+        """
 
         logger.info("Cancel from register page")
 

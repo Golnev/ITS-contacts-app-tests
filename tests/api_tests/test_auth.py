@@ -13,7 +13,9 @@ pytestmark = pytest.mark.api
 
 @pytest.mark.auth
 def test_login_and_logout(auth_headers):
-    """Test the login and logout process for a new user."""
+    """
+    Test the login and logout process for a new user.
+    """
 
     logger.info("TEST: login and logout with new user.")
     users_helper = UsersHelper()
@@ -77,7 +79,9 @@ def test_login_and_logout(auth_headers):
     ],
 )
 def test_login_with_wrong_email_or_pass(wr_email: str, wr_password: str):
-    """Test login with invalid email or password (negative test case)."""
+    """
+    Test login with invalid email or password (negative test case).
+    """
 
     logger.info("TEST: login with wrong email or pass.")
 

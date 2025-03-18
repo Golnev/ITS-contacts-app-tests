@@ -13,7 +13,9 @@ pytestmark = pytest.mark.api
 
 @pytest.mark.users
 def test_add_user(auth_headers):
-    """Test adding a new user."""
+    """
+    Test adding a new user.
+    """
 
     logger.info("TEST: Add new user.")
     users_helper = UsersHelper()
@@ -51,7 +53,10 @@ def test_add_user(auth_headers):
 def test_add_user_without_email_or_password(
     first_name: str, last_name: str, email: str, password: str, auth_headers
 ):
-    """Test adding a new user with missing email or password (negative test case)."""
+    """
+    Test adding a new user with missing email or password
+    (negative test case).
+    """
 
     logger.info("TEST: Add new user.")
     request_utility = RequestUtilities()
@@ -80,7 +85,9 @@ def test_add_user_without_email_or_password(
 
 @pytest.mark.users
 def test_get_user_profile(auth_headers):
-    """Test retrieving a user's profile."""
+    """
+    Test retrieving a user's profile.
+    """
 
     logger.info("TEST: Get user profile.")
 
@@ -93,7 +100,9 @@ def test_get_user_profile(auth_headers):
 
 @pytest.mark.users
 def test_update_user(auth_headers):
-    """Test updating user details."""
+    """
+    Test updating user details.
+    """
 
     logger.info("TEST: Update user.")
 
@@ -152,7 +161,10 @@ def test_update_user(auth_headers):
 def test_update_user_without_email_or_password(
     first_name: str, last_name: str, email: str, password: str, auth_headers
 ):
-    """Test updating a user with missing email or password (negative test case)."""
+    """
+    Test updating a user with missing email or password
+    (negative test case).
+    """
 
     logger.info("TEST: Update user without email or password")
 
@@ -190,7 +202,9 @@ def test_update_user_without_email_or_password(
 
 @pytest.mark.users
 def test_delete_new_user(auth_headers):
-    """Test deleting a new user."""
+    """
+    Test deleting a new user.
+    """
 
     logger.info("TEST: Delete new user.")
     users_helper = UsersHelper()

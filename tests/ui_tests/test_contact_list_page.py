@@ -1,5 +1,6 @@
 """
-This module contains UI tests for the "Contact List" page using Selenium WebDriver.
+This module contains UI tests
+for the "Contact List" page using Selenium WebDriver.
 """
 
 # pylint: disable=unused-argument
@@ -23,14 +24,18 @@ base_url = RequestUtilities.get_base_url()
 
 @pytest.mark.contact_list
 class TestContactListPage:
-    """Test suite for the "Contact List" page."""
+    """
+    Test suite for the "Contact List" page.
+    """
 
     logger.info("Starting tests for contact list page.")
 
     def test_user_should_be_in_contact_list_page(
         self, browser: webdriver.Firefox | webdriver.Chrome, setup_user
     ):
-        """Verifies that the user can navigate to the "Contact List" page."""
+        """
+        Verifies that the user can navigate to the "Contact List" page.
+        """
 
         logger.info("Starting Test: user should be in contact list page.")
 
@@ -42,7 +47,9 @@ class TestContactListPage:
     def test_logout(
         self, browser: webdriver.Firefox | webdriver.Chrome, setup_user
     ):
-        """Tests logout functionality from the "Contact List" page."""
+        """
+        Tests logout functionality from the "Contact List" page.
+        """
 
         logger.info("Starting Test: logout.")
 
@@ -60,7 +67,10 @@ class TestContactListPage:
     def test_user_can_go_to_add_new_contact(
         self, browser: webdriver.Firefox | webdriver.Chrome, setup_user
     ):
-        """Verifies that the user can navigate to the "Add New Contact" page."""
+        """
+        Verifies that the user can navigate
+        to the "Add New Contact" page.
+        """
 
         logger.info("Starting Test: user can go to add new contact.")
 

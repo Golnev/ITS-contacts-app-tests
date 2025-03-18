@@ -10,14 +10,18 @@ from src.requests_utilities import RequestUtilities
 
 
 class ContactsHelper:
-    """Class with methods for contacts."""
+    """
+    Class with methods for contacts.
+    """
 
     def __init__(self):
         self.request_utility = RequestUtilities()
         self.full_contact: int = 11
 
     def create_contact(self, auth_headers: dict):
-        """Method for creating new contact."""
+        """
+        Method for creating new contact.
+        """
 
         logger.info("Create new contact.")
         fake = Faker()
@@ -50,7 +54,9 @@ class ContactsHelper:
         return create_contact_json, payload
 
     def delete_contact(self, auth_headers: dict, contact_id: str):
-        """Method for deleting contact."""
+        """
+        Method for deleting contact.
+        """
 
         logger.info("Delete contact id=%s", contact_id)
 
@@ -64,7 +70,9 @@ class ContactsHelper:
         contact_id: str | None = None,
         expected_status_code: int = 200,
     ):
-        """Method to get list of contacts."""
+        """
+        Method to get list of contacts.
+        """
 
         if contact_id is None:
             logger.info("Get contacts")
@@ -92,7 +100,9 @@ class ContactsHelper:
         contact_id: str,
         expected_status_code: int = 200,
     ):
-        """Method to update contact."""
+        """
+        Method to update contact.
+        """
 
         if len(payload) == self.full_contact:
             logger.info("Update contact with PUT.")

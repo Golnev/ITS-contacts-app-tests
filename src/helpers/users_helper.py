@@ -9,13 +9,17 @@ from src.requests_utilities import RequestUtilities
 
 
 class UsersHelper:
-    """Class with methods for users."""
+    """
+    Class with methods for users.
+    """
 
     def __init__(self):
         self.request_utility = RequestUtilities()
 
     def create_user(self, auth_headers: dict):
-        """Method for creating new user."""
+        """
+        Method for creating new user.
+        """
 
         logger.info("Create new user.")
         fake = Faker()
@@ -27,7 +31,8 @@ class UsersHelper:
         }
 
         logger.info(
-            "Fake user first name: %s, fake user last name: %s, fake user email: %s",
+            "Fake user first name: %s, "
+            "fake user last name: %s, fake user email: %s",
             payload["firstName"],
             payload["lastName"],
             payload["email"],
@@ -43,14 +48,18 @@ class UsersHelper:
         return create_user_json, payload
 
     def delete_user(self, auth_headers: dict):
-        """Method for deleting user."""
+        """
+        Method for deleting user.
+        """
 
         logger.info("Delete user.")
 
         self.request_utility.delete(endpoint="users/me", headers=auth_headers)
 
     def get_user(self, auth_headers: dict):
-        """Method for getting user."""
+        """
+        Method for getting user.
+        """
 
         logger.info("Get user.")
 
@@ -61,7 +70,9 @@ class UsersHelper:
         return rs_user_info
 
     def update_user(self, auth_headers: dict):
-        """Method for updating user."""
+        """
+        Method for updating user.
+        """
 
         logger.info("Update user.")
 

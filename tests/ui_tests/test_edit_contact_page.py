@@ -1,5 +1,6 @@
 """
-This module contains UI tests for the "Edit Contact" page using Selenium WebDriver.
+This module contains UI tests
+for the "Edit Contact" page using Selenium WebDriver.
 """
 
 # pylint: disable=unused-argument
@@ -24,7 +25,9 @@ base_url = RequestUtilities.get_base_url()
 @pytest.mark.edit_contact_page
 @pytest.mark.usefixtures("del_all_contacts")
 class TestEditContactPage:
-    """Test suite for the "Edit Contact" page."""
+    """
+    Test suite for the "Edit Contact" page.
+    """
 
     logger.info("Starting tests for edit contact page.")
 
@@ -34,7 +37,9 @@ class TestEditContactPage:
         setup_user,
         created_contact: tuple[ContactDetailsPage, tuple],
     ):
-        """Verifies that the user is on the "Edit Contact" page."""
+        """
+        Verifies that the user is on the "Edit Contact" page.
+        """
 
         logger.info("Starting Test: user should be in edit contact page")
 
@@ -51,7 +56,9 @@ class TestEditContactPage:
         setup_user,
         created_contact: tuple[ContactDetailsPage, tuple],
     ):
-        """Verifies that the user can log out from the "Edit Contact" page."""
+        """
+        Verifies that the user can log out from the "Edit Contact" page.
+        """
 
         logger.info("Starting Test: logout from edit contact page")
 
@@ -101,7 +108,9 @@ class TestEditContactPage:
         setup_user,
         created_contact: tuple[ContactDetailsPage, tuple],
     ):
-        """Verifies that the user can edit a contact's phone number."""
+        """
+        Verifies that the user can edit a contact's phone number.
+        """
 
         logger.info("Starting test: edit contact.")
 
