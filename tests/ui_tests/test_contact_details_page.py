@@ -1,3 +1,9 @@
+"""
+This module contains UI tests for the "Contact Details" page using Selenium WebDriver.
+"""
+
+# pylint: disable=unused-argument
+
 import logging as logger
 
 import pytest
@@ -18,6 +24,8 @@ base_url = RequestUtilities.get_base_url()
 @pytest.mark.contact_details_page
 @pytest.mark.usefixtures("del_all_contacts")
 class TestContactDetailsPage:
+    """Test suite for the "Contact Details" page."""
+
     logger.info("Starting tests for contact details page.")
 
     def test_user_should_be_in_contact_details_page(
@@ -26,6 +34,8 @@ class TestContactDetailsPage:
         setup_user,
         created_contact: tuple[ContactDetailsPage, tuple],
     ):
+        """Verifies that the user is on the "Contact Details" page."""
+
         logger.info("Starting Test: user should be in contact details page.")
 
         page, _ = created_contact
@@ -38,6 +48,8 @@ class TestContactDetailsPage:
         setup_user,
         created_contact: tuple[ContactDetailsPage, tuple],
     ):
+        """Verifies that the user can log out from the "Contact Details" page."""
+
         logger.info("Starting Test: logout from contact details page.")
 
         page, _ = created_contact
@@ -56,6 +68,8 @@ class TestContactDetailsPage:
         setup_user,
         created_contact: tuple[ContactDetailsPage, tuple],
     ):
+        """Verifies that the user can return to the contact list from the "Contact Details" page."""
+
         logger.info("Starting Test: return to contact list.")
 
         page, _ = created_contact
@@ -73,6 +87,8 @@ class TestContactDetailsPage:
         setup_user,
         created_contact: tuple[ContactDetailsPage, tuple],
     ):
+        """Verifies that a contact can be deleted from the "Contact Details" page."""
+
         logger.info("Starting Test: delete contact.")
 
         page, contact_info = created_contact
@@ -97,6 +113,11 @@ class TestContactDetailsPage:
         setup_user,
         created_contact: tuple[ContactDetailsPage, tuple],
     ):
+        """
+        Verifies that the user can navigate to the "Edit Contact" page
+        from the "Contact Details" page.
+        """
+
         logger.info("Starting Test: user can go to edit contact.")
 
         page, _ = created_contact

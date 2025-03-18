@@ -1,3 +1,9 @@
+"""
+This module contains UI tests for the "Login" page using Selenium WebDriver.
+"""
+
+# pylint: disable=unused-argument
+
 import logging as logger
 import os
 
@@ -20,11 +26,15 @@ load_dotenv()
 
 @pytest.mark.login
 class TestLoginPage:
+    """Test suite for the "Login" page."""
+
     logger.info("Starting tests for Login Page")
 
     def test_user_should_be_in_login_page(
         self, browser: webdriver.Firefox | webdriver.Chrome
     ):
+        """Verifies that the user can navigate to the "Login" page."""
+
         logger.info("Starting Test: user should be in login page")
         link = base_url + "login"
         page = LoginPage(browser=browser, url=link)
@@ -34,6 +44,8 @@ class TestLoginPage:
     def test_login(
         self, browser: webdriver.Firefox | webdriver.Chrome, setup_user
     ):
+        """Verifies that the user can log in successfully."""
+
         logger.info("Starting Test: login")
         link = base_url + "login"
         page = LoginPage(browser=browser, url=link)
@@ -56,6 +68,8 @@ class TestLoginPage:
     def test_user_can_go_to_register_page(
         self, browser: webdriver.Firefox | webdriver.Chrome
     ):
+        """Verifies that the user can navigate to the "Register" page from the "Login" page."""
+
         logger.info("Starting Test: go to register page.")
         link = base_url + "login"
         page = LoginPage(browser=browser, url=link)

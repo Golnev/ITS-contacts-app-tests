@@ -1,3 +1,9 @@
+"""
+This module contains API tests for contacts management.
+"""
+
+# pylint: disable=unused-argument
+
 import logging as logger
 import pytest
 from faker.proxy import Faker
@@ -5,11 +11,14 @@ from faker.proxy import Faker
 from src.helpers.contacts_helper import ContactsHelper
 from src.requests_utilities import RequestUtilities
 
+
 pytestmark = pytest.mark.api
 
 
 @pytest.mark.contacts
 def test_add_contact(auth_headers, manage_contacts):
+    """Test the addition of a new contact."""
+
     logger.info("TEST: Add new contact")
 
     contact_rs_api, contact_info = manage_contacts()
@@ -23,22 +32,25 @@ def test_add_contact(auth_headers, manage_contacts):
 @pytest.mark.contacts
 @pytest.mark.negative
 def test_add_contact_without_mandatory_data(faker: Faker, auth_headers):
+    """Test adding a contact without mandatory data (negative test case)."""
+
     logger.info("TEST: Add new contact without mandatory data.")
 
-    payload = dict()
-    payload["firstName"] = ""
-    payload["lastName"] = ""
-    payload["birthdate"] = (
-        faker.date_of_birth(minimum_age=6, maximum_age=110)
-    ).strftime("%Y-%m-%d")
-    payload["email"] = faker.email()
-    payload["phone"] = faker.basic_phone_number()
-    payload["street1"] = faker.street_name()
-    payload["street2"] = faker.street_name()
-    payload["city"] = faker.city()
-    payload["stateProvince"] = faker.state()
-    payload["postalCode"] = faker.postalcode()
-    payload["country"] = faker.country()
+    payload = {
+        "firstName": "",
+        "lastName": "",
+        "birthdate": (
+            faker.date_of_birth(minimum_age=6, maximum_age=110)
+        ).strftime("%Y-%m-%d"),
+        "email": faker.email(),
+        "phone": faker.basic_phone_number(),
+        "street1": faker.street_name(),
+        "street2": faker.street_name(),
+        "city": faker.city(),
+        "stateProvince": faker.state(),
+        "postalCode": faker.postalcode(),
+        "country": faker.country(),
+    }
 
     request_utility = RequestUtilities()
 
@@ -59,22 +71,25 @@ def test_add_contact_without_mandatory_data(faker: Faker, auth_headers):
 @pytest.mark.contacts
 @pytest.mark.negative
 def test_contact_with_wrong_phone_number(faker: Faker, auth_headers):
+    """Test adding a contact with an invalid phone number (negative test case)."""
+
     logger.info("TEST: Add new contact with wrong phone number.")
 
-    payload = dict()
-    payload["firstName"] = faker.first_name()
-    payload["lastName"] = faker.last_name()
-    payload["birthdate"] = (
-        faker.date_of_birth(minimum_age=6, maximum_age=110)
-    ).strftime("%Y-%m-%d")
-    payload["email"] = faker.email()
-    payload["phone"] = "No phone"
-    payload["street1"] = faker.street_name()
-    payload["street2"] = faker.street_name()
-    payload["city"] = faker.city()
-    payload["stateProvince"] = faker.state()
-    payload["postalCode"] = faker.postalcode()
-    payload["country"] = faker.country()
+    payload = {
+        "firstName": faker.first_name(),
+        "lastName": faker.last_name(),
+        "birthdate": (
+            faker.date_of_birth(minimum_age=6, maximum_age=110)
+        ).strftime("%Y-%m-%d"),
+        "email": faker.email(),
+        "phone": "No phone",
+        "street1": faker.street_name(),
+        "street2": faker.street_name(),
+        "city": faker.city(),
+        "stateProvince": faker.state(),
+        "postalCode": faker.postalcode(),
+        "country": faker.country(),
+    }
 
     request_utility = RequestUtilities()
 
@@ -100,24 +115,27 @@ def test_contact_with_wrong_phone_number(faker: Faker, auth_headers):
 def test_add_contact_with_existing_last_name_and_first_name(
     faker: Faker, auth_headers, manage_contacts
 ):
+    """Test adding a contact with an existing first and last name (negative test case)."""
+
     logger.info("TEST: Add contact with existing last name amd first name")
 
     contact_rs_api, _ = manage_contacts()
 
-    payload = dict()
-    payload["firstName"] = contact_rs_api["firstName"]
-    payload["lastName"] = contact_rs_api["lastName"]
-    payload["birthdate"] = (
-        faker.date_of_birth(minimum_age=6, maximum_age=110)
-    ).strftime("%Y-%m-%d")
-    payload["email"] = faker.email()
-    payload["phone"] = faker.basic_phone_number()
-    payload["street1"] = faker.street_name()
-    payload["street2"] = faker.street_name()
-    payload["city"] = faker.city()
-    payload["stateProvince"] = faker.state()
-    payload["postalCode"] = faker.postalcode()
-    payload["country"] = faker.country()
+    payload = {
+        "firstName": contact_rs_api["firstName"],
+        "lastName": contact_rs_api["lastName"],
+        "birthdate": (
+            faker.date_of_birth(minimum_age=6, maximum_age=110)
+        ).strftime("%Y-%m-%d"),
+        "email": faker.email(),
+        "phone": faker.basic_phone_number(),
+        "street1": faker.street_name(),
+        "street2": faker.street_name(),
+        "city": faker.city(),
+        "stateProvince": faker.state(),
+        "postalCode": faker.postalcode(),
+        "country": faker.country(),
+    }
 
     request_utility = RequestUtilities()
 
@@ -131,6 +149,8 @@ def test_add_contact_with_existing_last_name_and_first_name(
 
 @pytest.mark.contacts
 def test_get_contacts_list(auth_headers):
+    """Test retrieving the list of all contacts."""
+
     logger.info("TEST: Get all contacts")
 
     contacts_helper = ContactsHelper()
@@ -142,6 +162,8 @@ def test_get_contacts_list(auth_headers):
 
 @pytest.mark.contacts
 def test_get_contact(auth_headers, manage_contacts):
+    """Test retrieving a specific contact by ID."""
+
     logger.info("TEST: Get contact")
 
     contact_rs_api, _ = manage_contacts()
@@ -161,6 +183,8 @@ def test_get_contact(auth_headers, manage_contacts):
 @pytest.mark.contacts
 @pytest.mark.negative
 def test_get_not_existing_contact(auth_headers, manage_contacts):
+    """Test retrieving a non-existent contact (negative test case)."""
+
     logger.info("TEST: Get nonexistent contact")
 
     contact_rs_api, _ = manage_contacts()
@@ -182,6 +206,8 @@ def test_get_not_existing_contact(auth_headers, manage_contacts):
 
 @pytest.mark.contacts
 def test_update_contact(faker: Faker, auth_headers, manage_contacts):
+    """Test updating a contact's details."""
+
     logger.info("TEST: Full update contact.")
 
     contact_rs_api, _ = manage_contacts()
@@ -231,6 +257,8 @@ def test_update_contact(faker: Faker, auth_headers, manage_contacts):
 def test_update_not_existing_contact(
     faker: Faker, auth_headers, manage_contacts
 ):
+    """Test updating a contact that does not exist (negative test case)."""
+
     logger.info("TEST: Update not existing contact")
 
     contact_rs_api, _ = manage_contacts()
@@ -241,27 +269,26 @@ def test_update_not_existing_contact(
         auth_headers=auth_headers, contact_id=contact_id
     )
 
-    payload = dict()
-    payload["firstName"] = contact_rs_api["firstName"]
-    payload["lastName"] = contact_rs_api["lastName"]
-    payload["birthdate"] = contact_rs_api["birthdate"]
-    payload["email"] = contact_rs_api["email"]
-    #  Change.
-    payload["phone"] = faker.basic_phone_number()
-    payload["street1"] = contact_rs_api["street1"]
-    #  Change.
-    payload["street2"] = faker.street_name()
-    payload["city"] = contact_rs_api["city"]
-    payload["stateProvince"] = contact_rs_api["stateProvince"]
-    #  Change.
-    payload["postalCode"] = faker.postalcode()
-    payload["country"] = contact_rs_api["country"]
+    payload = {
+        "firstName": contact_rs_api["firstName"],
+        "lastName": contact_rs_api["lastName"],
+        "birthdate": contact_rs_api["birthdate"],
+        "email": contact_rs_api["email"],
+        "phone": faker.basic_phone_number(),
+        "street1": contact_rs_api["street1"],
+        "street2": faker.street_name(),
+        "city": contact_rs_api["city"],
+        "stateProvince": contact_rs_api["stateProvince"],
+        "postalCode": faker.postalcode(),
+        "country": contact_rs_api["country"],
+    }
 
     logger.info(
-        f"Update contact with id={contact_id}, "
-        f"Update phone={payload['phone']}, "
-        f"Update street2={payload['street2']}, "
-        f"Update postalCode={payload['postalCode']}."
+        "Update contact with id=%s, Update phone=%s, Update street2=%s, Update postalCode=%s.",
+        contact_id,
+        payload["phone"],
+        payload["street2"],
+        payload["postalCode"],
     )
 
     contacts_helper = ContactsHelper()
@@ -278,6 +305,8 @@ def test_update_not_existing_contact(
 @pytest.mark.contacts
 @pytest.mark.negative
 def test_update_contact_with_wrong_data(auth_headers, manage_contacts):
+    """Test updating a contact with invalid data (negative test case)."""
+
     logger.info("TEST: Update not existing contact")
 
     contact_rs_api, _ = manage_contacts()
@@ -288,26 +317,26 @@ def test_update_contact_with_wrong_data(auth_headers, manage_contacts):
         auth_headers=auth_headers, contact_id=contact_id
     )
 
-    payload = dict()
-    payload["firstName"] = contact_rs_api["firstName"]
-    payload["lastName"] = contact_rs_api["lastName"]
-    payload["birthdate"] = contact_rs_api["birthdate"]
-    payload["email"] = contact_rs_api["email"]
-    #  Change.
-    payload["phone"] = "No Phone number"
-    payload["street1"] = contact_rs_api["street1"]
-    payload["street2"] = contact_rs_api["street2"]
-    payload["city"] = contact_rs_api["city"]
-    payload["stateProvince"] = contact_rs_api["stateProvince"]
-    #  Change.
-    payload["postalCode"] = "No postal code"
-    payload["country"] = contact_rs_api["country"]
+    payload = {
+        "firstName": contact_rs_api["firstName"],
+        "lastName": contact_rs_api["lastName"],
+        "birthdate": contact_rs_api["birthdate"],
+        "email": contact_rs_api["email"],
+        "phone": "No Phone number",
+        "street1": contact_rs_api["street1"],
+        "street2": contact_rs_api["street2"],
+        "city": contact_rs_api["city"],
+        "stateProvince": contact_rs_api["stateProvince"],
+        "postalCode": "No postal code",
+        "country": contact_rs_api["country"],
+    }
 
     logger.info(
-        f"Update contact with id={contact_id}, "
-        f"Update phone={payload['phone']}, "
-        f"Update street2={payload['street2']}, "
-        f"Update postalCode={payload['postalCode']}."
+        "Update contact with id=%s, Update phone=%s, Update street2=%s, Update postalCode=%s.",
+        contact_id,
+        payload["phone"],
+        payload["street2"],
+        payload["postalCode"],
     )
 
     contacts_helper = ContactsHelper()
@@ -333,9 +362,11 @@ def test_update_contact_with_wrong_data(auth_headers, manage_contacts):
 
 @pytest.mark.contacts
 def test_update_last_name_contact(faker: Faker, auth_headers, manage_contacts):
+    """Test updating the last name of a contact."""
+
     logger.info("TEST: Update last name contact")
 
-    contact_rs_api, contact_info = manage_contacts()
+    contact_rs_api, _ = manage_contacts()
     contact_id = contact_rs_api["_id"]
 
     update_lastname = faker.last_name()
@@ -364,9 +395,11 @@ def test_update_last_name_contact(faker: Faker, auth_headers, manage_contacts):
 
 @pytest.mark.contacts
 def test_update_email_contact(faker: Faker, auth_headers, manage_contacts):
+    """Test updating the email address of a contact."""
+
     logger.info("TEST: Update email contact")
 
-    contact_rs_api, contact_info = manage_contacts()
+    contact_rs_api, _ = manage_contacts()
     contact_id = contact_rs_api["_id"]
 
     update_email = faker.email()
@@ -397,9 +430,11 @@ def test_update_email_contact(faker: Faker, auth_headers, manage_contacts):
 def test_upgrade_first_name_and_postal_code_together(
     faker: Faker, auth_headers, manage_contacts
 ):
+    """Test updating the first name and postal code of a contact simultaneously."""
+
     logger.info("TEST: Update first name and postal code contact")
 
-    contact_rs_api, contact_info = manage_contacts()
+    contact_rs_api, _ = manage_contacts()
     contact_id = contact_rs_api["_id"]
 
     update_firstname = faker.first_name()
@@ -436,9 +471,11 @@ def test_upgrade_first_name_and_postal_code_together(
 @pytest.mark.negative
 @pytest.mark.parametrize("phone", ["No Phone", 12345678901234567890])
 def test_update_phone_with_wrong_data(auth_headers, manage_contacts, phone):
+    """Test updating a contact with an invalid phone number (negative test case)."""
+
     logger.info("TEST: Update contact phone number with wrong data.")
 
-    contact_rs_api, contact_info = manage_contacts()
+    contact_rs_api, _ = manage_contacts()
     contact_id = contact_rs_api["_id"]
 
     payload = {"phone": phone}

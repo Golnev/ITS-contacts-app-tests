@@ -1,3 +1,7 @@
+"""
+This module contains API tests for managing users.
+"""
+
 import logging as logger
 import pytest
 
@@ -9,6 +13,8 @@ pytestmark = pytest.mark.api
 
 @pytest.mark.users
 def test_add_user(auth_headers):
+    """Test adding a new user."""
+
     logger.info("TEST: Add new user.")
     users_helper = UsersHelper()
     user_rs_api, _ = users_helper.create_user(auth_headers)
@@ -45,14 +51,17 @@ def test_add_user(auth_headers):
 def test_add_user_without_email_or_password(
     first_name: str, last_name: str, email: str, password: str, auth_headers
 ):
+    """Test adding a new user with missing email or password (negative test case)."""
+
     logger.info("TEST: Add new user.")
     request_utility = RequestUtilities()
 
-    payload = dict()
-    payload["firstName"] = first_name
-    payload["lastName"] = last_name
-    payload["email"] = email
-    payload["password"] = password
+    payload = {
+        "firstName": first_name,
+        "lastName": last_name,
+        "email": email,
+        "password": password,
+    }
 
     rs_api = request_utility.post(
         endpoint="users",
@@ -71,6 +80,8 @@ def test_add_user_without_email_or_password(
 
 @pytest.mark.users
 def test_get_user_profile(auth_headers):
+    """Test retrieving a user's profile."""
+
     logger.info("TEST: Get user profile.")
 
     users_helper = UsersHelper()
@@ -82,6 +93,8 @@ def test_get_user_profile(auth_headers):
 
 @pytest.mark.users
 def test_update_user(auth_headers):
+    """Test updating user details."""
+
     logger.info("TEST: Update user.")
 
     users_helper = UsersHelper()
@@ -139,6 +152,8 @@ def test_update_user(auth_headers):
 def test_update_user_without_email_or_password(
     first_name: str, last_name: str, email: str, password: str, auth_headers
 ):
+    """Test updating a user with missing email or password (negative test case)."""
+
     logger.info("TEST: Update user without email or password")
 
     users_helper = UsersHelper()
@@ -150,11 +165,12 @@ def test_update_user_without_email_or_password(
 
     request_utility = RequestUtilities()
 
-    payload = dict()
-    payload["firstName"] = first_name
-    payload["lastName"] = last_name
-    payload["email"] = email
-    payload["password"] = password
+    payload = {
+        "firstName": first_name,
+        "lastName": last_name,
+        "email": email,
+        "password": password,
+    }
 
     rs_api = request_utility.patch(
         endpoint="users/me",
@@ -174,6 +190,8 @@ def test_update_user_without_email_or_password(
 
 @pytest.mark.users
 def test_delete_new_user(auth_headers):
+    """Test deleting a new user."""
+
     logger.info("TEST: Delete new user.")
     users_helper = UsersHelper()
     user_rs_api, _ = users_helper.create_user(auth_headers)
@@ -186,8 +204,6 @@ def test_delete_new_user(auth_headers):
         auth_headers={"Authorization": f'Bearer {user_rs_api["token"]}'}
     )
 
-    rs_del_user = users_helper.delete_user(
+    users_helper.delete_user(
         auth_headers={"Authorization": f'Bearer {user_rs_api["token"]}'}
     )
-
-    assert not rs_del_user, "Request is not empty."

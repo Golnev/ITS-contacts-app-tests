@@ -1,3 +1,9 @@
+"""
+This module contains UI tests for the "Edit Contact" page using Selenium WebDriver.
+"""
+
+# pylint: disable=unused-argument
+
 import logging as logger
 
 import pytest
@@ -18,6 +24,8 @@ base_url = RequestUtilities.get_base_url()
 @pytest.mark.edit_contact_page
 @pytest.mark.usefixtures("del_all_contacts")
 class TestEditContactPage:
+    """Test suite for the "Edit Contact" page."""
+
     logger.info("Starting tests for edit contact page.")
 
     def test_user_should_be_in_edit_contact_page(
@@ -26,6 +34,8 @@ class TestEditContactPage:
         setup_user,
         created_contact: tuple[ContactDetailsPage, tuple],
     ):
+        """Verifies that the user is on the "Edit Contact" page."""
+
         logger.info("Starting Test: user should be in edit contact page")
 
         contact_page, _ = created_contact
@@ -41,6 +51,8 @@ class TestEditContactPage:
         setup_user,
         created_contact: tuple[ContactDetailsPage, tuple],
     ):
+        """Verifies that the user can log out from the "Edit Contact" page."""
+
         logger.info("Starting Test: logout from edit contact page")
 
         contact_page, _ = created_contact
@@ -62,6 +74,11 @@ class TestEditContactPage:
         setup_user,
         created_contact: tuple[ContactDetailsPage, tuple],
     ):
+        """
+        Verifies that the user can return to the "Contact Details" page
+        from the "Edit Contact" page.
+        """
+
         logger.info(
             "Starting Test: return to contact details from edit contact page."
         )
@@ -84,9 +101,11 @@ class TestEditContactPage:
         setup_user,
         created_contact: tuple[ContactDetailsPage, tuple],
     ):
+        """Verifies that the user can edit a contact's phone number."""
+
         logger.info("Starting test: edit contact.")
 
-        contact_page, contact_info = created_contact
+        contact_page, _ = created_contact
         contact_page.go_to_edit_contact_page()
 
         page = EditContactPage(browser=browser, url=browser.current_url)

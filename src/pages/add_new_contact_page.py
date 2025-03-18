@@ -2,6 +2,10 @@
 This module provides methods for interacting with the "Add New Contact" page.
 """
 
+# pylint: disable=too-many-arguments
+# pylint: disable=too-many-positional-arguments
+# pylint: disable=too-many-locals
+
 import logging as logger
 
 from selenium.webdriver.support import expected_conditions as EC

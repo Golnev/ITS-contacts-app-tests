@@ -1,3 +1,9 @@
+"""
+This module contains UI tests for the "Add New Contact" page using Selenium WebDriver.
+"""
+
+# pylint: disable=unused-argument
+
 import logging as logger
 
 import pytest
@@ -17,11 +23,15 @@ base_url = RequestUtilities.get_base_url()
 @pytest.mark.add_new_contact_page
 @pytest.mark.usefixtures("del_all_contacts")
 class TestAddNewContactPage:
+    """Test suite for the "Add New Contact" page."""
+
     logger.info("Starting tests for add new contact page.")
 
     def test_user_should_be_in_add_new_contact_page(
         self, browser: webdriver.Firefox | webdriver.Chrome, setup_user
     ):
+        """Verify navigation to the "Add New Contact" page."""
+
         logger.info("Starting Test: user should be in add new contact page")
 
         link = base_url + "addContact"
@@ -32,6 +42,8 @@ class TestAddNewContactPage:
     def test_logout_from_add_new_contact_page(
         self, browser: webdriver.Firefox | webdriver.Chrome, setup_user
     ):
+        """Test logout functionality from the "Add New Contact" page."""
+
         logger.info("Starting Test: logout from add new contact page")
 
         link = base_url + "addContact"
@@ -49,6 +61,8 @@ class TestAddNewContactPage:
     def test_cancel_from_add_new_contact_page(
         self, browser: webdriver.Firefox | webdriver.Chrome, setup_user
     ):
+        """Verify the cancel operation on the "Add New Contact" page."""
+
         logger.info("Starting Test: cancel from add new contact page")
 
         link = base_url + "addContact"
@@ -70,6 +84,8 @@ class TestAddNewContactPage:
         setup_user,
         create_contact_info,
     ):
+        """Verify that a new contact can be added successfully."""
+
         logger.info("Starting Test: add new contact")
 
         link = base_url + "addContact"

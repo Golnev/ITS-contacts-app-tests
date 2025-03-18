@@ -1,3 +1,7 @@
+"""
+This module contains API tests for user authentication and login functionality.
+"""
+
 import logging as logger
 import pytest
 
@@ -9,13 +13,16 @@ pytestmark = pytest.mark.api
 
 @pytest.mark.auth
 def test_login_and_logout(auth_headers):
+    """Test the login and logout process for a new user."""
+
     logger.info("TEST: login and logout with new user.")
     users_helper = UsersHelper()
     user_rs_api, user_info = users_helper.create_user(auth_headers)
 
     request_utility = RequestUtilities()
 
-    logger.info(f"Login with user email: {user_info['email']}")
+    logger.info("Login with user email: %s", user_info["email"])
+
     rs_login_json = request_utility.post(
         endpoint="users/login",
         payload={
@@ -70,6 +77,8 @@ def test_login_and_logout(auth_headers):
     ],
 )
 def test_login_with_wrong_email_or_pass(wr_email: str, wr_password: str):
+    """Test login with invalid email or password (negative test case)."""
+
     logger.info("TEST: login with wrong email or pass.")
 
     request_utility = RequestUtilities()

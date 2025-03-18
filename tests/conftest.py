@@ -1,3 +1,12 @@
+"""
+This module sets up configurations, fixtures, and helpers
+for running Selenium-based and API-based tests.
+"""
+
+# pylint: disable=import-outside-toplevel
+# pylint: disable=redefined-outer-name
+# pylint: disable=unused-argument
+
 import logging as logger
 import os
 
@@ -28,6 +37,14 @@ base_url = RequestUtilities.get_base_url()
 
 
 def pytest_addoption(parser):
+    """
+    Add custom command-line options for Pytest.
+
+    Options:
+    - `--rm`: Enables automatic deletion of created contacts after tests.
+    - `--browser_name`: Specifies the browser to use (chrome or firefox).
+    """
+
     parser.addoption(
         "--rm",
         action="store_true",
@@ -44,6 +61,8 @@ def pytest_addoption(parser):
 
 @pytest.fixture(scope="module")
 def auth_headers():
+    """Provides authorization headers for API requests."""
+
     my_email = os.getenv("MY_EMAIL")
     my_pass = os.getenv("MY_PASSWORD")
 
@@ -70,6 +89,8 @@ def auth_headers():
 
 @pytest.fixture()
 def manage_contacts(auth_headers, pytestconfig):
+    """Manages contact creation and cleanup for API tests."""
+
     contacts_helper = ContactsHelper()
     created_contacts = []
 
@@ -96,21 +117,27 @@ def manage_contacts(auth_headers, pytestconfig):
                     contacts_helper.delete_contact(
                         auth_headers=auth_headers, contact_id=contact_id
                     )
-                    logger.info(f"Deleted contact: {contact_id}")
+                    logger.info("Deleted contact: %s", contact_id)
             except AssertionError as e:
                 logger.info(
-                    f"Contact {contact_id} already deleted or not found: {e}"
+                    "Contact %s already deleted or not found: %s",
+                    contact_id,
+                    e,
                 )
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught
                 logger.error(
-                    f"Error while trying to delete contact {contact_id}: {e}"
+                    "Error while trying to delete contact %s: %s",
+                    contact_id,
+                    e,
                 )
 
 
 @pytest.fixture
 def browser(pytestconfig):
+    """Initializes a Selenium WebDriver instance for the specified browser."""
+
     browser_name = pytestconfig.getoption("--browser_name")
-    browser = None
+    browser_driver = None
 
     if browser_name == "firefox":
         logger.info("Prepare browser firefox.")
@@ -123,7 +150,9 @@ def browser(pytestconfig):
             options.binary_location = firefox_path
 
             service = Service(executable_path=geckodriver_path)
-            browser = webdriver.Firefox(service=service, options=options)
+            browser_driver = webdriver.Firefox(
+                service=service, options=options
+            )
     elif browser_name == "chrome":
         logger.info("Prepare browser chrome.")
 
@@ -135,21 +164,22 @@ def browser(pytestconfig):
             options.binary_location = google_chrome_path
 
             service = Service(executable_path=chromedriver_path)
-            browser = webdriver.Chrome(service=service, options=options)
+            browser_driver = webdriver.Chrome(service=service, options=options)
     else:
         raise pytest.UsageError("--browser_name should be chrome or firefox")
 
-    yield browser
+    yield browser_driver
 
     logger.info("Browser quit.")
-    if browser:
-        browser.quit()
+    if browser_driver:
+        browser_driver.quit()
 
 
 @pytest.fixture()
 def del_all_contacts(
     request, pytestconfig, browser: webdriver.Firefox | webdriver.Chrome
 ):
+    """Deletes all test contacts from the contact list page (Selenium-based cleanup)."""
 
     yield
     if pytestconfig.getoption("--rm"):
@@ -178,6 +208,8 @@ def del_all_contacts(
 
 @pytest.fixture(scope="function")
 def setup_user(browser: webdriver.Firefox | webdriver.Chrome):
+    """Logs in a user using the login page."""
+
     logger.info("Setup user with default parameters.")
     link = base_url + "login"
     page = LoginPage(browser=browser, url=link)
@@ -194,6 +226,8 @@ def setup_user(browser: webdriver.Firefox | webdriver.Chrome):
 def create_contact_info(
     browser: webdriver.Firefox | webdriver.Chrome, setup_user
 ):
+    """Creates contact information using the Faker library."""
+
     logger.info("Create contact.")
     link = base_url + "addContact"
     page = AddNewContactPage(browser=browser, url=link)
@@ -234,11 +268,14 @@ def created_contact(
     create_contact_info,
     pytestconfig,
 ):
+    """Creates a new contact using Selenium."""
+
     logger.info(
-        f"Creating contact wit\n"
-        f"contact first name: {create_contact_info[0]}, "
-        f"last name: {create_contact_info[1]}"
+        "Creating contact with Contact first name: %s, last name: %s",
+        create_contact_info[0],
+        create_contact_info[1],
     )
+
     add_new_contact_link = base_url + "addContact"
     page = AddNewContactPage(browser=browser, url=add_new_contact_link)
     page.open()
