@@ -16,6 +16,7 @@ base_url = RequestUtilities.get_base_url()
 
 
 @pytest.mark.edit_contact_page
+@pytest.mark.usefixtures("del_all_contacts")
 class TestEditContactPage:
     logger.info("Starting tests for edit contact page.")
 

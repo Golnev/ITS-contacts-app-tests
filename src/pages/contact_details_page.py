@@ -1,3 +1,7 @@
+"""
+This module provides methods for interacting with the "Contact Details" page.
+"""
+
 import logging as logger
 import time
 from typing import Literal
@@ -7,11 +11,17 @@ from src.pages.base_page import BasePage
 
 
 class ContactDetailsPage(BasePage):
+    """Class with methods for verifying and interacting with the 'Contact Details' page."""
+
     def should_be_contact_details_page(self):
+        """Verify that the current page is the 'Contact Details' page."""
+
         self.should_be_contact_details_page_url()
         self.should_be_contact_details_form()
 
     def should_be_contact_details_page_url(self):
+        """Verify that the current page URL matches the expected 'Contact Details' page URL."""
+
         logger.info("Check contacts details page url.")
 
         assert (
@@ -20,6 +30,8 @@ class ContactDetailsPage(BasePage):
         ), "URL address is not correct."
 
     def should_be_contact_details_form(self):
+        """Verify the presence of the contact details form on the page."""
+
         logger.info("Check contact details form is present.")
 
         assert self.is_element_present(
@@ -27,6 +39,8 @@ class ContactDetailsPage(BasePage):
         ), "Contact details form is not present."
 
     def logout(self):
+        """Log out the current user from the 'Contact Details' page."""
+
         logger.info("Logout.")
 
         logout_button = self.browser.find_element(
@@ -35,6 +49,8 @@ class ContactDetailsPage(BasePage):
         logout_button.click()
 
     def return_to_contact_list(self):
+        """Return to the contact list from the 'Contact Details' page."""
+
         logger.info("Return to contact list.")
 
         return_button = self.browser.find_element(
@@ -43,6 +59,8 @@ class ContactDetailsPage(BasePage):
         return_button.click()
 
     def delete_contact(self):
+        """Delete the current contact from the 'Contact Details' page."""
+
         logger.info("Deleting contact.")
 
         delete_button = self.browser.find_element(
@@ -54,6 +72,8 @@ class ContactDetailsPage(BasePage):
         alert.accept()
 
     def go_to_edit_contact_page(self):
+        """Navigate to the 'Edit Contact' page from the 'Contact Details' page."""
+
         logger.info("Go to edit contact page.")
 
         edit_contact_button = self.browser.find_element(
@@ -77,6 +97,8 @@ class ContactDetailsPage(BasePage):
             "country",
         ],
     ):
+        """Retrieve information from a specified field on the 'Contact Details' page."""
+
         logger.info("Get info from field.")
 
         locators_dict = {

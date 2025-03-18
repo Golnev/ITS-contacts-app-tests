@@ -1,3 +1,7 @@
+"""
+This module provides methods for interacting with the "Edit Contact" page.
+"""
+
 import logging as logger
 import time
 from typing import Literal
@@ -10,11 +14,17 @@ from src.pages.base_page import BasePage
 
 
 class EditContactPage(BasePage):
+    """Class with methods for verifying and interacting with the 'Edit Contact' page."""
+
     def should_be_edit_contact_page(self):
+        """Verify that the current page is the 'Edit Contact' page."""
+
         self.should_be_edit_contact_page_url()
         self.should_be_edit_contact_form()
 
     def should_be_edit_contact_page_url(self):
+        """Verify that the URL of the current page matches the expected 'Edit Contact' page URL."""
+
         logger.info("Check edit contact page url.")
 
         assert (
@@ -23,6 +33,8 @@ class EditContactPage(BasePage):
         ), "URL address is not correct."
 
     def should_be_edit_contact_form(self):
+        """Verify the presence of the edit contact form on the page."""
+
         logger.info("Check edit contact form is present")
 
         assert self.is_element_present(
@@ -30,6 +42,8 @@ class EditContactPage(BasePage):
         ), "Edit contact form is not present."
 
     def logout(self):
+        """Log out the current user from the 'Edit Contact' page."""
+
         logger.info("Logout from edit contact page.")
 
         logout_button = self.browser.find_element(
@@ -38,6 +52,8 @@ class EditContactPage(BasePage):
         logout_button.click()
 
     def return_to_contact_details(self):
+        """Return to the 'Contact Details' page from the 'Edit Contact' page."""
+
         logger.info("Return to contact details from edit contact page.")
 
         cancel_button = self.browser.find_element(
@@ -62,7 +78,9 @@ class EditContactPage(BasePage):
         ],
         data: str,
     ):
-        logger.info(f"Edit {what} contact with {data}.")
+        """Edit a specified field of the contact on the 'Edit Contact' page."""
+
+        logger.info("Edit %s contact with %s.", what, data)
 
         locators_dict = {
             "first_name": EditContactPageLocators.FIRST_NAME,

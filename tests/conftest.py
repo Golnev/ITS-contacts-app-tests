@@ -146,10 +146,11 @@ def browser(pytestconfig):
         browser.quit()
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture()
 def del_all_contacts(
-    browser: webdriver.Firefox | webdriver.Chrome, pytestconfig
+    request, pytestconfig, browser: webdriver.Firefox | webdriver.Chrome
 ):
+
     yield
     if pytestconfig.getoption("--rm"):
         logger.info("Delete all contacts.")

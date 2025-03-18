@@ -7,5 +7,5 @@ src/__pycache__
 src/helpers/__pycache__
 src/pages/__pycache__
 tests/__pycache__
-tests/API_tests/__pycache__
-tests/UI_tests/__pycache__
+tests/api_tests/__pycache__
+tests/ui_tests/__pycache__

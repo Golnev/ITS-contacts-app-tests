@@ -1,3 +1,7 @@
+"""
+This module provides utility functions for working with users.
+"""
+
 import logging as logger
 from faker import Faker
 
@@ -5,22 +9,28 @@ from src.requests_utilities import RequestUtilities
 
 
 class UsersHelper:
+    """Class with methods for users."""
+
     def __init__(self):
         self.request_utility = RequestUtilities()
 
     def create_user(self, auth_headers: dict):
+        """Method for creating new user."""
+
         logger.info("Create new user.")
         fake = Faker()
-        payload = dict()
-        payload["firstName"] = fake.first_name()
-        payload["lastName"] = fake.last_name()
-        payload["email"] = fake.email()
-        payload["password"] = fake.password(length=8, special_chars=False)
+        payload = {
+            "firstName": fake.first_name(),
+            "lastName": fake.last_name(),
+            "email": fake.email(),
+            "password": fake.password(length=8, special_chars=False),
+        }
 
         logger.info(
-            f"Fake user first name: {payload['firstName']}, "
-            f"fake user last name: {payload['lastName']}, "
-            f"fake user email: {payload['email']}"
+            "Fake user first name: %s, fake user last name: %s, fake user email: %s",
+            payload["firstName"],
+            payload["lastName"],
+            payload["email"],
         )
 
         create_user_json = self.request_utility.post(
@@ -33,15 +43,15 @@ class UsersHelper:
         return create_user_json, payload
 
     def delete_user(self, auth_headers: dict):
+        """Method for deleting user."""
+
         logger.info("Delete user.")
 
-        rs_del_user = self.request_utility.delete(
-            endpoint="users/me", headers=auth_headers
-        )
-
-        return rs_del_user
+        self.request_utility.delete(endpoint="users/me", headers=auth_headers)
 
     def get_user(self, auth_headers: dict):
+        """Method for getting user."""
+
         logger.info("Get user.")
 
         rs_user_info = self.request_utility.get(
@@ -51,19 +61,25 @@ class UsersHelper:
         return rs_user_info
 
     def update_user(self, auth_headers: dict):
+        """Method for updating user."""
+
         logger.info("Update user.")
 
         fake = Faker()
-        payload = dict()
-        payload["firstName"] = fake.first_name()
-        payload["lastName"] = fake.last_name()
-        payload["email"] = fake.email()
-        payload["password"] = fake.password(length=8, special_chars=False)
+        payload = {
+            "firstName": fake.first_name(),
+            "lastName": fake.last_name(),
+            "email": fake.email(),
+            "password": fake.password(length=8, special_chars=False),
+        }
 
         logger.info(
-            f"Fake user update first name: {payload['firstName']}, "
-            f"fake user update last name: {payload['lastName']}, "
-            f"fake user update email: {payload['email']}"
+            "Fake user update first name: %s, "
+            "fake user update last name: %s, "
+            "fake user update email: %s",
+            payload["firstName"],
+            payload["lastName"],
+            payload["email"],
         )
 
         create_user_json = self.request_utility.patch(

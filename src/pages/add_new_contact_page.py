@@ -1,3 +1,7 @@
+"""
+This module provides methods for interacting with the "Add New Contact" page.
+"""
+
 import logging as logger
 
 from selenium.webdriver.support import expected_conditions as EC
@@ -8,11 +12,17 @@ from src.pages.base_page import BasePage
 
 
 class AddNewContactPage(BasePage):
+    """Class with methods for verifying the 'Add New Contact' page."""
+
     def should_be_add_new_contact_page(self):
+        """Method for verifying that the 'Add New Contact' page is correct."""
+
         self.should_be_contact_list_url()
         self.should_be_add_new_contact_form()
 
     def should_be_contact_list_url(self):
+        """Method for verifying that the 'contact list' page url is correct."""
+
         logger.info("Check contact list url.")
 
         assert (
@@ -21,6 +31,8 @@ class AddNewContactPage(BasePage):
         ), "URL address is not correct."
 
     def should_be_add_new_contact_form(self):
+        """Method for verifying that the 'Add New Contact form' is correct."""
+
         logger.info("Check add new contact form is present.")
 
         assert self.is_element_present(
@@ -28,6 +40,8 @@ class AddNewContactPage(BasePage):
         ), "Add new contact form is not present."
 
     def logout(self):
+        """Method to log out the current user by clicking the logout button."""
+
         logger.info("Logout.")
 
         logout_button = self.browser.find_element(
@@ -36,6 +50,8 @@ class AddNewContactPage(BasePage):
         logout_button.click()
 
     def cancel_from_add_new_contact_page(self):
+        """Method to cancel form add new page by clicking the cancel button."""
+
         logger.info("Cancel from add new contact page")
 
         WebDriverWait(self.browser, 10).until(
@@ -63,9 +79,12 @@ class AddNewContactPage(BasePage):
         postal_code,
         country,
     ):
+        """Method to add new contact."""
+
         logger.info(
-            f"Add new contact, "
-            f"with first name: {first_name}, last name: {last_name}"
+            "Add new contact, with first name: %s, last name: %s",
+            first_name,
+            last_name,
         )
 
         first_name_form = self.browser.find_element(
