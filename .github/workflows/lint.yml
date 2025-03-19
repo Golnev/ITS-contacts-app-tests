@@ -1,0 +1,32 @@
+name: Linting
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13.2'
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install pylint flake8 pycodestyle
+
+      - name: Run pylint
+        run: pylint --disable=R0801 --ignore=.venv **/*.py
+
+      - name: Run flake8
+        run: flake8 --exclude=.venv .
+
+      - name: Run pycodestyle
+        run: pycodestyle --exclude=.venv .
