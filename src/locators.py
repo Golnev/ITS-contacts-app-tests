@@ -4,9 +4,6 @@ This module contains locators for Selenium tests.
 The locators are used for interacting with the Login Page elements.
 """
 
-# pylint: disable=invalid-name
-
-
 from dataclasses import dataclass
 
 from selenium.webdriver.common.by import By

@@ -3,8 +3,6 @@ This module contains UI tests
 for the "Contact Details" page using Selenium WebDriver.
 """
 
-# pylint: disable=unused-argument
-
 import logging as logger
 
 import pytest

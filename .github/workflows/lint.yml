@@ -21,11 +21,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run pylint
-        run: pylint --disable=R0801 --ignore=.venv **/*.py
-
       - name: Run flake8
         run: flake8 --exclude=.venv .
 
       - name: Run pycodestyle
         run: pycodestyle --exclude=.venv .
+
+      - name: Run pylint
+        run: pylint --ignore=.venv **/*.py

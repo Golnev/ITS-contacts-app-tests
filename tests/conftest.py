@@ -3,10 +3,6 @@ This module sets up configurations, fixtures, and helpers
 for running Selenium-based and API-based tests.
 """
 
-# pylint: disable=import-outside-toplevel
-# pylint: disable=redefined-outer-name
-# pylint: disable=unused-argument
-
 import logging as logger
 import os
 
@@ -31,8 +27,6 @@ from src.pages.login_page import LoginPage
 from src.requests_utilities import RequestUtilities
 
 load_dotenv()
-
-firefox_path = os.getenv("FIREFOX_PATH")
 
 base_url = RequestUtilities.get_base_url()
 
@@ -129,7 +123,7 @@ def manage_contacts(auth_headers, pytestconfig):
                     contact_id,
                     e,
                 )
-            except Exception as e:  # pylint: disable=broad-exception-caught
+            except Exception as e:
                 logger.error(
                     "Error while trying to delete contact %s: %s",
                     contact_id,
@@ -144,18 +138,23 @@ def browser(pytestconfig):
     """
 
     browser_name = pytestconfig.getoption("--browser_name")
-    driver = None
 
     if browser_name == "firefox":
         logger.info("Prepare browser firefox.")
 
         options = Options()
+        firefox_path = os.getenv("FIREFOX_PATH")
+
         if firefox_path:
             options.binary_location = firefox_path
 
             driver = webdriver.Firefox(
                 service=FirefoxService(GeckoDriverManager().install()),
                 options=options,
+            )
+        else:
+            driver = webdriver.Firefox(
+                service=FirefoxService(GeckoDriverManager().install())
             )
 
     elif browser_name == "chrome":

@@ -2,8 +2,6 @@
 This module contains API tests for contacts management.
 """
 
-# pylint: disable=unused-argument
-
 import logging as logger
 import pytest
 from faker.proxy import Faker

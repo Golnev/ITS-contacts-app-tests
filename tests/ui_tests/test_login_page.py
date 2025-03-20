@@ -2,8 +2,6 @@
 This module contains UI tests for the "Login" page using Selenium WebDriver.
 """
 
-# pylint: disable=unused-argument
-
 import logging as logger
 import os
 

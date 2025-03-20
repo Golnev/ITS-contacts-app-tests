@@ -13,7 +13,6 @@ from src.hosts_config import API_HOSTS
 load_dotenv()
 
 
-# pylint: disable=too-many-instance-attributes
 class RequestUtilities:
     """
     A utility class for sending HTTP requests and handling API responses.
@@ -40,7 +39,7 @@ class RequestUtilities:
         self.response_api = None
         self.response_json = None
 
-        self.EMPTY_CONTENT_LENGTH = "0"  # pylint: disable=invalid-name
+        self.EMPTY_CONTENT_LENGTH = "0"
 
     def __assert_status_code(self):
         """
