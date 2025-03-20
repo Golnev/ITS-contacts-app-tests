@@ -14,9 +14,14 @@ import pytest
 from dotenv import load_dotenv
 from faker import Faker
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.service import Service as FirefoxService
 
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.firefox import GeckoDriverManager
 
 from src.helpers.contacts_helper import ContactsHelper
 from src.pages.add_new_contact_page import AddNewContactPage
@@ -28,10 +33,6 @@ from src.requests_utilities import RequestUtilities
 load_dotenv()
 
 firefox_path = os.getenv("FIREFOX_PATH")
-geckodriver_path = os.getenv("GECKODRIVER_PATH")
-
-google_chrome_path = os.getenv("GOOGLE_CHROME_PATH")
-chromedriver_path = os.getenv("CHROMEDRIVER_PATH")
 
 base_url = RequestUtilities.get_base_url()
 
@@ -143,42 +144,35 @@ def browser(pytestconfig):
     """
 
     browser_name = pytestconfig.getoption("--browser_name")
-    browser_driver = None
+    driver = None
 
     if browser_name == "firefox":
         logger.info("Prepare browser firefox.")
 
-        from selenium.webdriver.firefox.options import Options
-        from selenium.webdriver.firefox.service import Service
-
         options = Options()
-        if firefox_path and geckodriver_path:
+        if firefox_path:
             options.binary_location = firefox_path
 
-            service = Service(executable_path=geckodriver_path)
-            browser_driver = webdriver.Firefox(
-                service=service, options=options
+            driver = webdriver.Firefox(
+                service=FirefoxService(GeckoDriverManager().install()),
+                options=options,
             )
+
     elif browser_name == "chrome":
         logger.info("Prepare browser chrome.")
 
-        from selenium.webdriver.chrome.options import Options
-        from selenium.webdriver.chrome.service import Service
+        driver = webdriver.Chrome(
+            service=ChromeService(ChromeDriverManager().install())
+        )
 
-        options = Options()
-        if google_chrome_path and chromedriver_path:
-            options.binary_location = google_chrome_path
-
-            service = Service(executable_path=chromedriver_path)
-            browser_driver = webdriver.Chrome(service=service, options=options)
     else:
         raise pytest.UsageError("--browser_name should be chrome or firefox")
 
-    yield browser_driver
+    yield driver
 
     logger.info("Browser quit.")
-    if browser_driver:
-        browser_driver.quit()
+    if driver:
+        driver.quit()
 
 
 @pytest.fixture()
