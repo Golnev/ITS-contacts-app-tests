@@ -43,7 +43,6 @@ class TestLoginPage:
         page.open()
         page.should_be_login_page()
 
-    @pytest.mark.usefixtures("setup_user")
     def test_login(self, browser: webdriver.Firefox | webdriver.Chrome):
         """
         Verifies that the user can log in successfully.

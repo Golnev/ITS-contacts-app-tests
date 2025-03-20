@@ -93,7 +93,7 @@ class AddNewContactPage(BasePage):
             last_name,
         )
 
-        time.sleep(3)
+        time.sleep(5)
 
         first_name_form = self.wait_for_element_ready(
             AddNewContactPageLocators.FIRST_NAME
@@ -149,4 +149,4 @@ class AddNewContactPage(BasePage):
         )
         submit_button.click()
 
-        time.sleep(3)
+        time.sleep(5)

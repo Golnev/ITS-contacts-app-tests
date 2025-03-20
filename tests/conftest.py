@@ -219,17 +219,14 @@ def setup_user(browser: webdriver.Firefox | webdriver.Chrome):
     if email and password:
         page.login(email=email, password=password)
 
+    WebDriverWait(browser, 10).until(EC.url_to_be(base_url + "contactList"))
+
 
 @pytest.fixture(scope="function")
 def create_contact_info(browser: webdriver.Firefox | webdriver.Chrome):
     """
     Creates contact information using the Faker library.
     """
-
-    # logger.info("Create contact.")
-    # link = base_url + "addContact"
-    # page = AddNewContactPage(browser=browser, url=link)
-    # page.open()
 
     fake = Faker()
     fake_contact_first_name = fake.first_name()
@@ -278,6 +275,8 @@ def created_contact(
     add_new_contact_link = base_url + "addContact"
     page = AddNewContactPage(browser=browser, url=add_new_contact_link)
     page.open()
+
+    WebDriverWait(browser, 10).until(EC.url_to_be(base_url + "addContact"))
 
     page.add_new_contact(*create_contact_info)
 
