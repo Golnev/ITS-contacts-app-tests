@@ -1,6 +1,5 @@
 """
 This module contains locators for Selenium tests.
-
 The locators are used for interacting with the Login Page elements.
 """
 

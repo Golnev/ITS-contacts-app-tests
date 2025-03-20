@@ -83,7 +83,7 @@ class RegisterPage(BasePage):
         """
 
         logger.info("Check validation error notification.")
-        assert self.get_visible_element(
+        assert self.get_visible_element_text(
             *RegisterPageLocators.ERROR_NOTIFICATION
         ).startswith(
             "User validation failed"

@@ -32,7 +32,6 @@ class TestEditContactPage:
     def test_user_should_be_in_edit_contact_page(
         self,
         browser: webdriver.Firefox | webdriver.Chrome,
-        setup_user,
         created_contact: tuple[ContactDetailsPage, tuple],
     ):
         """
@@ -51,7 +50,6 @@ class TestEditContactPage:
     def test_logout_from_edit_contact_page(
         self,
         browser: webdriver.Firefox | webdriver.Chrome,
-        setup_user,
         created_contact: tuple[ContactDetailsPage, tuple],
     ):
         """
@@ -76,7 +74,6 @@ class TestEditContactPage:
     def test_return_to_contact_details(
         self,
         browser: webdriver.Firefox | webdriver.Chrome,
-        setup_user,
         created_contact: tuple[ContactDetailsPage, tuple],
     ):
         """
@@ -103,7 +100,6 @@ class TestEditContactPage:
     def test_edit_contact_phone(
         self,
         browser: webdriver.Firefox | webdriver.Chrome,
-        setup_user,
         created_contact: tuple[ContactDetailsPage, tuple],
     ):
         """

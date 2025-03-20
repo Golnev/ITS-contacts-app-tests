@@ -14,7 +14,7 @@ pytestmark = pytest.mark.api
 
 
 @pytest.mark.contacts
-def test_add_contact(auth_headers, manage_contacts):
+def test_add_contact(manage_contacts):
     """
     Test the addition of a new contact.
     """

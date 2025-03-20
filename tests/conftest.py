@@ -123,12 +123,6 @@ def manage_contacts(auth_headers, pytestconfig):
                     contact_id,
                     e,
                 )
-            except Exception as e:
-                logger.error(
-                    "Error while trying to delete contact %s: %s",
-                    contact_id,
-                    e,
-                )
 
 
 @pytest.fixture
@@ -176,7 +170,7 @@ def browser(pytestconfig):
 
 @pytest.fixture()
 def del_all_contacts(
-    request, pytestconfig, browser: webdriver.Firefox | webdriver.Chrome
+    pytestconfig, browser: webdriver.Firefox | webdriver.Chrome
 ):
     """
     Deletes all test contacts from the contact list page
@@ -227,17 +221,15 @@ def setup_user(browser: webdriver.Firefox | webdriver.Chrome):
 
 
 @pytest.fixture(scope="function")
-def create_contact_info(
-    browser: webdriver.Firefox | webdriver.Chrome, setup_user
-):
+def create_contact_info(browser: webdriver.Firefox | webdriver.Chrome):
     """
     Creates contact information using the Faker library.
     """
 
-    logger.info("Create contact.")
-    link = base_url + "addContact"
-    page = AddNewContactPage(browser=browser, url=link)
-    page.open()
+    # logger.info("Create contact.")
+    # link = base_url + "addContact"
+    # page = AddNewContactPage(browser=browser, url=link)
+    # page.open()
 
     fake = Faker()
     fake_contact_first_name = fake.first_name()
@@ -272,7 +264,6 @@ def created_contact(
     browser: webdriver.Firefox | webdriver.Chrome,
     setup_user,
     create_contact_info,
-    pytestconfig,
 ):
     """
     Creates a new contact using Selenium.

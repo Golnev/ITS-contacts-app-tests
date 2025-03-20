@@ -31,8 +31,6 @@ class TestContactDetailsPage:
 
     def test_user_should_be_in_contact_details_page(
         self,
-        browser: webdriver.Firefox | webdriver.Chrome,
-        setup_user,
         created_contact: tuple[ContactDetailsPage, tuple],
     ):
         """
@@ -48,7 +46,6 @@ class TestContactDetailsPage:
     def test_logout_from_contact_details_page(
         self,
         browser: webdriver.Firefox | webdriver.Chrome,
-        setup_user,
         created_contact: tuple[ContactDetailsPage, tuple],
     ):
         """
@@ -71,7 +68,6 @@ class TestContactDetailsPage:
     def test_return_to_contact_list(
         self,
         browser: webdriver.Firefox | webdriver.Chrome,
-        setup_user,
         created_contact: tuple[ContactDetailsPage, tuple],
     ):
         """
@@ -93,7 +89,6 @@ class TestContactDetailsPage:
     def test_delete_contact(
         self,
         browser: webdriver.Firefox | webdriver.Chrome,
-        setup_user,
         created_contact: tuple[ContactDetailsPage, tuple],
     ):
         """
@@ -122,7 +117,6 @@ class TestContactDetailsPage:
     def test_user_can_go_to_edit_contact(
         self,
         browser: webdriver.Firefox | webdriver.Chrome,
-        setup_user,
         created_contact: tuple[ContactDetailsPage, tuple],
     ):
         """

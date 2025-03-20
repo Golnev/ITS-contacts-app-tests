@@ -34,7 +34,16 @@ class BasePage:
             return False
         return True
 
-    def get_visible_element(self, how, what, timeout: int = 5):
+    def get_visible_element(self, how, what, timeout: int = 10):
+        """
+        Retrieve a visible element on the page.
+        """
+
+        return WebDriverWait(self.browser, timeout).until(
+            EC.visibility_of_element_located((how, what))
+        )
+
+    def get_visible_element_text(self, how, what, timeout: int = 10):
         """
         Retrieve the text of a visible element on the page.
         """
@@ -45,9 +54,44 @@ class BasePage:
             .text
         )
 
+    def get_clickable_element(self, how, what, timeout: int = 10):
+        """
+        Retrieve a clickable element on the page.
+        """
+
+        return WebDriverWait(self.browser, timeout).until(
+            EC.element_to_be_clickable((how, what))
+        )
+
     def open(self):
         """
         Open the web page using the specified URL.
         """
 
         self.browser.get(self.url)
+
+    def is_element_visible_and_enabled(self, element):
+        """
+        Checks if an element is visible and enabled for interaction.
+        """
+
+        return (
+            element.is_displayed()
+            and element.is_enabled()
+            and self.browser.execute_script(
+                "return window.getComputedStyle(arguments[0]).visibility === 'visible';",
+                element,
+            )
+        )
+
+    def wait_for_element_ready(self, locator, timeout=10):
+        """
+        Waits for an element to become visible and enabled for interaction.
+        """
+
+        WebDriverWait(self.browser, timeout).until(
+            lambda driver: self.is_element_visible_and_enabled(
+                driver.find_element(*locator)
+            )
+        )
+        return self.browser.find_element(*locator)

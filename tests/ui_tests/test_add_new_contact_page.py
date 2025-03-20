@@ -20,7 +20,7 @@ base_url = RequestUtilities.get_base_url()
 
 
 @pytest.mark.add_new_contact_page
-@pytest.mark.usefixtures("del_all_contacts")
+@pytest.mark.usefixtures("del_all_contacts", "setup_user")
 class TestAddNewContactPage:
     """
     Test suite for the "Add New Contact" page.
@@ -29,7 +29,7 @@ class TestAddNewContactPage:
     logger.info("Starting tests for add new contact page.")
 
     def test_user_should_be_in_add_new_contact_page(
-        self, browser: webdriver.Firefox | webdriver.Chrome, setup_user
+        self, browser: webdriver.Firefox | webdriver.Chrome
     ):
         """
         Verify navigation to the "Add New Contact" page.
@@ -43,7 +43,7 @@ class TestAddNewContactPage:
         page.should_be_add_new_contact_page()
 
     def test_logout_from_add_new_contact_page(
-        self, browser: webdriver.Firefox | webdriver.Chrome, setup_user
+        self, browser: webdriver.Firefox | webdriver.Chrome
     ):
         """
         Test logout functionality from the "Add New Contact" page.
@@ -64,7 +64,7 @@ class TestAddNewContactPage:
         ), f"Wrong URL after logout. URL: {page.browser.current_url}"
 
     def test_cancel_from_add_new_contact_page(
-        self, browser: webdriver.Firefox | webdriver.Chrome, setup_user
+        self, browser: webdriver.Firefox | webdriver.Chrome
     ):
         """
         Verify the cancel operation on the "Add New Contact" page.
@@ -76,9 +76,13 @@ class TestAddNewContactPage:
         page = AddNewContactPage(browser=browser, url=link)
         page.open()
 
+        WebDriverWait(browser, 10).until(EC.url_to_be(base_url + "addContact"))
+
         page.cancel_from_add_new_contact_page()
 
-        WebDriverWait(browser, 5).until(EC.url_changes(link))
+        WebDriverWait(browser, 10).until(
+            EC.url_to_be(base_url + "contactList")
+        )
 
         contact_list_page = ContactListPage(
             browser=browser, url=browser.current_url
@@ -88,7 +92,6 @@ class TestAddNewContactPage:
     def test_add_new_contact(
         self,
         browser: webdriver.Firefox | webdriver.Chrome,
-        setup_user,
         create_contact_info,
     ):
         """

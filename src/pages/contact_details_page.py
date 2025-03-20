@@ -138,6 +138,6 @@ class ContactDetailsPage(BasePage):
         }
 
         time.sleep(3)
-        field_text = self.get_visible_element(*locators_dict[what])
+        field_text = self.get_visible_element_text(*locators_dict[what])
 
         return field_text
