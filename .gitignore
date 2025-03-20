@@ -9,3 +9,4 @@ src/pages/__pycache__
 tests/__pycache__
 tests/api_tests/__pycache__
 tests/ui_tests/__pycache__
+tests/reports
