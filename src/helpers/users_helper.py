@@ -47,16 +47,19 @@ class UsersHelper:
 
         return create_user_json, payload
 
-    def delete_user(self, auth_headers: dict):
+    def delete_user(self, auth_extra=None):
         """
         Method for deleting user.
         """
 
         logger.info("Delete user.")
 
-        self.request_utility.delete(endpoint="users/me")
+        self.request_utility.delete(
+            endpoint="users/me",
+            auth_extra=auth_extra
+        )
 
-    def get_user(self, auth_headers: dict):
+    def get_user(self, auth_extra=None):
         """
         Method for getting user.
         """
@@ -64,12 +67,13 @@ class UsersHelper:
         logger.info("Get user.")
 
         rs_user_info = self.request_utility.get(
-            endpoint="users/me"
+            endpoint="users/me",
+            auth_extra=auth_extra,
         )
 
         return rs_user_info
 
-    def update_user(self, auth_headers: dict):
+    def update_user(self, auth_extra=None):
         """
         Method for updating user.
         """
@@ -94,7 +98,9 @@ class UsersHelper:
         )
 
         create_user_json = self.request_utility.patch(
-            endpoint="users/me", payload=payload
+            endpoint="users/me",
+            payload=payload,
+            auth_extra=auth_extra,
         )
 
         return create_user_json, payload

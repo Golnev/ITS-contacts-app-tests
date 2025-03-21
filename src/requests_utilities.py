@@ -98,6 +98,7 @@ class RequestUtilities:
         self,
         auth_headers,
         endpoint: str,
+        auth_extra=None,
         expected_status_code=200,
     ):
         """
@@ -106,8 +107,9 @@ class RequestUtilities:
 
         logger.info("Starting GET method.")
 
-        if not auth_headers:
+        if auth_extra:
             auth_headers = {"Content-Type": "application/json"}
+            auth_headers.update(auth_extra)
         else:
             auth_headers.update({"Content-Type": "application/json"})
 
@@ -247,6 +249,7 @@ class RequestUtilities:
         auth_headers,
         endpoint: str,
         payload: dict | None = None,
+        auth_extra=None,
         # headers: dict | None = None,
         expected_status_code=200,
     ):
@@ -256,8 +259,9 @@ class RequestUtilities:
 
         logger.info("Starting PATCH method.")
 
-        if not auth_headers:
+        if auth_extra:
             auth_headers = {"Content-Type": "application/json"}
+            auth_headers.update(auth_extra)
         else:
             auth_headers.update({"Content-Type": "application/json"})
 
@@ -299,6 +303,7 @@ class RequestUtilities:
         auth_headers,
         endpoint: str,
         # headers: dict | None = None,
+        auth_extra=None,
         expected_status_code=200,
     ):
         """
@@ -307,8 +312,9 @@ class RequestUtilities:
 
         logger.info("Starting DELETE method.")
 
-        if not auth_headers:
+        if auth_extra:
             auth_headers = {"Content-Type": "application/json"}
+            auth_headers.update(auth_extra)
         else:
             auth_headers.update({"Content-Type": "application/json"})
 

@@ -12,21 +12,22 @@ pytestmark = pytest.mark.api
 
 
 @pytest.mark.users
-def test_add_user(auth_headers):
+def test_add_user():
     """
     Test adding a new user.
     """
 
     logger.info("TEST: Add new user.")
     users_helper = UsersHelper()
-    user_rs_api, _ = users_helper.create_user(auth_headers)
+    user_rs_api, _ = users_helper.create_user()
     assert (
         user_rs_api is not None
     ), "Response is None, but expected JSON response."
 
     get_info_user = users_helper.get_user(
-        auth_headers={"Authorization": f'Bearer {user_rs_api["token"]}'}
+        auth_extra={"Authorization": f'Bearer {user_rs_api["token"]}'}
     )
+
     assert (
         get_info_user is not None
     ), "Response is None, but expected JSON response."
@@ -36,7 +37,7 @@ def test_add_user(auth_headers):
     ), "User Id does not match."
 
     users_helper.delete_user(
-        auth_headers={"Authorization": f'Bearer {user_rs_api["token"]}'}
+        auth_extra={"Authorization": f'Bearer {user_rs_api["token"]}'}
     )
 
 
@@ -51,7 +52,7 @@ def test_add_user(auth_headers):
     ],
 )
 def test_add_user_without_email_or_password(
-    first_name: str, last_name: str, email: str, password: str, auth_headers
+    first_name: str, last_name: str, email: str, password: str
 ):
     """
     Test adding a new user with missing email or password
@@ -71,7 +72,7 @@ def test_add_user_without_email_or_password(
     rs_api = request_utility.post(
         endpoint="users",
         payload=payload,
-        headers=auth_headers,
+        # headers=auth_headers,
         expected_status_code=400,
     )
 
@@ -84,7 +85,7 @@ def test_add_user_without_email_or_password(
 
 
 @pytest.mark.users
-def test_get_user_profile(auth_headers):
+def test_get_user_profile():
     """
     Test retrieving a user's profile.
     """
@@ -93,13 +94,13 @@ def test_get_user_profile(auth_headers):
 
     users_helper = UsersHelper()
 
-    get_info_user = users_helper.get_user(auth_headers=auth_headers)
+    get_info_user = users_helper.get_user()
 
     assert get_info_user, "Response is empty."
 
 
 @pytest.mark.users
-def test_update_user(auth_headers):
+def test_update_user():
     """
     Test updating user details.
     """
@@ -107,14 +108,14 @@ def test_update_user(auth_headers):
     logger.info("TEST: Update user.")
 
     users_helper = UsersHelper()
-    user_rs_api, user_info = users_helper.create_user(auth_headers)
+    user_rs_api, user_info = users_helper.create_user()
 
     assert (
         user_rs_api is not None
     ), "Response is None, but expected JSON response."
 
     update_user_rs_api, update_user_info = users_helper.update_user(
-        auth_headers={"Authorization": f'Bearer {user_rs_api["token"]}'}
+        auth_extra={"Authorization": f'Bearer {user_rs_api["token"]}'}
     )
 
     assert (
@@ -144,7 +145,7 @@ def test_update_user(auth_headers):
     ), "The password is the same after the update"
 
     users_helper.delete_user(
-        auth_headers={"Authorization": f'Bearer {user_rs_api["token"]}'}
+        auth_extra={"Authorization": f'Bearer {user_rs_api["token"]}'}
     )
 
 
@@ -159,7 +160,7 @@ def test_update_user(auth_headers):
     ],
 )
 def test_update_user_without_email_or_password(
-    first_name: str, last_name: str, email: str, password: str, auth_headers
+    first_name: str, last_name: str, email: str, password: str
 ):
     """
     Test updating a user with missing email or password
@@ -169,7 +170,7 @@ def test_update_user_without_email_or_password(
     logger.info("TEST: Update user without email or password")
 
     users_helper = UsersHelper()
-    user_rs_api, _ = users_helper.create_user(auth_headers)
+    user_rs_api, _ = users_helper.create_user()
 
     assert (
         user_rs_api is not None
@@ -187,7 +188,7 @@ def test_update_user_without_email_or_password(
     rs_api = request_utility.patch(
         endpoint="users/me",
         payload=payload,
-        headers={"Authorization": f'Bearer {user_rs_api["token"]}'},
+        auth_extra={"Authorization": f'Bearer {user_rs_api["token"]}'},
         expected_status_code=400,
     )
 
@@ -201,23 +202,23 @@ def test_update_user_without_email_or_password(
 
 
 @pytest.mark.users
-def test_delete_new_user(auth_headers):
+def test_delete_new_user():
     """
     Test deleting a new user.
     """
 
     logger.info("TEST: Delete new user.")
     users_helper = UsersHelper()
-    user_rs_api, _ = users_helper.create_user(auth_headers)
+    user_rs_api, _ = users_helper.create_user()
 
     assert (
         user_rs_api is not None
     ), "Response is None, but expected JSON response."
 
     users_helper.get_user(
-        auth_headers={"Authorization": f'Bearer {user_rs_api["token"]}'}
+        auth_extra={"Authorization": f'Bearer {user_rs_api["token"]}'}
     )
 
     users_helper.delete_user(
-        auth_headers={"Authorization": f'Bearer {user_rs_api["token"]}'}
+        auth_extra={"Authorization": f'Bearer {user_rs_api["token"]}'}
     )
