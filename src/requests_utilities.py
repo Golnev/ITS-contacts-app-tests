@@ -4,6 +4,7 @@ This module provides a utility class for making HTTP requests.
 
 import logging as logger
 import os
+from dataclasses import dataclass
 
 import requests
 from dotenv import load_dotenv
@@ -12,6 +13,14 @@ from src.helpers.auth_helper import with_auth_headers
 from src.hosts_config import API_HOSTS
 
 load_dotenv()
+
+
+@dataclass
+class RequestParams:
+    endpoint: str
+    payload: dict | None = None
+    auth_extra: dict = None
+    expected_status_code: int = 200
 
 
 class RequestUtilities:
@@ -53,14 +62,20 @@ class RequestUtilities:
         )
         logger.info("Status is %s", self.status_code)
 
+    # def __make_request(
+    #     self,
+    #     method: str,
+    #     endpoint: str,
+    #     auth_headers: dict = None,
+    #     payload: dict | None = None,
+    #     auth_extra: dict = None,
+    #     expected_status_code: int = 200,
+    # ):
     def __make_request(
         self,
         method: str,
-        endpoint: str,
+        request_params: RequestParams,
         auth_headers: dict = None,
-        payload: dict | None = None,
-        auth_extra: dict = None,
-        expected_status_code: int = 200,
     ):
         """
         Perform an HTTP request to the specified API endpoint.
@@ -68,21 +83,21 @@ class RequestUtilities:
 
         logger.info("Starting %s method.", method.upper())
 
-        if auth_extra:
+        if request_params.auth_extra:
             auth_headers = {"Content-Type": "application/json"}
-            auth_headers.update(auth_extra)
+            auth_headers.update(request_params.auth_extra)
         else:
             auth_headers.update({"Content-Type": "application/json"})
 
-        self.url = self.get_base_url() + endpoint
+        self.url = self.get_base_url() + request_params.endpoint
         logger.info("URL: %s", self.url)
 
-        self.expected_status_code = expected_status_code
+        self.expected_status_code = request_params.expected_status_code
 
         self.response_api = requests.request(
             method=method,
             url=self.url,
-            json=payload,
+            json=request_params.payload,
             headers=auth_headers,
             timeout=10,
         )
@@ -97,7 +112,7 @@ class RequestUtilities:
             logger.info("Response has empty body (Content-Length: 0)")
             return None
 
-        if payload is None and method.upper() in [
+        if request_params.payload is None and method.upper() in [
             "POST",
             "PUT",
             "PATCH",
@@ -113,10 +128,8 @@ class RequestUtilities:
     @with_auth_headers
     def get(
         self,
-        endpoint: str,
+        request_params: RequestParams,
         auth_headers=None,
-        auth_extra=None,
-        expected_status_code=200,
     ):
         """
         Perform a GET request to the specified API endpoint.
@@ -124,29 +137,31 @@ class RequestUtilities:
 
         return self.__make_request(
             method="GET",
-            endpoint=endpoint,
             auth_headers=auth_headers,
-            auth_extra=auth_extra,
-            expected_status_code=expected_status_code,
+            request_params=request_params,
         )
 
+    # @with_auth_headers
+    # def post(
+    #     self,
+    #     endpoint: str,
+    #     auth_headers=None,
+    #     payload: dict | None = None,
+    #     expected_status_code=200,
+    # ):
     @with_auth_headers
     def post(
         self,
-        endpoint: str,
+        request_params: RequestParams,
         auth_headers=None,
-        payload: dict | None = None,
-        expected_status_code=200,
     ):
         """
         Perform a POST request to the specified API endpoint.
         """
         return self.__make_request(
             method="POST",
-            endpoint=endpoint,
             auth_headers=auth_headers,
-            payload=payload,
-            expected_status_code=expected_status_code,
+            request_params=request_params,
         )
 
     @with_auth_headers
@@ -171,39 +186,29 @@ class RequestUtilities:
     @with_auth_headers
     def patch(
         self,
-        endpoint: str,
+        request_params: RequestParams,
         auth_headers=None,
-        payload: dict | None = None,
-        auth_extra=None,
-        expected_status_code=200,
     ):
         """
         Perform a PATCH request to the specified API endpoint.
         """
         return self.__make_request(
             method="PATCH",
-            endpoint=endpoint,
             auth_headers=auth_headers,
-            payload=payload,
-            auth_extra=auth_extra,
-            expected_status_code=expected_status_code,
+            request_params=request_params,
         )
 
     @with_auth_headers
     def delete(
         self,
-        endpoint: str,
+        request_params: RequestParams,
         auth_headers=None,
-        auth_extra=None,
-        expected_status_code=200,
     ):
         """
         Perform a DELETE request to the specified API endpoint.
         """
         return self.__make_request(
             method="DELETE",
-            endpoint=endpoint,
             auth_headers=auth_headers,
-            auth_extra=auth_extra,
-            expected_status_code=expected_status_code,
+            request_params=request_params,
         )

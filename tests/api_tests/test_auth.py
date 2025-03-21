@@ -7,7 +7,7 @@ import pytest
 import requests
 
 from src.helpers.users_helper import UsersHelper
-from src.requests_utilities import RequestUtilities
+from src.requests_utilities import RequestUtilities, RequestParams
 
 pytestmark = pytest.mark.api
 
@@ -97,8 +97,9 @@ def test_login_with_wrong_email_or_pass(wr_email: str, wr_password: str):
 
     request_utility = RequestUtilities()
 
-    request_utility.post(
+    request_params = RequestParams(
         endpoint="users/login",
         payload={"email": wr_email, "password": wr_password},
         expected_status_code=401,
     )
+    request_utility.post(request_params=request_params)

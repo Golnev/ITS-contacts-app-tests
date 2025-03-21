@@ -6,7 +6,7 @@ import logging as logger
 import pytest
 
 from src.helpers.users_helper import UsersHelper
-from src.requests_utilities import RequestUtilities
+from src.requests_utilities import RequestUtilities, RequestParams
 
 pytestmark = pytest.mark.api
 
@@ -69,11 +69,10 @@ def test_add_user_without_email_or_password(
         "password": password,
     }
 
-    rs_api = request_utility.post(
-        endpoint="users",
-        payload=payload,
-        expected_status_code=400,
+    request_params = RequestParams(
+        endpoint="users", payload=payload, expected_status_code=400
     )
+    rs_api = request_utility.post(request_params=request_params)
 
     assert rs_api is not None, "Response is None, but expected JSON response."
     assert rs_api["_message"] == "User validation failed", (
@@ -184,12 +183,13 @@ def test_update_user_without_email_or_password(
         "password": password,
     }
 
-    rs_api = request_utility.patch(
+    request_params = RequestParams(
         endpoint="users/me",
         payload=payload,
         auth_extra={"Authorization": f'Bearer {user_rs_api["token"]}'},
         expected_status_code=400,
     )
+    rs_api = request_utility.patch(request_params=request_params)
 
     assert rs_api is not None, "Response is None, but expected JSON response."
 

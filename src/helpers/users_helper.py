@@ -5,7 +5,7 @@ This module provides utility functions for working with users.
 import logging as logger
 from faker import Faker
 
-from src.requests_utilities import RequestUtilities
+from src.requests_utilities import RequestUtilities, RequestParams
 
 
 class UsersHelper:
@@ -38,10 +38,13 @@ class UsersHelper:
             payload["email"],
         )
 
-        create_user_json = self.request_utility.post(
+        request_params = RequestParams(
             endpoint="users",
             payload=payload,
             expected_status_code=201,
+        )
+        create_user_json = self.request_utility.post(
+            request_params=request_params
         )
 
         return create_user_json, payload
@@ -53,7 +56,11 @@ class UsersHelper:
 
         logger.info("Delete user.")
 
-        self.request_utility.delete(endpoint="users/me", auth_extra=auth_extra)
+        request_params = RequestParams(
+            endpoint="users/me",
+            auth_extra=auth_extra,
+        )
+        self.request_utility.delete(request_params=request_params)
 
     def get_user(self, auth_extra=None):
         """
@@ -62,10 +69,11 @@ class UsersHelper:
 
         logger.info("Get user.")
 
-        rs_user_info = self.request_utility.get(
+        request_params = RequestParams(
             endpoint="users/me",
             auth_extra=auth_extra,
         )
+        rs_user_info = self.request_utility.get(request_params=request_params)
 
         return rs_user_info
 
@@ -93,10 +101,13 @@ class UsersHelper:
             payload["email"],
         )
 
-        create_user_json = self.request_utility.patch(
+        request_params = RequestParams(
             endpoint="users/me",
             payload=payload,
             auth_extra=auth_extra,
+        )
+        create_user_json = self.request_utility.patch(
+            request_params=request_params
         )
 
         return create_user_json, payload
