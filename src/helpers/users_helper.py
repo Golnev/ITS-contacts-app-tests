@@ -41,7 +41,6 @@ class UsersHelper:
         create_user_json = self.request_utility.post(
             endpoint="users",
             payload=payload,
-            # headers=auth_headers,
             expected_status_code=201,
         )
 
@@ -54,10 +53,7 @@ class UsersHelper:
 
         logger.info("Delete user.")
 
-        self.request_utility.delete(
-            endpoint="users/me",
-            auth_extra=auth_extra
-        )
+        self.request_utility.delete(endpoint="users/me", auth_extra=auth_extra)
 
     def get_user(self, auth_extra=None):
         """

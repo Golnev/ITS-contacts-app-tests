@@ -12,44 +12,6 @@ from src.helpers.auth_helper import with_auth_headers
 from src.hosts_config import API_HOSTS
 
 load_dotenv()
-#
-#
-# def with_auth_headers(func):
-#     """
-#     Decorator providing authorization headers
-#     """
-#
-#     @wraps(func)
-#     def wrapper(*args, **kwargs):
-#         my_email = os.getenv("MY_EMAIL")
-#         my_pass = os.getenv("MY_PASSWORD")
-#
-#         request_utility = RequestUtilities()
-#
-#         logger.info("Login with My Email.")
-#         response_json = request_utility.post(
-#             endpoint="users/login",
-#             payload={"email": my_email, "password": my_pass},
-#         )
-#         assert (
-#             response_json is not None
-#         ), "Response is None, but expected JSON response."
-#
-#         token = response_json["token"]
-#         headers = {"Authorization": f"Bearer {token}"}
-#
-#         try:
-#             result = func(*args, auth_headers=headers, **kwargs)
-#             return result
-#         finally:
-#             logger.info("Logout.")
-#             request_utility.post(
-#                 endpoint="users/logout",
-#                 headers={"Authorization": f"Bearer {token}"},
-#             )
-#
-#     return wrapper
-
 
 
 class RequestUtilities:
@@ -68,8 +30,6 @@ class RequestUtilities:
         return base_url
 
     def __init__(self):
-        self.__env = os.getenv("ENV", "test")
-        self.base_url: str = API_HOSTS[self.__env]
 
         self.status_code: int | None = None
         self.expected_status_code: int | None = None
@@ -96,8 +56,8 @@ class RequestUtilities:
     @with_auth_headers
     def get(
         self,
-        auth_headers,
         endpoint: str,
+        auth_headers=None,
         auth_extra=None,
         expected_status_code=200,
     ):
@@ -113,7 +73,7 @@ class RequestUtilities:
         else:
             auth_headers.update({"Content-Type": "application/json"})
 
-        self.url = self.base_url + endpoint
+        self.url = self.get_base_url() + endpoint
         logger.info("URL: %s", self.url)
 
         self.expected_status_code = expected_status_code
@@ -142,10 +102,9 @@ class RequestUtilities:
     @with_auth_headers
     def post(
         self,
-        auth_headers,
         endpoint: str,
+        auth_headers=None,
         payload: dict | None = None,
-        # headers: dict | None = None,
         expected_status_code=200,
     ):
         """
@@ -159,7 +118,7 @@ class RequestUtilities:
         else:
             auth_headers.update({"Content-Type": "application/json"})
 
-        self.url = self.base_url + endpoint
+        self.url = self.get_base_url() + endpoint
         logger.info("URL: %s", self.url)
 
         self.expected_status_code = expected_status_code
@@ -194,10 +153,9 @@ class RequestUtilities:
     @with_auth_headers
     def put(
         self,
-        auth_headers,
         endpoint: str,
+        auth_headers=None,
         payload: dict | None = None,
-        # headers: dict | None = None,
         expected_status_code=200,
     ):
         """
@@ -211,7 +169,7 @@ class RequestUtilities:
         else:
             auth_headers.update({"Content-Type": "application/json"})
 
-        self.url = self.base_url + endpoint
+        self.url = self.get_base_url() + endpoint
         logger.info("URL: %s", self.url)
 
         self.expected_status_code = expected_status_code
@@ -246,11 +204,10 @@ class RequestUtilities:
     @with_auth_headers
     def patch(
         self,
-        auth_headers,
         endpoint: str,
+        auth_headers=None,
         payload: dict | None = None,
         auth_extra=None,
-        # headers: dict | None = None,
         expected_status_code=200,
     ):
         """
@@ -265,7 +222,7 @@ class RequestUtilities:
         else:
             auth_headers.update({"Content-Type": "application/json"})
 
-        self.url = self.base_url + endpoint
+        self.url = self.get_base_url() + endpoint
         logger.info("URL: %s", self.url)
 
         self.expected_status_code = expected_status_code
@@ -300,9 +257,8 @@ class RequestUtilities:
     @with_auth_headers
     def delete(
         self,
-        auth_headers,
         endpoint: str,
-        # headers: dict | None = None,
+        auth_headers=None,
         auth_extra=None,
         expected_status_code=200,
     ):
@@ -318,7 +274,7 @@ class RequestUtilities:
         else:
             auth_headers.update({"Content-Type": "application/json"})
 
-        self.url = self.base_url + endpoint
+        self.url = self.get_base_url() + endpoint
         logger.info("URL: %s", self.url)
 
         self.expected_status_code = expected_status_code

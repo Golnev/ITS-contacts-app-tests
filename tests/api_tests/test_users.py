@@ -72,7 +72,6 @@ def test_add_user_without_email_or_password(
     rs_api = request_utility.post(
         endpoint="users",
         payload=payload,
-        # headers=auth_headers,
         expected_status_code=400,
     )
 

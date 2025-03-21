@@ -1,18 +1,35 @@
+"""
+Authentication and Authorization Management Module.
+"""
+
 import os
 from functools import wraps
 
-import requests
 import logging as logger
+import requests
 from src.hosts_config import API_HOSTS
 
 
 class AuthManager:
+    """
+    Manages authentication for API requests,
+    including login, logout, and token handling.
+    """
+
     def __init__(self, env="test"):
+        """
+        Initializes the AuthManager with the specified environment.
+        """
+
         self.env = env
         self.base_url = API_HOSTS[self.env]
         self.token = None
 
     def login(self, email=None, password=None):
+        """
+        Logs in to the API and retrieves an authentication token.
+        """
+
         logger.info("Performing login...")
 
         my_email = email or os.getenv("MY_EMAIL")
@@ -26,16 +43,21 @@ class AuthManager:
         )
 
         if response.status_code != 200:
-            raise Exception(
-                f"Login failed with status: {response.status_code}"
+            raise requests.HTTPError(
+                f"Login failed with status: {response.status_code}",
+                response=response,
             )
 
         self.token = response.json()["token"]
 
-        logger.info(f"Login successful. Token: {self.token}")
+        logger.info("Login successful. Token: %s", self.token)
         return self.token
 
     def logout(self):
+        """
+        Logs out of the API and invalidates the current token.
+        """
+
         if not self.token:
             logger.warning("No token found. Skipping logout.")
             return
@@ -50,14 +72,19 @@ class AuthManager:
         )
 
         if response.status_code != 200:
-            raise Exception(
-                f"Logout failed with status: {response.status_code}"
+            raise requests.HTTPError(
+                f"Logout failed with status: {response.status_code}",
+                response=response,
             )
 
         logger.info("Logout successful.")
         self.token = None
 
     def get_auth_headers(self):
+        """
+        Retrieves the authentication headers for API requests.
+        """
+
         if not self.token:
             self.login()
 
@@ -65,6 +92,10 @@ class AuthManager:
 
 
 def with_auth_headers(func):
+    """
+    A decorator that automatically adds authentication headers to a function.
+    """
+
     @wraps(func)
     def wrapper(self, *args, **kwargs):
         auth_manager = AuthManager()

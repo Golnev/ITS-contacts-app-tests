@@ -12,7 +12,6 @@ from src.requests_utilities import RequestUtilities
 
 pytestmark = pytest.mark.api
 
-
 @pytest.mark.contacts
 def test_add_contact(manage_contacts):
     """
