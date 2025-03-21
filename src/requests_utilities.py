@@ -53,19 +53,20 @@ class RequestUtilities:
         )
         logger.info("Status is %s", self.status_code)
 
-    @with_auth_headers
-    def get(
+    def __make_request(
         self,
+        method: str,
         endpoint: str,
-        auth_headers=None,
-        auth_extra=None,
-        expected_status_code=200,
+        auth_headers: dict = None,
+        payload: dict | None = None,
+        auth_extra: dict = None,
+        expected_status_code: int = 200,
     ):
         """
-        Perform a GET request to the specified API endpoint.
+        Perform an HTTP request to the specified API endpoint.
         """
 
-        logger.info("Starting GET method.")
+        logger.info("Starting %s method.", method.upper())
 
         if auth_extra:
             auth_headers = {"Content-Type": "application/json"}
@@ -78,11 +79,14 @@ class RequestUtilities:
 
         self.expected_status_code = expected_status_code
 
-        self.response_api = requests.get(
+        self.response_api = requests.request(
+            method=method,
             url=self.url,
+            json=payload,
             headers=auth_headers,
-            timeout=5,
+            timeout=10,
         )
+
         self.status_code = self.response_api.status_code
         self.__assert_status_code()
 
@@ -93,11 +97,38 @@ class RequestUtilities:
             logger.info("Response has empty body (Content-Length: 0)")
             return None
 
-        self.response_json = self.response_api.json()
+        if payload is None and method.upper() in [
+            "POST",
+            "PUT",
+            "PATCH",
+            "DELETE",
+        ]:
+            return None
 
-        logger.info("GET API response %s", self.response_json)
+        self.response_json = self.response_api.json()
+        logger.info("%s API response %s", method.upper(), self.response_json)
 
         return self.response_json
+
+    @with_auth_headers
+    def get(
+        self,
+        endpoint: str,
+        auth_headers=None,
+        auth_extra=None,
+        expected_status_code=200,
+    ):
+        """
+        Perform a GET request to the specified API endpoint.
+        """
+
+        return self.__make_request(
+            method="GET",
+            endpoint=endpoint,
+            auth_headers=auth_headers,
+            auth_extra=auth_extra,
+            expected_status_code=expected_status_code,
+        )
 
     @with_auth_headers
     def post(
@@ -110,45 +141,13 @@ class RequestUtilities:
         """
         Perform a POST request to the specified API endpoint.
         """
-
-        logger.info("Starting POST method.")
-
-        if not auth_headers:
-            auth_headers = {"Content-Type": "application/json"}
-        else:
-            auth_headers.update({"Content-Type": "application/json"})
-
-        self.url = self.get_base_url() + endpoint
-        logger.info("URL: %s", self.url)
-
-        self.expected_status_code = expected_status_code
-
-        self.response_api = requests.post(
-            url=self.url,
-            json=payload,
-            headers=auth_headers,
-            timeout=10,
+        return self.__make_request(
+            method="POST",
+            endpoint=endpoint,
+            auth_headers=auth_headers,
+            payload=payload,
+            expected_status_code=expected_status_code,
         )
-
-        self.status_code = self.response_api.status_code
-
-        self.__assert_status_code()
-
-        if (
-            self.response_api.headers.get("Content-Length")
-            == self.EMPTY_CONTENT_LENGTH
-        ):
-            logger.info("Response has empty body (Content-Length: 0)")
-            return None
-
-        if payload is None:
-            return None
-
-        self.response_json = self.response_api.json()
-
-        logger.info("POST API response %s", self.response_json)
-
-        return self.response_json
 
     @with_auth_headers
     def put(
@@ -161,45 +160,13 @@ class RequestUtilities:
         """
         Perform a PUT request to the specified API endpoint.
         """
-
-        logger.info("Starting PUT method.")
-
-        if not auth_headers:
-            auth_headers = {"Content-Type": "application/json"}
-        else:
-            auth_headers.update({"Content-Type": "application/json"})
-
-        self.url = self.get_base_url() + endpoint
-        logger.info("URL: %s", self.url)
-
-        self.expected_status_code = expected_status_code
-
-        self.response_api = requests.put(
-            url=self.url,
-            json=payload,
-            headers=auth_headers,
-            timeout=10,
+        return self.__make_request(
+            method="PUT",
+            endpoint=endpoint,
+            auth_headers=auth_headers,
+            payload=payload,
+            expected_status_code=expected_status_code,
         )
-
-        self.status_code = self.response_api.status_code
-
-        self.__assert_status_code()
-
-        if (
-            self.response_api.headers.get("Content-Length")
-            == self.EMPTY_CONTENT_LENGTH
-        ):
-            logger.info("Response has empty body (Content-Length: 0)")
-            return None
-
-        if payload is None:
-            return None
-
-        self.response_json = self.response_api.json()
-
-        logger.info("PUT API response %s", self.response_json)
-
-        return self.response_json
 
     @with_auth_headers
     def patch(
@@ -213,46 +180,14 @@ class RequestUtilities:
         """
         Perform a PATCH request to the specified API endpoint.
         """
-
-        logger.info("Starting PATCH method.")
-
-        if auth_extra:
-            auth_headers = {"Content-Type": "application/json"}
-            auth_headers.update(auth_extra)
-        else:
-            auth_headers.update({"Content-Type": "application/json"})
-
-        self.url = self.get_base_url() + endpoint
-        logger.info("URL: %s", self.url)
-
-        self.expected_status_code = expected_status_code
-
-        self.response_api = requests.patch(
-            url=self.url,
-            json=payload,
-            headers=auth_headers,
-            timeout=10,
+        return self.__make_request(
+            method="PATCH",
+            endpoint=endpoint,
+            auth_headers=auth_headers,
+            payload=payload,
+            auth_extra=auth_extra,
+            expected_status_code=expected_status_code,
         )
-
-        self.status_code = self.response_api.status_code
-
-        self.__assert_status_code()
-
-        if (
-            self.response_api.headers.get("Content-Length")
-            == self.EMPTY_CONTENT_LENGTH
-        ):
-            logger.info("Response has empty body (Content-Length: 0)")
-            return None
-
-        if payload is None:
-            return None
-
-        self.response_json = self.response_api.json()
-
-        logger.info("PATCH API response %s", self.response_json)
-
-        return self.response_json
 
     @with_auth_headers
     def delete(
@@ -265,24 +200,10 @@ class RequestUtilities:
         """
         Perform a DELETE request to the specified API endpoint.
         """
-
-        logger.info("Starting DELETE method.")
-
-        if auth_extra:
-            auth_headers = {"Content-Type": "application/json"}
-            auth_headers.update(auth_extra)
-        else:
-            auth_headers.update({"Content-Type": "application/json"})
-
-        self.url = self.get_base_url() + endpoint
-        logger.info("URL: %s", self.url)
-
-        self.expected_status_code = expected_status_code
-
-        self.response_api = requests.delete(
-            url=self.url,
-            headers=auth_headers,
-            timeout=10,
+        return self.__make_request(
+            method="DELETE",
+            endpoint=endpoint,
+            auth_headers=auth_headers,
+            auth_extra=auth_extra,
+            expected_status_code=expected_status_code,
         )
-        self.status_code = self.response_api.status_code
-        self.__assert_status_code()
