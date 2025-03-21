@@ -84,7 +84,7 @@ def pytest_addoption(parser):
 
 
 @pytest.fixture()
-def manage_contacts(auth_headers, pytestconfig):
+def manage_contacts(pytestconfig):
     """
     Manages contact creation and cleanup for API tests.
     """
@@ -93,9 +93,7 @@ def manage_contacts(auth_headers, pytestconfig):
     created_contacts = []
 
     def create_contact():
-        contact_rs_api, contact_info = contacts_helper.create_contact(
-            auth_headers=auth_headers
-        )
+        contact_rs_api, contact_info = contacts_helper.create_contact()
         assert (
             contact_rs_api is not None
         ), "Response is None, but expected JSON response."
@@ -109,11 +107,11 @@ def manage_contacts(auth_headers, pytestconfig):
         for contact_id in created_contacts:
             try:
                 contact = contacts_helper.get_contacts(
-                    auth_headers=auth_headers, contact_id=contact_id
+                    contact_id=contact_id
                 )
                 if contact:
                     contacts_helper.delete_contact(
-                        auth_headers=auth_headers, contact_id=contact_id
+                        contact_id=contact_id
                     )
                     logger.info("Deleted contact: %s", contact_id)
             except AssertionError as e:

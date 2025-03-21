@@ -47,7 +47,7 @@ class ContactsHelper:
 
         return payload
 
-    def create_contact(self, auth_headers: dict):
+    def create_contact(self):
         """
         Method for creating new contact.
         """
@@ -57,13 +57,12 @@ class ContactsHelper:
         create_contact_json = self.request_utility.post(
             endpoint="contacts",
             payload=payload,
-            headers=auth_headers,
             expected_status_code=201,
         )
 
         return create_contact_json, payload
 
-    def delete_contact(self, auth_headers: dict, contact_id: str):
+    def delete_contact(self, contact_id: str):
         """
         Method for deleting contact.
         """
@@ -71,12 +70,11 @@ class ContactsHelper:
         logger.info("Delete contact id=%s", contact_id)
 
         self.request_utility.delete(
-            endpoint=f"contacts/{contact_id}", headers=auth_headers
+            endpoint=f"contacts/{contact_id}",
         )
 
     def get_contacts(
         self,
-        auth_headers: dict,
         contact_id: str | None = None,
         expected_status_code: int = 200,
     ):
@@ -89,7 +87,6 @@ class ContactsHelper:
 
             rs_get_contacts = self.request_utility.get(
                 endpoint="contacts",
-                headers=auth_headers,
                 expected_status_code=expected_status_code,
             )
             return rs_get_contacts
@@ -98,14 +95,12 @@ class ContactsHelper:
 
         rs_get_contact = self.request_utility.get(
             endpoint=f"contacts/{contact_id}",
-            headers=auth_headers,
             expected_status_code=expected_status_code,
         )
         return rs_get_contact
 
     def update(
         self,
-        auth_headers: dict,
         payload: dict,
         contact_id: str,
         expected_status_code: int = 200,
@@ -120,7 +115,6 @@ class ContactsHelper:
             rs_update_contact = self.request_utility.put(
                 endpoint=f"contacts/{contact_id}",
                 payload=payload,
-                headers=auth_headers,
                 expected_status_code=expected_status_code,
             )
             return rs_update_contact
@@ -131,7 +125,6 @@ class ContactsHelper:
             rs_update_contact = self.request_utility.patch(
                 endpoint=f"contacts/{contact_id}",
                 payload=payload,
-                headers=auth_headers,
                 expected_status_code=expected_status_code,
             )
             return rs_update_contact
