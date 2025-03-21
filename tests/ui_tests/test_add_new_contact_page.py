@@ -10,6 +10,7 @@ from selenium import webdriver
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
+from src.helpers.contacts_helper import ContactsHelper
 from src.pages.add_new_contact_page import AddNewContactPage
 from src.pages.contact_list_page import ContactListPage
 from src.requests_utilities import RequestUtilities
@@ -92,11 +93,12 @@ class TestAddNewContactPage:
     def test_add_new_contact(
         self,
         browser: webdriver.Firefox | webdriver.Chrome,
-        create_contact_info,
     ):
         """
         Verify that a new contact can be added successfully.
         """
+
+        contact_info = ContactsHelper.fake_contact()
 
         logger.info("Starting Test: add new contact")
 
@@ -104,7 +106,7 @@ class TestAddNewContactPage:
         page = AddNewContactPage(browser=browser, url=link)
         page.open()
 
-        page.add_new_contact(*create_contact_info)
+        page.add_new_contact(contact_info)
 
         WebDriverWait(browser, 10).until(
             EC.url_to_be(base_url + "contactList")
@@ -118,5 +120,6 @@ class TestAddNewContactPage:
             browser=browser, url=browser.current_url
         )
         contact_list_page.find_contact_by_full_name(
-            first_name=create_contact_info[0], last_name=create_contact_info[1]
+            first_name=contact_info["firstName"],
+            last_name=contact_info["lastName"],
         )

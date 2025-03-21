@@ -32,7 +32,7 @@ class TestEditContactPage:
     def test_user_should_be_in_edit_contact_page(
         self,
         browser: webdriver.Firefox | webdriver.Chrome,
-        created_contact: tuple[ContactDetailsPage, tuple],
+        created_contact: tuple[ContactDetailsPage, dict],
     ):
         """
         Verifies that the user is on the "Edit Contact" page.
@@ -50,7 +50,7 @@ class TestEditContactPage:
     def test_logout_from_edit_contact_page(
         self,
         browser: webdriver.Firefox | webdriver.Chrome,
-        created_contact: tuple[ContactDetailsPage, tuple],
+        created_contact: tuple[ContactDetailsPage, dict],
     ):
         """
         Verifies that the user can log out from the "Edit Contact" page.
@@ -74,7 +74,7 @@ class TestEditContactPage:
     def test_return_to_contact_details(
         self,
         browser: webdriver.Firefox | webdriver.Chrome,
-        created_contact: tuple[ContactDetailsPage, tuple],
+        created_contact: tuple[ContactDetailsPage, dict],
     ):
         """
         Verifies that the user can return to the "Contact Details" page
@@ -100,7 +100,7 @@ class TestEditContactPage:
     def test_edit_contact_phone(
         self,
         browser: webdriver.Firefox | webdriver.Chrome,
-        created_contact: tuple[ContactDetailsPage, tuple],
+        created_contact: tuple[ContactDetailsPage, dict],
     ):
         """
         Verifies that the user can edit a contact's phone number.

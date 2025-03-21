@@ -31,7 +31,7 @@ class TestContactDetailsPage:
 
     def test_user_should_be_in_contact_details_page(
         self,
-        created_contact: tuple[ContactDetailsPage, tuple],
+        created_contact: tuple[ContactDetailsPage, dict],
     ):
         """
         Verifies that the user is on the "Contact Details" page.
@@ -46,7 +46,7 @@ class TestContactDetailsPage:
     def test_logout_from_contact_details_page(
         self,
         browser: webdriver.Firefox | webdriver.Chrome,
-        created_contact: tuple[ContactDetailsPage, tuple],
+        created_contact: tuple[ContactDetailsPage, dict],
     ):
         """
         Verifies that the user can log out
@@ -68,7 +68,7 @@ class TestContactDetailsPage:
     def test_return_to_contact_list(
         self,
         browser: webdriver.Firefox | webdriver.Chrome,
-        created_contact: tuple[ContactDetailsPage, tuple],
+        created_contact: tuple[ContactDetailsPage, dict],
     ):
         """
         Verifies that the user can return to the contact list
@@ -89,7 +89,7 @@ class TestContactDetailsPage:
     def test_delete_contact(
         self,
         browser: webdriver.Firefox | webdriver.Chrome,
-        created_contact: tuple[ContactDetailsPage, tuple],
+        created_contact: tuple[ContactDetailsPage, dict],
     ):
         """
         Verifies that a contact can be deleted from
@@ -111,13 +111,14 @@ class TestContactDetailsPage:
         )
         contact_list_page.should_be_contact_list_page()
         contact_list_page.contact_is_not_present_in_contact_list(
-            first_name=contact_info[0], last_name=contact_info[1]
+            first_name=contact_info["firstName"],
+            last_name=contact_info["lastName"],
         )
 
     def test_user_can_go_to_edit_contact(
         self,
         browser: webdriver.Firefox | webdriver.Chrome,
-        created_contact: tuple[ContactDetailsPage, tuple],
+        created_contact: tuple[ContactDetailsPage, dict],
     ):
         """
         Verifies that the user can navigate to the "Edit Contact" page

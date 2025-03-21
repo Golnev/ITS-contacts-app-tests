@@ -18,9 +18,10 @@ class ContactsHelper:
         self.request_utility = RequestUtilities()
         self.full_contact: int = 11
 
-    def create_contact(self, auth_headers: dict):
+    @staticmethod
+    def fake_contact():
         """
-        Method for creating new contact.
+        Creates contact information using the Faker library.
         """
 
         logger.info("Create new contact.")
@@ -39,10 +40,19 @@ class ContactsHelper:
             "city": fake.city(),
             "stateProvince": fake.state(),
             "postalCode": fake.postalcode(),
-            "country": fake.country(),
+            "country": fake.country()[:40],
         }
 
         logger.info("Fake contact created")
+
+        return payload
+
+    def create_contact(self, auth_headers: dict):
+        """
+        Method for creating new contact.
+        """
+
+        payload = self.fake_contact()
 
         create_contact_json = self.request_utility.post(
             endpoint="contacts",

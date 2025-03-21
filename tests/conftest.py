@@ -8,7 +8,6 @@ import os
 
 import pytest
 from dotenv import load_dotenv
-from faker import Faker
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.firefox.options import Options
@@ -223,53 +222,20 @@ def setup_user(browser: webdriver.Firefox | webdriver.Chrome):
 
 
 @pytest.fixture(scope="function")
-def create_contact_info(browser: webdriver.Firefox | webdriver.Chrome):
-    """
-    Creates contact information using the Faker library.
-    """
-
-    fake = Faker()
-    fake_contact_first_name = fake.first_name()
-    fake_contact_last_name = fake.last_name()
-    fake_contact_date_of_birth = (
-        fake.date_of_birth(minimum_age=6, maximum_age=110)
-    ).strftime("%Y-%m-%d")
-    fake_contact_email = fake.email()
-    fake_contact_phone = fake.basic_phone_number()
-    fake_contact_street_address_1 = fake.street_name()
-    fake_contact_city = fake.city()
-    fake_contact_state = fake.state()
-    fake_contact_postal_code = fake.postalcode()
-    fake_contact_country = fake.country()[:40]
-
-    return (
-        fake_contact_first_name,
-        fake_contact_last_name,
-        fake_contact_date_of_birth,
-        fake_contact_email,
-        fake_contact_phone,
-        fake_contact_street_address_1,
-        fake_contact_city,
-        fake_contact_state,
-        fake_contact_postal_code,
-        fake_contact_country,
-    )
-
-
-@pytest.fixture(scope="function")
 def created_contact(
     browser: webdriver.Firefox | webdriver.Chrome,
     setup_user,
-    create_contact_info,
 ):
     """
     Creates a new contact using Selenium.
     """
 
+    contact_info = ContactsHelper.fake_contact()
+
     logger.info(
         "Creating contact with Contact first name: %s, last name: %s",
-        create_contact_info[0],
-        create_contact_info[1],
+        contact_info["firstName"],
+        contact_info["lastName"],
     )
 
     add_new_contact_link = base_url + "addContact"
@@ -278,7 +244,7 @@ def created_contact(
 
     WebDriverWait(browser, 10).until(EC.url_to_be(base_url + "addContact"))
 
-    page.add_new_contact(*create_contact_info)
+    page.add_new_contact(contact_info=contact_info)
 
     WebDriverWait(browser, 10).until(EC.url_to_be(base_url + "contactList"))
 
@@ -287,11 +253,12 @@ def created_contact(
     )
 
     contact_list_page.go_to_contact_details_by_full_name(
-        first_name=create_contact_info[0], last_name=create_contact_info[1]
+        first_name=contact_info["firstName"],
+        last_name=contact_info["lastName"],
     )
 
     contact_details_page = ContactDetailsPage(
         browser=browser, url=browser.current_url
     )
 
-    return contact_details_page, create_contact_info
+    return contact_details_page, contact_info

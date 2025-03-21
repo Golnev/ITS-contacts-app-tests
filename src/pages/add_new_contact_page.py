@@ -72,16 +72,7 @@ class AddNewContactPage(BasePage):
 
     def add_new_contact(
         self,
-        first_name,
-        last_name,
-        date_of_birth,
-        email,
-        phone,
-        street_address_1,
-        city,
-        state,
-        postal_code,
-        country,
+        contact_info: dict,
     ):
         """
         Method to add new contact.
@@ -89,8 +80,8 @@ class AddNewContactPage(BasePage):
 
         logger.info(
             "Add new contact, with first name: %s, last name: %s",
-            first_name,
-            last_name,
+            contact_info["firstName"],
+            contact_info["lastName"],
         )
 
         time.sleep(5)
@@ -99,54 +90,52 @@ class AddNewContactPage(BasePage):
             AddNewContactPageLocators.FIRST_NAME
         )
 
-        first_name_form.send_keys(first_name)
+        first_name_form.send_keys(contact_info["firstName"])
 
         last_name_form = self.wait_for_element_ready(
             AddNewContactPageLocators.LAST_NAME
         )
-        last_name_form.send_keys(last_name)
+        last_name_form.send_keys(contact_info["lastName"])
 
         date_of_birth_form = self.wait_for_element_ready(
             AddNewContactPageLocators.DATE_OF_BIRTH
         )
-        date_of_birth_form.send_keys(date_of_birth)
+        date_of_birth_form.send_keys(contact_info["birthdate"])
 
         email_form = self.wait_for_element_ready(
             AddNewContactPageLocators.EMAIL
         )
-        email_form.send_keys(email)
+        email_form.send_keys(contact_info["email"])
 
         phone_form = self.wait_for_element_ready(
             AddNewContactPageLocators.PHONE
         )
-        phone_form.send_keys(str(phone))
+        phone_form.send_keys(str(contact_info["phone"]))
 
         street_address_1_form = self.wait_for_element_ready(
             AddNewContactPageLocators.STREET_ADDRESS_1
         )
-        street_address_1_form.send_keys(street_address_1)
+        street_address_1_form.send_keys(contact_info["street1"])
 
         city_form = self.wait_for_element_ready(AddNewContactPageLocators.CITY)
-        city_form.send_keys(city)
+        city_form.send_keys(contact_info["city"])
 
         state_form = self.wait_for_element_ready(
             AddNewContactPageLocators.STATE
         )
-        state_form.send_keys(state)
+        state_form.send_keys(contact_info["stateProvince"])
 
         postal_code_form = self.wait_for_element_ready(
             AddNewContactPageLocators.POSTAL_CODE
         )
-        postal_code_form.send_keys(str(postal_code))
+        postal_code_form.send_keys(str(contact_info["postalCode"]))
 
         country_form = self.wait_for_element_ready(
             AddNewContactPageLocators.COUNTRY
         )
-        country_form.send_keys(country)
+        country_form.send_keys(contact_info["country"])
 
         submit_button = self.wait_for_element_ready(
             AddNewContactPageLocators.SUBMIT_BUTTON
         )
         submit_button.click()
-
-        time.sleep(5)

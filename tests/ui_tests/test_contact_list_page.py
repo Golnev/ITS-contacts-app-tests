@@ -10,6 +10,7 @@ from selenium import webdriver
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
+from src.helpers.contacts_helper import ContactsHelper
 from src.pages.add_new_contact_page import AddNewContactPage
 from src.pages.contact_details_page import ContactDetailsPage
 from src.pages.contact_list_page import ContactListPage
@@ -85,12 +86,13 @@ class TestContactListPage:
     def test_user_can_go_to_contact_details(
         self,
         browser: webdriver.Firefox | webdriver.Chrome,
-        create_contact_info,
     ):
         """
         Verifies that the user can navigate to the "Contact Details" page
         from the "Contact List" page.
         """
+
+        contact_info = ContactsHelper.fake_contact()
 
         logger.info("Starting Test: user can go to contact details.")
         add_new_contact_link = base_url + "addContact"
@@ -99,7 +101,7 @@ class TestContactListPage:
 
         WebDriverWait(browser, 10).until(EC.url_to_be(base_url + "addContact"))
 
-        page.add_new_contact(*create_contact_info)
+        page.add_new_contact(contact_info)
 
         WebDriverWait(browser, 10).until(
             EC.url_to_be(base_url + "contactList")
@@ -110,7 +112,8 @@ class TestContactListPage:
         )
 
         contact_list_page.go_to_contact_details_by_full_name(
-            first_name=create_contact_info[0], last_name=create_contact_info[1]
+            first_name=contact_info["firstName"],
+            last_name=contact_info["lastName"],
         )
 
         contact_details_page = ContactDetailsPage(
