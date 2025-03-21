@@ -6,7 +6,7 @@ import logging as logger
 
 from faker import Faker
 
-from src.requests_utilities import RequestUtilities
+from src.requests_utilities import RequestUtilities, RequestParams
 
 
 class ContactsHelper:
@@ -54,10 +54,11 @@ class ContactsHelper:
 
         payload = self.fake_contact()
 
+        request_params = RequestParams(
+            endpoint="contacts", payload=payload, expected_status_code=201
+        )
         create_contact_json = self.request_utility.post(
-            endpoint="contacts",
-            payload=payload,
-            expected_status_code=201,
+            request_params=request_params
         )
 
         return create_contact_json, payload
@@ -69,9 +70,10 @@ class ContactsHelper:
 
         logger.info("Delete contact id=%s", contact_id)
 
-        self.request_utility.delete(
+        request_params = RequestParams(
             endpoint=f"contacts/{contact_id}",
         )
+        self.request_utility.delete(request_params=request_params)
 
     def get_contacts(
         self,
@@ -85,17 +87,23 @@ class ContactsHelper:
         if contact_id is None:
             logger.info("Get contacts")
 
-            rs_get_contacts = self.request_utility.get(
+            request_params = RequestParams(
                 endpoint="contacts",
                 expected_status_code=expected_status_code,
+            )
+            rs_get_contacts = self.request_utility.get(
+                request_params=request_params
             )
             return rs_get_contacts
 
         logger.info("Get contact by id=%s", contact_id)
 
-        rs_get_contact = self.request_utility.get(
+        request_params = RequestParams(
             endpoint=f"contacts/{contact_id}",
             expected_status_code=expected_status_code,
+        )
+        rs_get_contact = self.request_utility.get(
+            request_params=request_params
         )
         return rs_get_contact
 
@@ -112,20 +120,26 @@ class ContactsHelper:
         if len(payload) == self.full_contact:
             logger.info("Update contact with PUT.")
 
-            rs_update_contact = self.request_utility.put(
+            request_params = RequestParams(
                 endpoint=f"contacts/{contact_id}",
                 payload=payload,
                 expected_status_code=expected_status_code,
+            )
+            rs_update_contact = self.request_utility.put(
+                request_params=request_params
             )
             return rs_update_contact
 
         if len(payload) < self.full_contact:
             logger.info("Update contact with PATCH.")
 
-            rs_update_contact = self.request_utility.patch(
+            request_params = RequestParams(
                 endpoint=f"contacts/{contact_id}",
                 payload=payload,
                 expected_status_code=expected_status_code,
+            )
+            rs_update_contact = self.request_utility.patch(
+                request_params=request_params
             )
             return rs_update_contact
 

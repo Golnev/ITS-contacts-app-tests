@@ -7,8 +7,7 @@ import pytest
 from faker.proxy import Faker
 
 from src.helpers.contacts_helper import ContactsHelper
-from src.requests_utilities import RequestUtilities
-
+from src.requests_utilities import RequestUtilities, RequestParams
 
 pytestmark = pytest.mark.api
 
@@ -56,14 +55,17 @@ def test_add_contact_without_mandatory_data(faker: Faker):
 
     request_utility = RequestUtilities()
 
-    create_contact_json = request_utility.post(
+    request_params = RequestParams(
         endpoint="contacts",
         payload=payload,
         expected_status_code=400,
     )
+    create_contact_json = request_utility.post(request_params=request_params)
+
     assert (
         create_contact_json is not None
     ), "Response is None, but expected JSON response."
+
     assert (
         create_contact_json["_message"] == "Contact validation failed"
     ), "Validation without mandatory data was successful."
@@ -96,11 +98,13 @@ def test_contact_with_wrong_phone_number(faker: Faker):
 
     request_utility = RequestUtilities()
 
-    create_contact_json = request_utility.post(
+    request_params = RequestParams(
         endpoint="contacts",
         payload=payload,
         expected_status_code=400,
     )
+    create_contact_json = request_utility.post(request_params=request_params)
+
     assert (
         create_contact_json is not None
     ), "Response is None, but expected JSON response."
@@ -144,11 +148,10 @@ def test_add_contact_with_existing_last_name_and_first_name(
 
     request_utility = RequestUtilities()
 
-    request_utility.post(
-        endpoint="contacts",
-        payload=payload,
-        expected_status_code=400,
+    request_params = RequestParams(
+        endpoint="contacts", payload=payload, expected_status_code=400
     )
+    request_utility.post(request_params=request_params)
 
 
 @pytest.mark.contacts

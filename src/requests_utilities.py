@@ -17,6 +17,10 @@ load_dotenv()
 
 @dataclass
 class RequestParams:
+    """
+    A data class representing parameters for an HTTP request.
+    """
+
     endpoint: str
     payload: dict | None = None
     auth_extra: dict = None
@@ -62,15 +66,6 @@ class RequestUtilities:
         )
         logger.info("Status is %s", self.status_code)
 
-    # def __make_request(
-    #     self,
-    #     method: str,
-    #     endpoint: str,
-    #     auth_headers: dict = None,
-    #     payload: dict | None = None,
-    #     auth_extra: dict = None,
-    #     expected_status_code: int = 200,
-    # ):
     def __make_request(
         self,
         method: str,
@@ -141,14 +136,6 @@ class RequestUtilities:
             request_params=request_params,
         )
 
-    # @with_auth_headers
-    # def post(
-    #     self,
-    #     endpoint: str,
-    #     auth_headers=None,
-    #     payload: dict | None = None,
-    #     expected_status_code=200,
-    # ):
     @with_auth_headers
     def post(
         self,
@@ -167,20 +154,16 @@ class RequestUtilities:
     @with_auth_headers
     def put(
         self,
-        endpoint: str,
+        request_params: RequestParams,
         auth_headers=None,
-        payload: dict | None = None,
-        expected_status_code=200,
     ):
         """
         Perform a PUT request to the specified API endpoint.
         """
         return self.__make_request(
             method="PUT",
-            endpoint=endpoint,
             auth_headers=auth_headers,
-            payload=payload,
-            expected_status_code=expected_status_code,
+            request_params=request_params,
         )
 
     @with_auth_headers
