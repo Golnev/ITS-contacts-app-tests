@@ -4,6 +4,7 @@ This module contains API tests for user authentication and login functionality.
 
 import logging as logger
 import pytest
+import requests
 
 from src.helpers.users_helper import UsersHelper
 from src.requests_utilities import RequestUtilities
@@ -12,26 +13,26 @@ pytestmark = pytest.mark.api
 
 
 @pytest.mark.auth
-def test_login_and_logout(auth_headers):
+def test_login_and_logout():
     """
     Test the login and logout process for a new user.
     """
 
     logger.info("TEST: login and logout with new user.")
     users_helper = UsersHelper()
-    user_rs_api, user_info = users_helper.create_user(auth_headers)
-
-    request_utility = RequestUtilities()
+    user_rs_api, user_info = users_helper.create_user()
 
     logger.info("Login with user email: %s", user_info["email"])
 
-    rs_login_json = request_utility.post(
-        endpoint="users/login",
-        payload={
-            "email": user_info["email"],
-            "password": user_info["password"],
-        },
+    url = RequestUtilities.get_base_url() + "users/login"
+    response = requests.post(
+        url=url,
+        json={"email": user_info["email"], "password": user_info["password"]},
+        timeout=10,
     )
+    assert response.status_code == 200, "Bad status code of logout response."
+
+    rs_login_json = response.json()
 
     assert (
         rs_login_json is not None
@@ -44,28 +45,37 @@ def test_login_and_logout(auth_headers):
     ), "The IDs of the new user and the registered user do not match."
 
     logger.info("Logout with new user")
-    rs_logout = request_utility.post(
-        endpoint="users/logout",
+    url = RequestUtilities.get_base_url() + "users/logout"
+    response_logout = requests.post(
+        url=url,
+        json={"email": user_info["email"], "password": user_info["password"]},
         headers={"Authorization": f"Bearer {user_rs_api['token']}"},
-    )
-
-    assert not rs_logout, "Request is not empty."
-
-    logger.info("Deleting a new user")
-    rs_login_json = request_utility.post(
-        endpoint="users/login",
-        payload={
-            "email": user_info["email"],
-            "password": user_info["password"],
-        },
+        timeout=10,
     )
 
     assert (
-        rs_login_json is not None
-    ), "Response is None but expected JSON response"
-    users_helper.delete_user(
-        auth_headers={"Authorization": f"Bearer {rs_login_json['token']}"}
+        response_logout.status_code == 200
+    ), "Bad status code of logout response."
+
+    logger.info("Deleting a new user")
+    url = RequestUtilities.get_base_url() + "users/login"
+    response = requests.post(
+        url=url,
+        json={"email": user_info["email"], "password": user_info["password"]},
+        timeout=10,
     )
+    assert response.status_code == 200, "Bad status code of logout response."
+    rs_login_json = response.json()
+
+    url = RequestUtilities.get_base_url() + "users/me"
+    response_delete = requests.delete(
+        url=url,
+        headers={"Authorization": f"Bearer {rs_login_json['token']}"},
+        timeout=10,
+    )
+    assert (
+        response_delete.status_code == 200
+    ), "Bad status code of deleting response."
 
 
 @pytest.mark.auth

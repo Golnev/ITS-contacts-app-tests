@@ -8,9 +8,48 @@ import os
 import requests
 from dotenv import load_dotenv
 
+from src.helpers.auth_helper import with_auth_headers
 from src.hosts_config import API_HOSTS
 
 load_dotenv()
+#
+#
+# def with_auth_headers(func):
+#     """
+#     Decorator providing authorization headers
+#     """
+#
+#     @wraps(func)
+#     def wrapper(*args, **kwargs):
+#         my_email = os.getenv("MY_EMAIL")
+#         my_pass = os.getenv("MY_PASSWORD")
+#
+#         request_utility = RequestUtilities()
+#
+#         logger.info("Login with My Email.")
+#         response_json = request_utility.post(
+#             endpoint="users/login",
+#             payload={"email": my_email, "password": my_pass},
+#         )
+#         assert (
+#             response_json is not None
+#         ), "Response is None, but expected JSON response."
+#
+#         token = response_json["token"]
+#         headers = {"Authorization": f"Bearer {token}"}
+#
+#         try:
+#             result = func(*args, auth_headers=headers, **kwargs)
+#             return result
+#         finally:
+#             logger.info("Logout.")
+#             request_utility.post(
+#                 endpoint="users/logout",
+#                 headers={"Authorization": f"Bearer {token}"},
+#             )
+#
+#     return wrapper
+
 
 
 class RequestUtilities:
@@ -54,10 +93,11 @@ class RequestUtilities:
         )
         logger.info("Status is %s", self.status_code)
 
+    @with_auth_headers
     def get(
         self,
+        auth_headers,
         endpoint: str,
-        headers: dict | None = None,
         expected_status_code=200,
     ):
         """
@@ -66,10 +106,10 @@ class RequestUtilities:
 
         logger.info("Starting GET method.")
 
-        if not headers:
-            headers = {"Content-Type": "application/json"}
+        if not auth_headers:
+            auth_headers = {"Content-Type": "application/json"}
         else:
-            headers.update({"Content-Type": "application/json"})
+            auth_headers.update({"Content-Type": "application/json"})
 
         self.url = self.base_url + endpoint
         logger.info("URL: %s", self.url)
@@ -78,7 +118,7 @@ class RequestUtilities:
 
         self.response_api = requests.get(
             url=self.url,
-            headers=headers,
+            headers=auth_headers,
             timeout=5,
         )
         self.status_code = self.response_api.status_code
@@ -97,11 +137,13 @@ class RequestUtilities:
 
         return self.response_json
 
+    @with_auth_headers
     def post(
         self,
+        auth_headers,
         endpoint: str,
         payload: dict | None = None,
-        headers: dict | None = None,
+        # headers: dict | None = None,
         expected_status_code=200,
     ):
         """
@@ -110,10 +152,10 @@ class RequestUtilities:
 
         logger.info("Starting POST method.")
 
-        if not headers:
-            headers = {"Content-Type": "application/json"}
+        if not auth_headers:
+            auth_headers = {"Content-Type": "application/json"}
         else:
-            headers.update({"Content-Type": "application/json"})
+            auth_headers.update({"Content-Type": "application/json"})
 
         self.url = self.base_url + endpoint
         logger.info("URL: %s", self.url)
@@ -123,7 +165,7 @@ class RequestUtilities:
         self.response_api = requests.post(
             url=self.url,
             json=payload,
-            headers=headers,
+            headers=auth_headers,
             timeout=10,
         )
 
@@ -147,11 +189,13 @@ class RequestUtilities:
 
         return self.response_json
 
+    @with_auth_headers
     def put(
         self,
+        auth_headers,
         endpoint: str,
         payload: dict | None = None,
-        headers: dict | None = None,
+        # headers: dict | None = None,
         expected_status_code=200,
     ):
         """
@@ -160,10 +204,10 @@ class RequestUtilities:
 
         logger.info("Starting PUT method.")
 
-        if not headers:
-            headers = {"Content-Type": "application/json"}
+        if not auth_headers:
+            auth_headers = {"Content-Type": "application/json"}
         else:
-            headers.update({"Content-Type": "application/json"})
+            auth_headers.update({"Content-Type": "application/json"})
 
         self.url = self.base_url + endpoint
         logger.info("URL: %s", self.url)
@@ -173,7 +217,7 @@ class RequestUtilities:
         self.response_api = requests.put(
             url=self.url,
             json=payload,
-            headers=headers,
+            headers=auth_headers,
             timeout=10,
         )
 
@@ -197,11 +241,13 @@ class RequestUtilities:
 
         return self.response_json
 
+    @with_auth_headers
     def patch(
         self,
+        auth_headers,
         endpoint: str,
         payload: dict | None = None,
-        headers: dict | None = None,
+        # headers: dict | None = None,
         expected_status_code=200,
     ):
         """
@@ -210,10 +256,10 @@ class RequestUtilities:
 
         logger.info("Starting PATCH method.")
 
-        if not headers:
-            headers = {"Content-Type": "application/json"}
+        if not auth_headers:
+            auth_headers = {"Content-Type": "application/json"}
         else:
-            headers.update({"Content-Type": "application/json"})
+            auth_headers.update({"Content-Type": "application/json"})
 
         self.url = self.base_url + endpoint
         logger.info("URL: %s", self.url)
@@ -223,7 +269,7 @@ class RequestUtilities:
         self.response_api = requests.patch(
             url=self.url,
             json=payload,
-            headers=headers,
+            headers=auth_headers,
             timeout=10,
         )
 
@@ -247,10 +293,12 @@ class RequestUtilities:
 
         return self.response_json
 
+    @with_auth_headers
     def delete(
         self,
+        auth_headers,
         endpoint: str,
-        headers: dict | None = None,
+        # headers: dict | None = None,
         expected_status_code=200,
     ):
         """
@@ -259,8 +307,10 @@ class RequestUtilities:
 
         logger.info("Starting DELETE method.")
 
-        if not headers:
-            headers = {"Content-Type": "application/json"}
+        if not auth_headers:
+            auth_headers = {"Content-Type": "application/json"}
+        else:
+            auth_headers.update({"Content-Type": "application/json"})
 
         self.url = self.base_url + endpoint
         logger.info("URL: %s", self.url)
@@ -269,7 +319,7 @@ class RequestUtilities:
 
         self.response_api = requests.delete(
             url=self.url,
-            headers=headers,
+            headers=auth_headers,
             timeout=10,
         )
         self.status_code = self.response_api.status_code

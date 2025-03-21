@@ -53,34 +53,34 @@ def pytest_addoption(parser):
     )
 
 
-@pytest.fixture(scope="module")
-def auth_headers():
-    """
-    Provides authorization headers for API requests.
-    """
-
-    my_email = os.getenv("MY_EMAIL")
-    my_pass = os.getenv("MY_PASSWORD")
-
-    request_utility = RequestUtilities()
-
-    logger.info("Login with My Email.")
-    response_json = request_utility.post(
-        endpoint="users/login",
-        payload={"email": my_email, "password": my_pass},
-    )
-
-    assert (
-        response_json is not None
-    ), "Response is None, but expected JSON response."
-    token = response_json["token"]
-
-    yield {"Authorization": f"Bearer {token}"}
-
-    logger.info("Logout.")
-    request_utility.post(
-        endpoint="users/logout", headers={"Authorization": f"Bearer {token}"}
-    )
+# @pytest.fixture(scope="module")
+# def auth_headers():
+#     """
+#     Provides authorization headers for API requests.
+#     """
+#
+#     my_email = os.getenv("MY_EMAIL")
+#     my_pass = os.getenv("MY_PASSWORD")
+#
+#     request_utility = RequestUtilities()
+#
+#     logger.info("Login with My Email.")
+#     response_json = request_utility.post(
+#         endpoint="users/login",
+#         payload={"email": my_email, "password": my_pass},
+#     )
+#
+#     assert (
+#         response_json is not None
+#     ), "Response is None, but expected JSON response."
+#     token = response_json["token"]
+#
+#     yield {"Authorization": f"Bearer {token}"}
+#
+#     logger.info("Logout.")
+#     request_utility.post(
+#         endpoint="users/logout", headers={"Authorization": f"Bearer {token}"}
+#     )
 
 
 @pytest.fixture()

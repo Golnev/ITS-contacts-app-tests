@@ -16,7 +16,7 @@ class UsersHelper:
     def __init__(self):
         self.request_utility = RequestUtilities()
 
-    def create_user(self, auth_headers: dict):
+    def create_user(self):
         """
         Method for creating new user.
         """
@@ -41,7 +41,7 @@ class UsersHelper:
         create_user_json = self.request_utility.post(
             endpoint="users",
             payload=payload,
-            headers=auth_headers,
+            # headers=auth_headers,
             expected_status_code=201,
         )
 
@@ -54,7 +54,7 @@ class UsersHelper:
 
         logger.info("Delete user.")
 
-        self.request_utility.delete(endpoint="users/me", headers=auth_headers)
+        self.request_utility.delete(endpoint="users/me")
 
     def get_user(self, auth_headers: dict):
         """
@@ -64,7 +64,7 @@ class UsersHelper:
         logger.info("Get user.")
 
         rs_user_info = self.request_utility.get(
-            endpoint="users/me", headers=auth_headers
+            endpoint="users/me"
         )
 
         return rs_user_info
@@ -94,7 +94,7 @@ class UsersHelper:
         )
 
         create_user_json = self.request_utility.patch(
-            endpoint="users/me", payload=payload, headers=auth_headers
+            endpoint="users/me", payload=payload
         )
 
         return create_user_json, payload
