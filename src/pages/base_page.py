@@ -80,7 +80,8 @@ class BasePage:
             and element.is_enabled()
             and self.browser.execute_script(
                 "return "
-                "window.getComputedStyle(arguments[0]).visibility === 'visible';",
+                "window.getComputedStyle(arguments[0])."
+                "visibility === 'visible';",
                 element,
             )
         )
