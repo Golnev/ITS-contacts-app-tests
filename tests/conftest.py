@@ -5,6 +5,7 @@ for running Selenium-based and API-based tests.
 
 import logging as logger
 import os
+import requests_cache
 
 import pytest
 from dotenv import load_dotenv
@@ -93,6 +94,8 @@ def browser(pytestconfig):
     """
     Initializes a Selenium WebDriver instance for the specified browser.
     """
+
+    requests_cache.install_cache("webdriver_cache", expire_after=3600)
 
     browser_name = pytestconfig.getoption("--browser_name")
 

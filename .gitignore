@@ -11,3 +11,4 @@ tests/__pycache__
 tests/api_tests/__pycache__
 tests/ui_tests/__pycache__
 tests/reports
+webdriver_cache.sqlite
