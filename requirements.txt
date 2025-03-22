@@ -1,3 +1,5 @@
+allure-pytest==2.13.5
+allure-python-commons==2.13.5
 astroid==3.3.9
 attrs==25.3.0
 black==25.1.0
