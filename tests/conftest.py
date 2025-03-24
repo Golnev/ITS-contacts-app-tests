@@ -187,6 +187,8 @@ def setup_user(browser: webdriver.Firefox | webdriver.Chrome):
 
     WebDriverWait(browser, 10).until(EC.url_to_be(base_url + "contactList"))
 
+    return page
+
 
 @pytest.fixture(scope="function")
 def created_contact(

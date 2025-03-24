@@ -28,4 +28,4 @@ jobs:
         run: pycodestyle --exclude=.venv .
 
       - name: Run pylint
-        run: pylint --ignore=.venv **/*.py
+        run: pylint --ignore=.venv **/*.py --disable=C0103

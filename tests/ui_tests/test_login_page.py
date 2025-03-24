@@ -3,13 +3,10 @@ This module contains UI tests for the "Login" page using Selenium WebDriver.
 """
 
 import logging as logger
-import os
 
 import pytest
 from dotenv import load_dotenv
 from selenium import webdriver
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait
 
 from src.pages.login_page import LoginPage
 from src.pages.register_page import RegisterPage
@@ -43,25 +40,14 @@ class TestLoginPage:
         page.open()
         page.should_be_login_page()
 
-    def test_login(self, browser: webdriver.Firefox | webdriver.Chrome):
+    @pytest.mark.check
+    @pytest.mark.usefixtures("browser")
+    def test_login(self, setup_user):
         """
         Verifies that the user can log in successfully.
         """
 
-        logger.info("Starting Test: login")
-        link = base_url + "login"
-        page = LoginPage(browser=browser, url=link)
-        page.open()
-
-        email = os.getenv("MY_EMAIL")
-        password = os.getenv("MY_PASSWORD")
-
-        if email and password:
-            page.login(email=email, password=password)
-
-        WebDriverWait(browser, 10).until(
-            EC.url_to_be(base_url + "contactList")
-        )
+        page = setup_user
 
         assert (
             page.browser.current_url == base_url + "contactList"
