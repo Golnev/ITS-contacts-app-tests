@@ -11,7 +11,8 @@ import pytest
 from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
+from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.service import Service as FirefoxService
 
 from selenium.webdriver.support import expected_conditions as EC
@@ -51,6 +52,12 @@ def pytest_addoption(parser):
         action="store",
         default="firefox",
         help="Choose browser: chrome or firefox",
+    )
+    parser.addoption(
+        "--docker",
+        action="store_true",
+        default=False,
+        help="Add arguments for docker.",
     )
 
 
@@ -99,10 +106,12 @@ def browser(pytestconfig):
 
     browser_name = pytestconfig.getoption("--browser_name")
 
+    docker_args = pytestconfig.getoption("--docker")
+
     if browser_name == "firefox":
         logger.info("Prepare browser firefox.")
 
-        options = Options()
+        options = FirefoxOptions()
         firefox_path = os.getenv("FIREFOX_PATH")
 
         if firefox_path:
@@ -120,9 +129,23 @@ def browser(pytestconfig):
     elif browser_name == "chrome":
         logger.info("Prepare browser chrome.")
 
-        driver = webdriver.Chrome(
-            service=ChromeService(ChromeDriverManager().install())
-        )
+        if docker_args:
+            options = ChromeOptions()
+            options.add_argument("--headless=new")
+            options.add_argument("--no-sandbox")
+            options.add_argument("--disable-dev-shm-usage")
+            options.add_argument("--disable-gpu")
+            options.add_argument("--remote-debugging-port=9222")
+
+            driver = webdriver.Chrome(
+                service=ChromeService(ChromeDriverManager().install()),
+                options=options,
+            )
+
+        else:
+            driver = webdriver.Chrome(
+                service=ChromeService(ChromeDriverManager().install())
+            )
 
     else:
         raise pytest.UsageError("--browser_name should be chrome or firefox")
