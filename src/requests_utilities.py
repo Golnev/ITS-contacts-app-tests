@@ -23,7 +23,7 @@ class RequestParams:
 
     endpoint: str
     payload: dict | None = None
-    auth_extra: dict = None
+    auth_extra: dict | None = None
     expected_status_code: int = 200
 
 
@@ -70,7 +70,7 @@ class RequestUtilities:
         self,
         method: str,
         request_params: RequestParams,
-        auth_headers: dict = None,
+        auth_headers: dict | None = None,
     ):
         """
         Perform an HTTP request to the specified API endpoint.
@@ -78,11 +78,13 @@ class RequestUtilities:
 
         logger.info("Starting %s method.", method.upper())
 
-        if request_params.auth_extra:
+        if not auth_headers:
             auth_headers = {"Content-Type": "application/json"}
-            auth_headers.update(request_params.auth_extra)
         else:
             auth_headers.update({"Content-Type": "application/json"})
+
+        if request_params.auth_extra:
+            auth_headers.update(request_params.auth_extra)
 
         self.url = self.get_base_url() + request_params.endpoint
         logger.info("URL: %s", self.url)

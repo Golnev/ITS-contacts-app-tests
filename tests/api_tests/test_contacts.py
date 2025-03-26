@@ -472,7 +472,7 @@ def test_upgrade_first_name_and_postal_code_together(
 
     assert update_contact["firstName"] == update_firstname, (
         f"Expected email to be {update_firstname}, "
-        f"but got {update_contact["firstName"]}"
+        f"but got {update_contact['firstName']}"
     )
 
     assert update_contact["postalCode"] == update_postal_code, (
