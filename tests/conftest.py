@@ -113,7 +113,7 @@ def browser(pytestconfig):
 
         options = FirefoxOptions()
 
-        service = None
+        service = FirefoxService(GeckoDriverManager().install())
 
         if docker_args:
             options.add_argument("--headless")
@@ -122,23 +122,17 @@ def browser(pytestconfig):
             options.add_argument("--disable-gpu")
 
             service = FirefoxService(
-                executable_path=GeckoDriverManager().install(),
-                service_args=['--log', 'debug']  # Включение логов
+                executable_path=GeckoDriverManager().install()
             )
 
         firefox_path = os.getenv("FIREFOX_PATH")
         if firefox_path:
             options.binary_location = firefox_path
-            service = FirefoxService(GeckoDriverManager().install())
 
         driver = webdriver.Firefox(
             service=service,
             options=options,
         )
-        # else:
-        #     driver = webdriver.Firefox(
-        #         service=FirefoxService(GeckoDriverManager().install())
-        #     )
 
     elif browser_name == "chrome":
         logger.info("Prepare browser chrome.")
