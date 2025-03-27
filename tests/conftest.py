@@ -118,6 +118,10 @@ def browser(pytestconfig):
             options.add_argument("--no-sandbox")
             options.add_argument("--disable-dev-shm-usage")
             options.add_argument("--disable-gpu")
+            options.set_preference("browser.download.folderList", 2)
+            options.set_preference("browser.download.manager.showWhenStarting", False)
+            options.set_preference("browser.download.dir", "/tmp")
+            options.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/octet-stream")
 
         firefox_path = os.getenv("FIREFOX_PATH")
         if firefox_path:
