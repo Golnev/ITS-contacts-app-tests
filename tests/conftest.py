@@ -113,6 +113,8 @@ def browser(pytestconfig):
 
         options = FirefoxOptions()
 
+        service = None
+
         if docker_args:
             options.add_argument("--headless=new")
             options.add_argument("--no-sandbox")
@@ -123,12 +125,18 @@ def browser(pytestconfig):
             options.set_preference("browser.download.dir", "/tmp")
             options.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/octet-stream")
 
+            service = FirefoxService(
+                executable_path=GeckoDriverManager().install(),
+                service_args=['--log', 'debug']  # Включение логов
+            )
+
         firefox_path = os.getenv("FIREFOX_PATH")
         if firefox_path:
             options.binary_location = firefox_path
+            service = FirefoxService(GeckoDriverManager().install())
 
         driver = webdriver.Firefox(
-            service=FirefoxService(GeckoDriverManager().install()),
+            service=service,
             options=options,
         )
         # else:
