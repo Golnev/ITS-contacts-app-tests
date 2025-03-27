@@ -112,19 +112,26 @@ def browser(pytestconfig):
         logger.info("Prepare browser firefox.")
 
         options = FirefoxOptions()
-        firefox_path = os.getenv("FIREFOX_PATH")
 
+        if docker_args:
+            options.add_argument("--headless=new")
+            options.add_argument("--no-sandbox")
+            options.add_argument("--disable-dev-shm-usage")
+            options.add_argument("--disable-gpu")
+            options.add_argument("--remote-debugging-port=9222")
+
+        firefox_path = os.getenv("FIREFOX_PATH")
         if firefox_path:
             options.binary_location = firefox_path
 
-            driver = webdriver.Firefox(
-                service=FirefoxService(GeckoDriverManager().install()),
-                options=options,
-            )
-        else:
-            driver = webdriver.Firefox(
-                service=FirefoxService(GeckoDriverManager().install())
-            )
+        driver = webdriver.Firefox(
+            service=FirefoxService(GeckoDriverManager().install()),
+            options=options,
+        )
+        # else:
+        #     driver = webdriver.Firefox(
+        #         service=FirefoxService(GeckoDriverManager().install())
+        #     )
 
     elif browser_name == "chrome":
         logger.info("Prepare browser chrome.")
