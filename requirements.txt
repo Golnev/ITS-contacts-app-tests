@@ -1,9 +1,9 @@
 Faker==37.1.0
 pytest==8.3.5
-python-dotenv==1.1.0
+python-dotenv==1.0.1
 Requests==2.32.3
 requests_cache==1.2.1
-selenium==4.30.0
+selenium==4.29.0
 webdriver_manager==4.0.2
 flake8==7.1.2
 pycodestyle==2.12.1

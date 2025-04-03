@@ -16,12 +16,12 @@ class AuthManager:
     including login, logout, and token handling.
     """
 
-    def __init__(self, env="test"):
+    def __init__(self):
         """
         Initializes the AuthManager with the specified environment.
         """
 
-        self.env = env
+        self.env = os.getenv("ENV")
         self.base_url = API_HOSTS[self.env]
         self.token = None
 
@@ -80,16 +80,6 @@ class AuthManager:
         logger.info("Logout successful.")
         self.token = None
 
-    def get_auth_headers(self):
-        """
-        Retrieves the authentication headers for API requests.
-        """
-
-        if not self.token:
-            self.login()
-
-        return {"Authorization": f"Bearer {self.token}"}
-
 
 def with_auth_headers(func):
     """
@@ -99,9 +89,12 @@ def with_auth_headers(func):
     @wraps(func)
     def wrapper(self, *args, **kwargs):
         auth_manager = AuthManager()
-        headers = auth_manager.get_auth_headers()
 
         try:
+            if not auth_manager.token:
+                auth_manager.login()
+            headers = {"Authorization": f"Bearer {auth_manager.token}"}
+
             return func(self, *args, auth_headers=headers, **kwargs)
         finally:
             auth_manager.logout()
