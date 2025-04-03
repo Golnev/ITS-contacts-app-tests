@@ -43,28 +43,23 @@ class RequestUtilities:
         return base_url
 
     def __init__(self):
-
-        self.status_code: int | None = None
-        self.expected_status_code: int | None = None
         self.url: str | None = None
-
         self.response_api = None
-        self.response_json = None
-
         self.EMPTY_CONTENT_LENGTH = "0"
 
-    def __assert_status_code(self):
+    @staticmethod
+    def assert_status_code(status_code, expected_status_code):
         """
         Validate the status code of the latest API response.
         """
 
         logger.info("Status code check.")
-        assert self.status_code == self.expected_status_code, (
+        assert status_code == expected_status_code, (
             f"Bad status code. "
-            f"Expected status code: {self.expected_status_code}, "
-            f"actual status code: {self.status_code}"
+            f"Expected status code: {expected_status_code}, "
+            f"actual status code: {status_code}"
         )
-        logger.info("Status is %s", self.status_code)
+        logger.info("Status is %s", status_code)
 
     def __make_request(
         self,
@@ -84,7 +79,7 @@ class RequestUtilities:
         self.url = self.get_base_url() + request_params.endpoint
         logger.info("URL: %s", self.url)
 
-        self.expected_status_code = request_params.expected_status_code
+        expected_status_code = request_params.expected_status_code
 
         self.response_api = requests.request(
             method=method,
@@ -94,8 +89,10 @@ class RequestUtilities:
             timeout=10,
         )
 
-        self.status_code = self.response_api.status_code
-        self.__assert_status_code()
+        status_code = self.response_api.status_code
+        self.assert_status_code(
+            status_code=status_code, expected_status_code=expected_status_code
+        )
 
         if (
             self.response_api.headers.get("Content-Length")
@@ -112,10 +109,10 @@ class RequestUtilities:
         ]:
             return None
 
-        self.response_json = self.response_api.json()
-        logger.info("%s API response %s", method.upper(), self.response_json)
+        response_json = self.response_api.json()
+        logger.info("%s API response %s", method.upper(), response_json)
 
-        return self.response_json
+        return response_json
 
     @with_auth_headers
     def get(
