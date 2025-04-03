@@ -5,19 +5,12 @@ for running Selenium-based and API-based tests.
 
 import logging as logger
 import os
-import requests_cache
 
 import pytest
 from dotenv import load_dotenv
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.firefox.options import Options
-from selenium.webdriver.firefox.service import Service as FirefoxService
-
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
-from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.firefox import GeckoDriverManager
 
 from src.helpers.contacts_helper import ContactsHelper
 from src.pages.add_new_contact_page import AddNewContactPage
@@ -29,29 +22,6 @@ from src.requests_utilities import RequestUtilities
 load_dotenv()
 
 base_url = RequestUtilities.get_base_url()
-
-
-def pytest_addoption(parser):
-    """
-    Add custom command-line options for Pytest.
-
-    Options:
-    - `--rm`: Enables automatic deletion of created contacts after tests.
-    - `--browser_name`: Specifies the browser to use (chrome or firefox).
-    """
-
-    parser.addoption(
-        "--rm",
-        action="store_true",
-        default=False,
-        help="Delete a created contact after a test",
-    )
-    parser.addoption(
-        "--browser_name",
-        action="store",
-        default="firefox",
-        help="Choose browser: chrome or firefox",
-    )
 
 
 @pytest.fixture()
@@ -89,51 +59,6 @@ def manage_contacts(pytestconfig):
                 )
 
 
-@pytest.fixture
-def browser(pytestconfig):
-    """
-    Initializes a Selenium WebDriver instance for the specified browser.
-    """
-
-    requests_cache.install_cache("webdriver_cache", expire_after=3600)
-
-    browser_name = pytestconfig.getoption("--browser_name")
-
-    if browser_name == "firefox":
-        logger.info("Prepare browser firefox.")
-
-        options = Options()
-        firefox_path = os.getenv("FIREFOX_PATH")
-
-        if firefox_path:
-            options.binary_location = firefox_path
-
-            driver = webdriver.Firefox(
-                service=FirefoxService(GeckoDriverManager().install()),
-                options=options,
-            )
-        else:
-            driver = webdriver.Firefox(
-                service=FirefoxService(GeckoDriverManager().install())
-            )
-
-    elif browser_name == "chrome":
-        logger.info("Prepare browser chrome.")
-
-        driver = webdriver.Chrome(
-            service=ChromeService(ChromeDriverManager().install())
-        )
-
-    else:
-        raise pytest.UsageError("--browser_name should be chrome or firefox")
-
-    yield driver
-
-    logger.info("Browser quit.")
-    if driver:
-        driver.quit()
-
-
 @pytest.fixture()
 def del_all_contacts(
     pytestconfig, browser: webdriver.Firefox | webdriver.Chrome
@@ -168,8 +93,8 @@ def del_all_contacts(
                 break
 
 
-@pytest.fixture(scope="function")
-def setup_user(browser: webdriver.Firefox | webdriver.Chrome):
+@pytest.fixture(scope="function", name="setup_user")
+def fixture_setup_user(browser: webdriver.Firefox | webdriver.Chrome):
     """
     Logs in a user using the login page.
     """
@@ -198,6 +123,8 @@ def created_contact(
     """
     Creates a new contact using Selenium.
     """
+
+    _ = setup_user
 
     contact_info = ContactsHelper.fake_contact()
 
