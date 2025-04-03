@@ -58,10 +58,7 @@ class EditContactPage(BasePage):
 
         logger.info("Logout from edit contact page.")
 
-        logout_button = self.browser.find_element(
-            *EditContactPageLocators.LOGOUT_BUTTON
-        )
-        logout_button.click()
+        self.click_button(locator=EditContactPageLocators.LOGOUT_BUTTON)
 
     def return_to_contact_details(self):
         """
@@ -70,10 +67,7 @@ class EditContactPage(BasePage):
 
         logger.info("Return to contact details from edit contact page.")
 
-        cancel_button = self.browser.find_element(
-            *EditContactPageLocators.CANCEL_BUTTON
-        )
-        cancel_button.click()
+        self.click_button(locator=EditContactPageLocators.CANCEL_BUTTON)
 
     def edit_contact(
         self,
@@ -123,7 +117,4 @@ class EditContactPage(BasePage):
 
         edit_field.send_keys(data)
 
-        submit_button = self.browser.find_element(
-            *EditContactPageLocators.SUBMIT_BUTTON
-        )
-        submit_button.click()
+        self.click_button(locator=EditContactPageLocators.SUBMIT_BUTTON)

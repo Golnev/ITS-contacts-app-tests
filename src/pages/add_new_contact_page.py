@@ -86,56 +86,52 @@ class AddNewContactPage(BasePage):
 
         time.sleep(5)
 
-        first_name_form = self.wait_for_element_ready(
-            AddNewContactPageLocators.FIRST_NAME
+        self.send_text(
+            locator=AddNewContactPageLocators.FIRST_NAME,
+            text=contact_info["firstName"],
         )
 
-        first_name_form.send_keys(contact_info["firstName"])
-
-        last_name_form = self.wait_for_element_ready(
-            AddNewContactPageLocators.LAST_NAME
+        self.send_text(
+            locator=AddNewContactPageLocators.LAST_NAME,
+            text=contact_info["lastName"],
         )
-        last_name_form.send_keys(contact_info["lastName"])
 
-        date_of_birth_form = self.wait_for_element_ready(
-            AddNewContactPageLocators.DATE_OF_BIRTH
+        self.send_text(
+            locator=AddNewContactPageLocators.DATE_OF_BIRTH,
+            text=contact_info["birthdate"],
         )
-        date_of_birth_form.send_keys(contact_info["birthdate"])
 
-        email_form = self.wait_for_element_ready(
-            AddNewContactPageLocators.EMAIL
+        self.send_text(
+            locator=AddNewContactPageLocators.EMAIL, text=contact_info["email"]
         )
-        email_form.send_keys(contact_info["email"])
 
-        phone_form = self.wait_for_element_ready(
-            AddNewContactPageLocators.PHONE
+        self.send_text(
+            locator=AddNewContactPageLocators.PHONE,
+            text=str(contact_info["phone"]),
         )
-        phone_form.send_keys(str(contact_info["phone"]))
 
-        street_address_1_form = self.wait_for_element_ready(
-            AddNewContactPageLocators.STREET_ADDRESS_1
+        self.send_text(
+            locator=AddNewContactPageLocators.STREET_ADDRESS_1,
+            text=contact_info["street1"],
         )
-        street_address_1_form.send_keys(contact_info["street1"])
 
-        city_form = self.wait_for_element_ready(AddNewContactPageLocators.CITY)
-        city_form.send_keys(contact_info["city"])
-
-        state_form = self.wait_for_element_ready(
-            AddNewContactPageLocators.STATE
+        self.send_text(
+            locator=AddNewContactPageLocators.CITY, text=contact_info["city"]
         )
-        state_form.send_keys(contact_info["stateProvince"])
 
-        postal_code_form = self.wait_for_element_ready(
-            AddNewContactPageLocators.POSTAL_CODE
+        self.send_text(
+            locator=AddNewContactPageLocators.STATE,
+            text=contact_info["stateProvince"],
         )
-        postal_code_form.send_keys(str(contact_info["postalCode"]))
 
-        country_form = self.wait_for_element_ready(
-            AddNewContactPageLocators.COUNTRY
+        self.send_text(
+            locator=AddNewContactPageLocators.POSTAL_CODE,
+            text=str(contact_info["postalCode"]),
         )
-        country_form.send_keys(contact_info["country"])
 
-        submit_button = self.wait_for_element_ready(
-            AddNewContactPageLocators.SUBMIT_BUTTON
+        self.send_text(
+            locator=AddNewContactPageLocators.COUNTRY,
+            text=contact_info["country"],
         )
-        submit_button.click()
+
+        self.click_button(locator=AddNewContactPageLocators.SUBMIT_BUTTON)

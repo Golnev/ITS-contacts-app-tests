@@ -67,10 +67,7 @@ class ContactListPage(BasePage):
 
         logger.info("Logout.")
 
-        logout_button = self.browser.find_element(
-            *ContactListPageLocators.LOGOUT_BUTTON
-        )
-        logout_button.click()
+        self.click_button(locator=ContactListPageLocators.LOGOUT_BUTTON)
 
     def go_to_add_new_contact(self):
         """
@@ -79,10 +76,9 @@ class ContactListPage(BasePage):
 
         logger.info("Go to add new contact page.")
 
-        add_new_contact_button = self.browser.find_element(
-            *ContactListPageLocators.ADD_NEW_CONTACT_BUTTON
+        self.click_button(
+            locator=ContactListPageLocators.ADD_NEW_CONTACT_BUTTON
         )
-        add_new_contact_button.click()
 
     def find_contact_by_full_name(self, first_name: str, last_name: str):
         """
@@ -133,10 +129,10 @@ class ContactListPage(BasePage):
         logger.info("Go to contact details by full name.")
 
         full_name = " ".join([first_name, last_name])
-        contact = self.browser.find_element(
-            By.XPATH, f"//table//td[contains(text(), '{full_name}')]"
+
+        self.click_button(
+            locator=(By.XPATH, f"//table//td[contains(text(), '{full_name}')]")
         )
-        contact.click()
 
     def get_first_contact(self):
         """

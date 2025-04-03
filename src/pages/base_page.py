@@ -97,3 +97,17 @@ class BasePage:
             )
         )
         return self.browser.find_element(*locator)
+
+    def send_text(self, locator: tuple, text: str):
+        """
+        Send text to element in form.
+        """
+        element = self.wait_for_element_ready(locator=locator)
+        element.send_keys(text)
+
+    def click_button(self, locator: tuple):
+        """
+        Click button in form.
+        """
+        element = self.wait_for_element_ready(locator=locator)
+        element.click()

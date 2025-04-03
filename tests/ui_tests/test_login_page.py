@@ -40,7 +40,6 @@ class TestLoginPage:
         page.open()
         page.should_be_login_page()
 
-    @pytest.mark.check
     @pytest.mark.usefixtures("browser")
     def test_login(self, setup_user):
         """

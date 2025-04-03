@@ -3,6 +3,7 @@ This module provides methods for interacting with the "Login" page.
 """
 
 import logging as logger
+
 from src.locators import LoginPageLocators
 from src.pages.base_page import BasePage
 
@@ -58,8 +59,8 @@ class LoginPage(BasePage):
         """
 
         logger.info("Go to register page")
-        link = self.browser.find_element(*LoginPageLocators.SIGN_UP_BUTTON)
-        link.click()
+
+        self.click_button(locator=LoginPageLocators.SIGN_UP_BUTTON)
 
     def login(self, email: str, password: str):
         """
@@ -67,17 +68,11 @@ class LoginPage(BasePage):
         """
 
         logger.info("Starting login")
-        email_form = self.browser.find_element(
-            *LoginPageLocators.REGISTER_EMAIL
-        )
-        email_form.send_keys(email)
 
-        password_form = self.browser.find_element(
-            *LoginPageLocators.REGISTER_PASSWORD
-        )
-        password_form.send_keys(password)
+        self.send_text(locator=LoginPageLocators.REGISTER_EMAIL, text=email)
 
-        login_button = self.browser.find_element(
-            *LoginPageLocators.LOGIN_BUTTON
+        self.send_text(
+            locator=LoginPageLocators.REGISTER_PASSWORD, text=password
         )
-        login_button.click()
+
+        self.click_button(locator=LoginPageLocators.LOGIN_BUTTON)

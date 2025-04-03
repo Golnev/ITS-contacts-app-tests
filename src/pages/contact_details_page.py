@@ -55,10 +55,7 @@ class ContactDetailsPage(BasePage):
 
         logger.info("Logout.")
 
-        logout_button = self.browser.find_element(
-            *ContactDetailsPageLocators.LOGOUT_BUTTON
-        )
-        logout_button.click()
+        self.click_button(locator=ContactDetailsPageLocators.LOGOUT_BUTTON)
 
     def return_to_contact_list(self):
         """
@@ -67,10 +64,7 @@ class ContactDetailsPage(BasePage):
 
         logger.info("Return to contact list.")
 
-        return_button = self.browser.find_element(
-            *ContactDetailsPageLocators.RETURN_BUTTON
-        )
-        return_button.click()
+        self.click_button(locator=ContactDetailsPageLocators.RETURN_BUTTON)
 
     def delete_contact(self):
         """
@@ -79,10 +73,7 @@ class ContactDetailsPage(BasePage):
 
         logger.info("Deleting contact.")
 
-        delete_button = self.browser.find_element(
-            *ContactDetailsPageLocators.DELETE_BUTTON
-        )
-        delete_button.click()
+        self.click_button(locator=ContactDetailsPageLocators.DELETE_BUTTON)
 
         alert = self.browser.switch_to.alert
         alert.accept()
@@ -95,10 +86,9 @@ class ContactDetailsPage(BasePage):
 
         logger.info("Go to edit contact page.")
 
-        edit_contact_button = self.browser.find_element(
-            *ContactDetailsPageLocators.EDIT_CONTACT_BUTTON
+        self.click_button(
+            locator=ContactDetailsPageLocators.EDIT_CONTACT_BUTTON
         )
-        edit_contact_button.click()
 
     def get_info(
         self,

@@ -51,30 +51,21 @@ class RegisterPage(BasePage):
 
         logger.info("Starting register new user.")
 
-        first_name_form = self.browser.find_element(
-            *RegisterPageLocators.REGISTER_FIRST_NAME
+        self.send_text(
+            locator=RegisterPageLocators.REGISTER_FIRST_NAME, text=first_name
         )
-        first_name_form.send_keys(first_name)
 
-        last_name_form = self.browser.find_element(
-            *RegisterPageLocators.REGISTER_LAST_NAME
+        self.send_text(
+            locator=RegisterPageLocators.REGISTER_LAST_NAME, text=last_name
         )
-        last_name_form.send_keys(last_name)
 
-        email_form = self.browser.find_element(
-            *RegisterPageLocators.REGISTER_EMAIL
-        )
-        email_form.send_keys(email)
+        self.send_text(locator=RegisterPageLocators.REGISTER_EMAIL, text=email)
 
-        password_form = self.browser.find_element(
-            *RegisterPageLocators.REGISTER_PASSWORD
+        self.send_text(
+            locator=RegisterPageLocators.REGISTER_PASSWORD, text=password
         )
-        password_form.send_keys(password)
 
-        register_button = self.browser.find_element(
-            *RegisterPageLocators.REGISTER_BUTTON
-        )
-        register_button.click()
+        self.click_button(locator=RegisterPageLocators.REGISTER_BUTTON)
 
     def should_be_validation_error(self):
         """
@@ -97,7 +88,4 @@ class RegisterPage(BasePage):
 
         logger.info("Cancel from register page")
 
-        cancel_button = self.browser.find_element(
-            *RegisterPageLocators.CANCEL_BUTTON
-        )
-        cancel_button.click()
+        self.click_button(locator=RegisterPageLocators.CANCEL_BUTTON)
