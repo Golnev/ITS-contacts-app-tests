@@ -95,6 +95,8 @@ def with_auth_headers(func):
                 auth_manager.login()
             headers = {"Authorization": f"Bearer {auth_manager.token}"}
 
+            headers.update({"Content-Type": "application/json"})
+
             return func(self, *args, auth_headers=headers, **kwargs)
         finally:
             auth_manager.logout()

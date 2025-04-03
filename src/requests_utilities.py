@@ -78,12 +78,7 @@ class RequestUtilities:
 
         logger.info("Starting %s method.", method.upper())
 
-        if not auth_headers:
-            auth_headers = {"Content-Type": "application/json"}
-        else:
-            auth_headers.update({"Content-Type": "application/json"})
-
-        if request_params.auth_extra:
+        if request_params.auth_extra and auth_headers:
             auth_headers.update(request_params.auth_extra)
 
         self.url = self.get_base_url() + request_params.endpoint
