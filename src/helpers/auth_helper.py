@@ -21,7 +21,7 @@ class AuthManager:
         Initializes the AuthManager with the specified environment.
         """
 
-        self.env = os.getenv("ENV")
+        self.env = os.getenv("ENV", "test")
         self.base_url = API_HOSTS[self.env]
         self.token = None
 

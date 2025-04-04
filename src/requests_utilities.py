@@ -101,7 +101,9 @@ class RequestUtilities:
             logger.info("Response has empty body (Content-Length: 0)")
             return None
 
-        if request_params.payload is None and method.upper() != "GET":
+        if "application/json" not in self.response_api.headers.get(
+            "Content-Type", ""
+        ):
             return None
 
         response_json = self.response_api.json()
