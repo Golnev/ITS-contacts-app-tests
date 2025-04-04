@@ -101,12 +101,7 @@ class RequestUtilities:
             logger.info("Response has empty body (Content-Length: 0)")
             return None
 
-        if request_params.payload is None and method.upper() in [
-            "POST",
-            "PUT",
-            "PATCH",
-            "DELETE",
-        ]:
+        if request_params.payload is None and method.upper() != "GET":
             return None
 
         response_json = self.response_api.json()
