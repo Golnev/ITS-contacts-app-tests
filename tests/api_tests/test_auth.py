@@ -34,12 +34,8 @@ def test_login_and_logout():
 
     rs_login_json = response.json()
 
-    assert (
-        rs_login_json is not None
-    ), "Response is None but expected JSON response"
-    assert (
-        user_rs_api is not None
-    ), "Response is None but expected JSON response"
+    assert rs_login_json is not None, "Response is None but expected JSON response"
+    assert user_rs_api is not None, "Response is None but expected JSON response"
     assert (
         rs_login_json["user"]["_id"] == user_rs_api["user"]["_id"]
     ), "The IDs of the new user and the registered user do not match."
@@ -53,9 +49,7 @@ def test_login_and_logout():
         timeout=10,
     )
 
-    assert (
-        response_logout.status_code == 200
-    ), "Bad status code of logout response."
+    assert response_logout.status_code == 200, "Bad status code of logout response."
 
     logger.info("Deleting a new user")
     url = RequestUtilities.get_base_url() + "users/login"
@@ -73,9 +67,7 @@ def test_login_and_logout():
         headers={"Authorization": f"Bearer {rs_login_json['token']}"},
         timeout=10,
     )
-    assert (
-        response_delete.status_code == 200
-    ), "Bad status code of deleting response."
+    assert response_delete.status_code == 200, "Bad status code of deleting response."
 
 
 @pytest.mark.auth

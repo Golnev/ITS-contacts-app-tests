@@ -30,9 +30,7 @@ class TestContactListPage:
 
     logger.info("Starting tests for contact list page.")
 
-    def test_user_should_be_in_contact_list_page(
-        self, browser: webdriver.Firefox | webdriver.Chrome
-    ):
+    def test_user_should_be_in_contact_list_page(self, browser: webdriver.Firefox | webdriver.Chrome):
         """
         Verifies that the user can navigate to the "Contact List" page.
         """
@@ -58,13 +56,9 @@ class TestContactListPage:
 
         WebDriverWait(browser, 10).until(EC.url_to_be(base_url))
 
-        assert (
-            page.browser.current_url == base_url
-        ), f"Wrong URL after logout. URL: {page.browser.current_url}"
+        assert page.browser.current_url == base_url, f"Wrong URL after logout. URL: {page.browser.current_url}"
 
-    def test_user_can_go_to_add_new_contact(
-        self, browser: webdriver.Firefox | webdriver.Chrome
-    ):
+    def test_user_can_go_to_add_new_contact(self, browser: webdriver.Firefox | webdriver.Chrome):
         """
         Verifies that the user can navigate
         to the "Add New Contact" page.
@@ -77,9 +71,7 @@ class TestContactListPage:
         page.open()
         page.go_to_add_new_contact()
 
-        add_new_contact_page = AddNewContactPage(
-            browser=browser, url=browser.current_url
-        )
+        add_new_contact_page = AddNewContactPage(browser=browser, url=browser.current_url)
         add_new_contact_page.should_be_add_new_contact_page()
 
     @pytest.mark.usefixtures("del_all_contacts")
@@ -103,20 +95,14 @@ class TestContactListPage:
 
         page.add_new_contact(contact_info)
 
-        WebDriverWait(browser, 10).until(
-            EC.url_to_be(base_url + "contactList")
-        )
+        WebDriverWait(browser, 10).until(EC.url_to_be(base_url + "contactList"))
 
-        contact_list_page = ContactListPage(
-            browser=browser, url=browser.current_url
-        )
+        contact_list_page = ContactListPage(browser=browser, url=browser.current_url)
 
         contact_list_page.go_to_contact_details_by_full_name(
             first_name=contact_info["firstName"],
             last_name=contact_info["lastName"],
         )
 
-        contact_details_page = ContactDetailsPage(
-            browser=browser, url=browser.current_url
-        )
+        contact_details_page = ContactDetailsPage(browser=browser, url=browser.current_url)
         contact_details_page.should_be_contact_details_page()

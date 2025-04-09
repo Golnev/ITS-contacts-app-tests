@@ -35,9 +35,7 @@ def manage_contacts(pytestconfig):
 
     def create_contact():
         contact_rs_api, contact_info = contacts_helper.create_contact()
-        assert (
-            contact_rs_api is not None
-        ), "Response is None, but expected JSON response."
+        assert contact_rs_api is not None, "Response is None, but expected JSON response."
         create_contact_id = contact_rs_api["_id"]
         created_contacts.append(create_contact_id)
         return contact_rs_api, contact_info
@@ -60,9 +58,7 @@ def manage_contacts(pytestconfig):
 
 
 @pytest.fixture()
-def del_all_contacts(
-    pytestconfig, browser: webdriver.Firefox | webdriver.Chrome
-):
+def del_all_contacts(pytestconfig, browser: webdriver.Firefox | webdriver.Chrome):
     """
     Deletes all test contacts from the contact list page
     (Selenium-based cleanup).
@@ -79,13 +75,9 @@ def del_all_contacts(
             first_contact = contact_list_page.get_first_contact()
 
             if first_contact:
-                WebDriverWait(browser, 5).until(
-                    EC.element_to_be_clickable(first_contact)
-                )
+                WebDriverWait(browser, 5).until(EC.element_to_be_clickable(first_contact))
                 first_contact.click()
-                contact_details_page = ContactDetailsPage(
-                    browser=browser, url=browser.current_url
-                )
+                contact_details_page = ContactDetailsPage(browser=browser, url=browser.current_url)
                 contact_details_page.delete_contact()
                 WebDriverWait(browser, 5).until(EC.staleness_of(first_contact))
                 contact_list_page.open()
@@ -144,17 +136,13 @@ def created_contact(
 
     WebDriverWait(browser, 10).until(EC.url_to_be(base_url + "contactList"))
 
-    contact_list_page = ContactListPage(
-        browser=browser, url=browser.current_url
-    )
+    contact_list_page = ContactListPage(browser=browser, url=browser.current_url)
 
     contact_list_page.go_to_contact_details_by_full_name(
         first_name=contact_info["firstName"],
         last_name=contact_info["lastName"],
     )
 
-    contact_details_page = ContactDetailsPage(
-        browser=browser, url=browser.current_url
-    )
+    contact_details_page = ContactDetailsPage(browser=browser, url=browser.current_url)
 
     return contact_details_page, contact_info

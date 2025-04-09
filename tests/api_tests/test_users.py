@@ -20,25 +20,15 @@ def test_add_user():
     logger.info("TEST: Add new user.")
     users_helper = UsersHelper()
     user_rs_api, _ = users_helper.create_user()
-    assert (
-        user_rs_api is not None
-    ), "Response is None, but expected JSON response."
+    assert user_rs_api is not None, "Response is None, but expected JSON response."
 
-    get_info_user = users_helper.get_user(
-        auth_extra={"Authorization": f'Bearer {user_rs_api["token"]}'}
-    )
+    get_info_user = users_helper.get_user(auth_extra={"Authorization": f'Bearer {user_rs_api["token"]}'})
 
-    assert (
-        get_info_user is not None
-    ), "Response is None, but expected JSON response."
+    assert get_info_user is not None, "Response is None, but expected JSON response."
 
-    assert (
-        user_rs_api["user"]["_id"] == get_info_user["_id"]
-    ), "User Id does not match."
+    assert user_rs_api["user"]["_id"] == get_info_user["_id"], "User Id does not match."
 
-    users_helper.delete_user(
-        auth_extra={"Authorization": f'Bearer {user_rs_api["token"]}'}
-    )
+    users_helper.delete_user(auth_extra={"Authorization": f'Bearer {user_rs_api["token"]}'})
 
 
 @pytest.mark.users
@@ -51,9 +41,7 @@ def test_add_user():
         ("user3", "user3", "", ""),
     ],
 )
-def test_add_user_without_email_or_password(
-    first_name: str, last_name: str, email: str, password: str
-):
+def test_add_user_without_email_or_password(first_name: str, last_name: str, email: str, password: str):
     """
     Test adding a new user with missing email or password
     (negative test case).
@@ -69,16 +57,12 @@ def test_add_user_without_email_or_password(
         "password": password,
     }
 
-    request_params = RequestParams(
-        endpoint="users", payload=payload, expected_status_code=400
-    )
+    request_params = RequestParams(endpoint="users", payload=payload, expected_status_code=400)
     rs_api = request_utility.post(request_params=request_params)
 
     assert rs_api is not None, "Response is None, but expected JSON response."
     assert rs_api["_message"] == "User validation failed", (
-        f"User added without mandatory data."
-        f"Email: {email}, "
-        f"Password: {password}."
+        f"User added without mandatory data." f"Email: {email}, " f"Password: {password}."
     )
 
 
@@ -108,17 +92,13 @@ def test_update_user():
     users_helper = UsersHelper()
     user_rs_api, user_info = users_helper.create_user()
 
-    assert (
-        user_rs_api is not None
-    ), "Response is None, but expected JSON response."
+    assert user_rs_api is not None, "Response is None, but expected JSON response."
 
     update_user_rs_api, update_user_info = users_helper.update_user(
         auth_extra={"Authorization": f'Bearer {user_rs_api["token"]}'}
     )
 
-    assert (
-        update_user_rs_api is not None
-    ), "Response is None, but expected JSON response."
+    assert update_user_rs_api is not None, "Response is None, but expected JSON response."
 
     assert user_rs_api["user"]["_id"] == update_user_rs_api["_id"], (
         f"User id does not match, "
@@ -126,25 +106,15 @@ def test_update_user():
         f"after update: {update_user_rs_api['_id']}"
     )
 
-    assert (
-        user_info["firstName"] != update_user_info["firstName"]
-    ), "The first name is the same after the update"
+    assert user_info["firstName"] != update_user_info["firstName"], "The first name is the same after the update"
 
-    assert (
-        user_info["lastName"] != update_user_info["lastName"]
-    ), "The last name is the same after the update"
+    assert user_info["lastName"] != update_user_info["lastName"], "The last name is the same after the update"
 
-    assert (
-        user_info["email"] != update_user_info["email"]
-    ), "The email is the same after the update"
+    assert user_info["email"] != update_user_info["email"], "The email is the same after the update"
 
-    assert (
-        user_info["password"] != update_user_info["password"]
-    ), "The password is the same after the update"
+    assert user_info["password"] != update_user_info["password"], "The password is the same after the update"
 
-    users_helper.delete_user(
-        auth_extra={"Authorization": f'Bearer {user_rs_api["token"]}'}
-    )
+    users_helper.delete_user(auth_extra={"Authorization": f'Bearer {user_rs_api["token"]}'})
 
 
 @pytest.mark.users
@@ -157,9 +127,7 @@ def test_update_user():
         ("user3", "user3", "", ""),
     ],
 )
-def test_update_user_without_email_or_password(
-    first_name: str, last_name: str, email: str, password: str
-):
+def test_update_user_without_email_or_password(first_name: str, last_name: str, email: str, password: str):
     """
     Test updating a user with missing email or password
     (negative test case).
@@ -170,9 +138,7 @@ def test_update_user_without_email_or_password(
     users_helper = UsersHelper()
     user_rs_api, _ = users_helper.create_user()
 
-    assert (
-        user_rs_api is not None
-    ), "Response is None, but expected JSON response."
+    assert user_rs_api is not None, "Response is None, but expected JSON response."
 
     request_utility = RequestUtilities()
 
@@ -194,9 +160,7 @@ def test_update_user_without_email_or_password(
     assert rs_api is not None, "Response is None, but expected JSON response."
 
     assert rs_api["_message"] == "User validation failed", (
-        f"User updated without mandatory data."
-        f"Email: {email}, "
-        f"Password: {password}."
+        f"User updated without mandatory data." f"Email: {email}, " f"Password: {password}."
     )
 
 
@@ -210,14 +174,8 @@ def test_delete_new_user():
     users_helper = UsersHelper()
     user_rs_api, _ = users_helper.create_user()
 
-    assert (
-        user_rs_api is not None
-    ), "Response is None, but expected JSON response."
+    assert user_rs_api is not None, "Response is None, but expected JSON response."
 
-    users_helper.get_user(
-        auth_extra={"Authorization": f'Bearer {user_rs_api["token"]}'}
-    )
+    users_helper.get_user(auth_extra={"Authorization": f'Bearer {user_rs_api["token"]}'})
 
-    users_helper.delete_user(
-        auth_extra={"Authorization": f'Bearer {user_rs_api["token"]}'}
-    )
+    users_helper.delete_user(auth_extra={"Authorization": f'Bearer {user_rs_api["token"]}'})

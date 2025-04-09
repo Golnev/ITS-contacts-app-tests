@@ -36,8 +36,7 @@ class EditContactPage(BasePage):
         logger.info("Check edit contact page url.")
 
         assert (
-            self.browser.current_url
-            == EditContactPageLocators.EDIT_CONTACT_PAGE_URL
+            self.browser.current_url == EditContactPageLocators.EDIT_CONTACT_PAGE_URL
         ), "URL address is not correct."
 
     def should_be_edit_contact_form(self):
@@ -111,9 +110,7 @@ class EditContactPage(BasePage):
         time.sleep(1)
         edit_field.send_keys(Keys.CONTROL + "a")
         edit_field.send_keys(Keys.DELETE)
-        WebDriverWait(self.browser, 2).until(
-            lambda driver: edit_field.get_attribute("value") == ""
-        )
+        WebDriverWait(self.browser, 2).until(lambda driver: edit_field.get_attribute("value") == "")
 
         edit_field.send_keys(data)
 

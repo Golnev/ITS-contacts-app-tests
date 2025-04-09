@@ -29,9 +29,7 @@ class TestAddNewContactPage:
 
     logger.info("Starting tests for add new contact page.")
 
-    def test_user_should_be_in_add_new_contact_page(
-        self, browser: webdriver.Firefox | webdriver.Chrome
-    ):
+    def test_user_should_be_in_add_new_contact_page(self, browser: webdriver.Firefox | webdriver.Chrome):
         """
         Verify navigation to the "Add New Contact" page.
         """
@@ -43,9 +41,7 @@ class TestAddNewContactPage:
         page.open()
         page.should_be_add_new_contact_page()
 
-    def test_logout_from_add_new_contact_page(
-        self, browser: webdriver.Firefox | webdriver.Chrome
-    ):
+    def test_logout_from_add_new_contact_page(self, browser: webdriver.Firefox | webdriver.Chrome):
         """
         Test logout functionality from the "Add New Contact" page.
         """
@@ -60,13 +56,9 @@ class TestAddNewContactPage:
 
         WebDriverWait(browser, 10).until(EC.url_to_be(base_url))
 
-        assert (
-            page.browser.current_url == base_url
-        ), f"Wrong URL after logout. URL: {page.browser.current_url}"
+        assert page.browser.current_url == base_url, f"Wrong URL after logout. URL: {page.browser.current_url}"
 
-    def test_cancel_from_add_new_contact_page(
-        self, browser: webdriver.Firefox | webdriver.Chrome
-    ):
+    def test_cancel_from_add_new_contact_page(self, browser: webdriver.Firefox | webdriver.Chrome):
         """
         Verify the cancel operation on the "Add New Contact" page.
         """
@@ -81,13 +73,9 @@ class TestAddNewContactPage:
 
         page.cancel_from_add_new_contact_page()
 
-        WebDriverWait(browser, 10).until(
-            EC.url_to_be(base_url + "contactList")
-        )
+        WebDriverWait(browser, 10).until(EC.url_to_be(base_url + "contactList"))
 
-        contact_list_page = ContactListPage(
-            browser=browser, url=browser.current_url
-        )
+        contact_list_page = ContactListPage(browser=browser, url=browser.current_url)
         contact_list_page.should_be_contact_list_page()
 
     def test_add_new_contact(
@@ -108,17 +96,13 @@ class TestAddNewContactPage:
 
         page.add_new_contact(contact_info)
 
-        WebDriverWait(browser, 10).until(
-            EC.url_to_be(base_url + "contactList")
-        )
+        WebDriverWait(browser, 10).until(EC.url_to_be(base_url + "contactList"))
 
         assert (
             page.browser.current_url == base_url + "contactList"
         ), f"Wrong URL after add new contact. URL: {page.browser.current_url}"
 
-        contact_list_page = ContactListPage(
-            browser=browser, url=browser.current_url
-        )
+        contact_list_page = ContactListPage(browser=browser, url=browser.current_url)
         contact_list_page.find_contact_by_full_name(
             first_name=contact_info["firstName"],
             last_name=contact_info["lastName"],

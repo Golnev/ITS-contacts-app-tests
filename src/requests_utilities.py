@@ -90,20 +90,13 @@ class RequestUtilities:
         )
 
         status_code = self.response_api.status_code
-        self.assert_status_code(
-            status_code=status_code, expected_status_code=expected_status_code
-        )
+        self.assert_status_code(status_code=status_code, expected_status_code=expected_status_code)
 
-        if (
-            self.response_api.headers.get("Content-Length")
-            == self.EMPTY_CONTENT_LENGTH
-        ):
+        if self.response_api.headers.get("Content-Length") == self.EMPTY_CONTENT_LENGTH:
             logger.info("Response has empty body (Content-Length: 0)")
             return None
 
-        if "application/json" not in self.response_api.headers.get(
-            "Content-Type", ""
-        ):
+        if "application/json" not in self.response_api.headers.get("Content-Type", ""):
             return None
 
         response_json = self.response_api.json()

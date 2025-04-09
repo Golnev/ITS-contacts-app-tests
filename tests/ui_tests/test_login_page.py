@@ -27,9 +27,7 @@ class TestLoginPage:
 
     logger.info("Starting tests for Login Page")
 
-    def test_user_should_be_in_login_page(
-        self, browser: webdriver.Firefox | webdriver.Chrome
-    ):
+    def test_user_should_be_in_login_page(self, browser: webdriver.Firefox | webdriver.Chrome):
         """
         Verifies that the user can navigate to the "Login" page.
         """
@@ -52,9 +50,7 @@ class TestLoginPage:
             page.browser.current_url == base_url + "contactList"
         ), f"Wrong URL after login. URL: {page.browser.current_url}"
 
-    def test_user_can_go_to_register_page(
-        self, browser: webdriver.Firefox | webdriver.Chrome
-    ):
+    def test_user_can_go_to_register_page(self, browser: webdriver.Firefox | webdriver.Chrome):
         """
         Verifies that the user can navigate
         to the "Register" page from the "Login" page.

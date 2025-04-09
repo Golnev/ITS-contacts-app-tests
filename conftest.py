@@ -80,9 +80,7 @@ def browser(pytestconfig):
             options.add_argument("--disable-dev-shm-usage")
             options.add_argument("--disable-gpu")
 
-            service = FirefoxService(
-                executable_path=GeckoDriverManager().install()
-            )
+            service = FirefoxService(executable_path=GeckoDriverManager().install())
 
         firefox_path = os.getenv("FIREFOX_PATH")
         if firefox_path:
@@ -110,9 +108,7 @@ def browser(pytestconfig):
             )
 
         else:
-            driver = webdriver.Chrome(
-                service=ChromeService(ChromeDriverManager().install())
-            )
+            driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
 
     else:
         raise pytest.UsageError("--browser_name should be chrome or firefox")

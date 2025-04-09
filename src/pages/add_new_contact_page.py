@@ -30,8 +30,7 @@ class AddNewContactPage(BasePage):
         logger.info("Check contact list url.")
 
         assert (
-            self.browser.current_url
-            == AddNewContactPageLocators.ADD_NEW_CONTACT_PAGE_URL
+            self.browser.current_url == AddNewContactPageLocators.ADD_NEW_CONTACT_PAGE_URL
         ), "URL address is not correct."
 
     def should_be_add_new_contact_form(self):
@@ -52,9 +51,7 @@ class AddNewContactPage(BasePage):
 
         logger.info("Logout.")
 
-        logout_button = self.browser.find_element(
-            *AddNewContactPageLocators.LOGOUT_BUTTON
-        )
+        logout_button = self.browser.find_element(*AddNewContactPageLocators.LOGOUT_BUTTON)
         logout_button.click()
 
     def cancel_from_add_new_contact_page(self):
@@ -64,9 +61,7 @@ class AddNewContactPage(BasePage):
 
         logger.info("Cancel from add new contact page")
 
-        cancel_button = self.wait_for_element_ready(
-            AddNewContactPageLocators.CANCEL_BUTTON
-        )
+        cancel_button = self.wait_for_element_ready(AddNewContactPageLocators.CANCEL_BUTTON)
 
         cancel_button.click()
 
@@ -101,9 +96,7 @@ class AddNewContactPage(BasePage):
             text=contact_info["birthdate"],
         )
 
-        self.send_text(
-            locator=AddNewContactPageLocators.EMAIL, text=contact_info["email"]
-        )
+        self.send_text(locator=AddNewContactPageLocators.EMAIL, text=contact_info["email"])
 
         self.send_text(
             locator=AddNewContactPageLocators.PHONE,
@@ -115,9 +108,7 @@ class AddNewContactPage(BasePage):
             text=contact_info["street1"],
         )
 
-        self.send_text(
-            locator=AddNewContactPageLocators.CITY, text=contact_info["city"]
-        )
+        self.send_text(locator=AddNewContactPageLocators.CITY, text=contact_info["city"])
 
         self.send_text(
             locator=AddNewContactPageLocators.STATE,

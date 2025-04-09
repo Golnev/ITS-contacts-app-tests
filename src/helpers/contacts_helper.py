@@ -30,9 +30,7 @@ class ContactsHelper:
         payload = {
             "firstName": fake.first_name(),
             "lastName": fake.last_name(),
-            "birthdate": (
-                fake.date_of_birth(minimum_age=6, maximum_age=110)
-            ).strftime("%Y-%m-%d"),
+            "birthdate": (fake.date_of_birth(minimum_age=6, maximum_age=110)).strftime("%Y-%m-%d"),
             "email": fake.email(),
             "phone": fake.basic_phone_number(),
             "street1": fake.street_name(),
@@ -54,12 +52,8 @@ class ContactsHelper:
 
         payload = self.fake_contact()
 
-        request_params = RequestParams(
-            endpoint="contacts", payload=payload, expected_status_code=201
-        )
-        create_contact_json = self.request_utility.post(
-            request_params=request_params
-        )
+        request_params = RequestParams(endpoint="contacts", payload=payload, expected_status_code=201)
+        create_contact_json = self.request_utility.post(request_params=request_params)
 
         return create_contact_json, payload
 
@@ -91,9 +85,7 @@ class ContactsHelper:
                 endpoint="contacts",
                 expected_status_code=expected_status_code,
             )
-            rs_get_contacts = self.request_utility.get(
-                request_params=request_params
-            )
+            rs_get_contacts = self.request_utility.get(request_params=request_params)
             return rs_get_contacts
 
         logger.info("Get contact by id=%s", contact_id)
@@ -102,9 +94,7 @@ class ContactsHelper:
             endpoint=f"contacts/{contact_id}",
             expected_status_code=expected_status_code,
         )
-        rs_get_contact = self.request_utility.get(
-            request_params=request_params
-        )
+        rs_get_contact = self.request_utility.get(request_params=request_params)
         return rs_get_contact
 
     def update(
@@ -125,9 +115,7 @@ class ContactsHelper:
                 payload=payload,
                 expected_status_code=expected_status_code,
             )
-            rs_update_contact = self.request_utility.put(
-                request_params=request_params
-            )
+            rs_update_contact = self.request_utility.put(request_params=request_params)
             return rs_update_contact
 
         if len(payload) < self.full_contact:
@@ -138,9 +126,7 @@ class ContactsHelper:
                 payload=payload,
                 expected_status_code=expected_status_code,
             )
-            rs_update_contact = self.request_utility.patch(
-                request_params=request_params
-            )
+            rs_update_contact = self.request_utility.patch(request_params=request_params)
             return rs_update_contact
 
         logger.info("Payload length does not match any expected condition.")

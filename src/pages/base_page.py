@@ -39,29 +39,21 @@ class BasePage:
         Retrieve a visible element on the page.
         """
 
-        return WebDriverWait(self.browser, timeout).until(
-            EC.visibility_of_element_located((how, what))
-        )
+        return WebDriverWait(self.browser, timeout).until(EC.visibility_of_element_located((how, what)))
 
     def get_visible_element_text(self, how, what, timeout: int = 10):
         """
         Retrieve the text of a visible element on the page.
         """
 
-        return (
-            WebDriverWait(self.browser, timeout)
-            .until(EC.visibility_of_element_located((how, what)))
-            .text
-        )
+        return WebDriverWait(self.browser, timeout).until(EC.visibility_of_element_located((how, what))).text
 
     def get_clickable_element(self, how, what, timeout: int = 10):
         """
         Retrieve a clickable element on the page.
         """
 
-        return WebDriverWait(self.browser, timeout).until(
-            EC.element_to_be_clickable((how, what))
-        )
+        return WebDriverWait(self.browser, timeout).until(EC.element_to_be_clickable((how, what)))
 
     def open(self):
         """
@@ -76,12 +68,8 @@ class BasePage:
         """
 
         return (
-            element.is_displayed()
-            and element.is_enabled()
-            and self.browser.execute_script(
-                "return "
-                "window.getComputedStyle(arguments[0])."
-                "visibility === 'visible';",
+            element.is_displayed() and element.is_enabled() and self.browser.execute_script(
+                "return window.getComputedStyle(arguments[0]).visibility === 'visible';",
                 element,
             )
         )
@@ -92,9 +80,7 @@ class BasePage:
         """
 
         WebDriverWait(self.browser, timeout).until(
-            lambda driver: self.is_element_visible_and_enabled(
-                driver.find_element(*locator)
-            )
+            lambda driver: self.is_element_visible_and_enabled(driver.find_element(*locator))
         )
         return self.browser.find_element(*locator)
 

@@ -33,8 +33,7 @@ class ContactDetailsPage(BasePage):
         logger.info("Check contacts details page url.")
 
         assert (
-            self.browser.current_url
-            == ContactDetailsPageLocators.CONTACT_DETAILS_PAGE_URL
+            self.browser.current_url == ContactDetailsPageLocators.CONTACT_DETAILS_PAGE_URL
         ), "URL address is not correct."
 
     def should_be_contact_details_form(self):
@@ -86,9 +85,7 @@ class ContactDetailsPage(BasePage):
 
         logger.info("Go to edit contact page.")
 
-        self.click_button(
-            locator=ContactDetailsPageLocators.EDIT_CONTACT_BUTTON
-        )
+        self.click_button(locator=ContactDetailsPageLocators.EDIT_CONTACT_BUTTON)
 
     def get_info(
         self,

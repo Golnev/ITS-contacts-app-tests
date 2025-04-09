@@ -67,9 +67,7 @@ class TestEditContactPage:
 
         WebDriverWait(browser, 10).until(EC.url_to_be(base_url))
 
-        assert (
-            page.browser.current_url == base_url
-        ), f"Wrong URL after logout. URL: {page.browser.current_url}"
+        assert page.browser.current_url == base_url, f"Wrong URL after logout. URL: {page.browser.current_url}"
 
     def test_return_to_contact_details(
         self,
@@ -81,9 +79,7 @@ class TestEditContactPage:
         from the "Edit Contact" page.
         """
 
-        logger.info(
-            "Starting Test: return to contact details from edit contact page."
-        )
+        logger.info("Starting Test: return to contact details from edit contact page.")
 
         contact_page, _ = created_contact
         contact_page.go_to_edit_contact_page()
@@ -92,9 +88,7 @@ class TestEditContactPage:
 
         page.return_to_contact_details()
 
-        contact_details_page = ContactDetailsPage(
-            browser=browser, url=browser.current_url
-        )
+        contact_details_page = ContactDetailsPage(browser=browser, url=browser.current_url)
         contact_details_page.should_be_contact_details_page()
 
     def test_edit_contact_phone(
@@ -118,13 +112,10 @@ class TestEditContactPage:
 
         page.edit_contact(what="phone", data=fake_new_phone)
 
-        contact_details_page = ContactDetailsPage(
-            browser=browser, url=browser.current_url
-        )
+        contact_details_page = ContactDetailsPage(browser=browser, url=browser.current_url)
 
         new_phone = contact_details_page.get_info(what="phone")
 
         assert fake_new_phone == new_phone, (
-            f"Incorrect phone number of a contact\n"
-            f"Expected: {fake_new_phone}, received: {new_phone}"
+            f"Incorrect phone number of a contact\n" f"Expected: {fake_new_phone}, received: {new_phone}"
         )

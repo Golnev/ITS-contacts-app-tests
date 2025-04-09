@@ -31,8 +31,7 @@ class UsersHelper:
         }
 
         logger.info(
-            "Fake user first name: %s, "
-            "fake user last name: %s, fake user email: %s",
+            "Fake user first name: %s, fake user last name: %s, fake user email: %s",
             payload["firstName"],
             payload["lastName"],
             payload["email"],
@@ -43,9 +42,7 @@ class UsersHelper:
             payload=payload,
             expected_status_code=201,
         )
-        create_user_json = self.request_utility.post(
-            request_params=request_params
-        )
+        create_user_json = self.request_utility.post(request_params=request_params)
 
         return create_user_json, payload
 
@@ -93,9 +90,7 @@ class UsersHelper:
         }
 
         logger.info(
-            "Fake user update first name: %s, "
-            "fake user update last name: %s, "
-            "fake user update email: %s",
+            "Fake user update first name: %s, fake user update last name: %s, fake user update email: %s",
             payload["firstName"],
             payload["lastName"],
             payload["email"],
@@ -106,8 +101,6 @@ class UsersHelper:
             payload=payload,
             auth_extra=auth_extra,
         )
-        create_user_json = self.request_utility.patch(
-            request_params=request_params
-        )
+        create_user_json = self.request_utility.patch(request_params=request_params)
 
         return create_user_json, payload
