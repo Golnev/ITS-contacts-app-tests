@@ -96,13 +96,12 @@ class RequestUtilities:
             logger.info("Response has empty body (Content-Length: 0)")
             return None
 
-        if "application/json" not in self.response_api.headers.get("Content-Type", ""):
-            return None
+        if method != "DELETE":
+            response_json = self.response_api.json()
+            logger.info("%s API response %s", method.upper(), response_json)
+            return response_json
 
-        response_json = self.response_api.json()
-        logger.info("%s API response %s", method.upper(), response_json)
-
-        return response_json
+        return None
 
     @with_auth_headers
     def get(
