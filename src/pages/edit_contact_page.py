@@ -50,15 +50,6 @@ class EditContactPage(BasePage):
             *EditContactPageLocators.EDIT_CONTACT_FORM
         ), "Edit contact form is not present."
 
-    def logout(self):
-        """
-        Log out the current user from the 'Edit Contact' page.
-        """
-
-        logger.info("Logout from edit contact page.")
-
-        self.click_button(locator=EditContactPageLocators.LOGOUT_BUTTON)
-
     def return_to_contact_details(self):
         """
         Return to the 'Contact Details' page from the 'Edit Contact' page.

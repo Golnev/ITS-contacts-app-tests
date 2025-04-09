@@ -59,15 +59,6 @@ class ContactListPage(BasePage):
             *ContactListPageLocators.CONTACT_LIST_TABLE
         ), "Contact list table is not present."
 
-    def logout(self):
-        """
-        Log out the current user from the 'Contact List' page.
-        """
-
-        logger.info("Logout.")
-
-        self.click_button(locator=ContactListPageLocators.LOGOUT_BUTTON)
-
     def go_to_add_new_contact(self):
         """
         Navigate to the 'Add New Contact' page.

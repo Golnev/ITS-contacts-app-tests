@@ -47,15 +47,6 @@ class ContactDetailsPage(BasePage):
             *ContactDetailsPageLocators.CONTACT_DETAILS_FORM
         ), "Contact details form is not present."
 
-    def logout(self):
-        """
-        Log out the current user from the 'Contact Details' page.
-        """
-
-        logger.info("Logout.")
-
-        self.click_button(locator=ContactDetailsPageLocators.LOGOUT_BUTTON)
-
     def return_to_contact_list(self):
         """
         Return to the contact list from the 'Contact Details' page.

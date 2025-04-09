@@ -7,8 +7,6 @@ import logging as logger
 
 import pytest
 from selenium import webdriver
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait
 
 from src.pages.contact_details_page import ContactDetailsPage
 from src.pages.contact_list_page import ContactListPage
@@ -43,9 +41,9 @@ class TestContactDetailsPage:
 
         page.should_be_contact_details_page()
 
+    @pytest.mark.usefixtures("browser")
     def test_logout_from_contact_details_page(
         self,
-        browser: webdriver.Firefox | webdriver.Chrome,
         created_contact: tuple[ContactDetailsPage, dict],
     ):
         """
@@ -58,8 +56,6 @@ class TestContactDetailsPage:
         page, _ = created_contact
 
         page.logout()
-
-        WebDriverWait(browser, 10).until(EC.url_to_be(base_url))
 
         assert page.browser.current_url == base_url, f"Wrong URL after logout. URL: {page.browser.current_url}"
 
@@ -98,7 +94,7 @@ class TestContactDetailsPage:
 
         page.delete_contact()
 
-        WebDriverWait(browser, 10).until(EC.url_to_be(base_url + "contactList"))
+        page.is_url_change(base_url + "contactList")
 
         contact_list_page = ContactListPage(browser=browser, url=browser.current_url)
         contact_list_page.should_be_contact_list_page()
@@ -123,7 +119,7 @@ class TestContactDetailsPage:
 
         page.go_to_edit_contact_page()
 
-        WebDriverWait(browser, 10).until(EC.url_to_be(base_url + "editContact"))
+        page.is_url_change(base_url + "editContact")
 
         edit_contact_page = EditContactPage(browser=browser, url=browser.current_url)
         edit_contact_page.should_be_edit_contact_page()

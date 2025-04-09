@@ -7,8 +7,6 @@ import logging as logger
 
 import pytest
 from selenium import webdriver
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait
 
 from src.helpers.contacts_helper import ContactsHelper
 from src.pages.add_new_contact_page import AddNewContactPage
@@ -52,9 +50,8 @@ class TestContactListPage:
         link = base_url + "contactList"
         page = ContactListPage(browser=browser, url=link)
         page.open()
-        page.logout()
 
-        WebDriverWait(browser, 10).until(EC.url_to_be(base_url))
+        page.logout()
 
         assert page.browser.current_url == base_url, f"Wrong URL after logout. URL: {page.browser.current_url}"
 
@@ -91,11 +88,11 @@ class TestContactListPage:
         page = AddNewContactPage(browser=browser, url=add_new_contact_link)
         page.open()
 
-        WebDriverWait(browser, 10).until(EC.url_to_be(base_url + "addContact"))
+        page.is_url_change(base_url + "addContact")
 
         page.add_new_contact(contact_info)
 
-        WebDriverWait(browser, 10).until(EC.url_to_be(base_url + "contactList"))
+        page.is_url_change(base_url + "contactList")
 
         contact_list_page = ContactListPage(browser=browser, url=browser.current_url)
 

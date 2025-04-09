@@ -8,8 +8,6 @@ import logging as logger
 import pytest
 from faker import Faker
 from selenium import webdriver
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait
 
 from src.pages.contact_details_page import ContactDetailsPage
 from src.pages.edit_contact_page import EditContactPage
@@ -64,8 +62,6 @@ class TestEditContactPage:
         page = EditContactPage(browser=browser, url=browser.current_url)
 
         page.logout()
-
-        WebDriverWait(browser, 10).until(EC.url_to_be(base_url))
 
         assert page.browser.current_url == base_url, f"Wrong URL after logout. URL: {page.browser.current_url}"
 

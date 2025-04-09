@@ -2,10 +2,15 @@
 This module provides methods for interacting with the "Base" page.
 """
 
+import logging as logger
+
 from selenium import webdriver
 from selenium.common import NoSuchElementException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+
+from src.locators import BasePageLocators
+from src.requests_utilities import RequestUtilities
 
 
 class BasePage:
@@ -34,13 +39,6 @@ class BasePage:
             return False
         return True
 
-    def get_visible_element(self, how, what, timeout: int = 10):
-        """
-        Retrieve a visible element on the page.
-        """
-
-        return WebDriverWait(self.browser, timeout).until(EC.visibility_of_element_located((how, what)))
-
     def get_visible_element_text(self, how, what, timeout: int = 10):
         """
         Retrieve the text of a visible element on the page.
@@ -48,12 +46,12 @@ class BasePage:
 
         return WebDriverWait(self.browser, timeout).until(EC.visibility_of_element_located((how, what))).text
 
-    def get_clickable_element(self, how, what, timeout: int = 10):
+    def is_url_change(self, new_endpoint: str, timeout: int = 10):
         """
-        Retrieve a clickable element on the page.
+        Wait until the browser URL changes to include the specified new endpoint.
         """
 
-        return WebDriverWait(self.browser, timeout).until(EC.element_to_be_clickable((how, what)))
+        return WebDriverWait(self.browser, timeout).until(EC.url_to_be(new_endpoint))
 
     def open(self):
         """
@@ -97,3 +95,13 @@ class BasePage:
         """
         element = self.wait_for_element_ready(locator=locator)
         element.click()
+
+    def logout(self):
+        """
+        Click logout button.
+        """
+        logger.info("Logout.")
+        self.click_button(locator=BasePageLocators.LOGOUT_BUTTON)
+
+        base_url = RequestUtilities.get_base_url()
+        self.is_url_change(base_url)

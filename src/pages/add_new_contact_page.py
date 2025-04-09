@@ -44,16 +44,6 @@ class AddNewContactPage(BasePage):
             *AddNewContactPageLocators.ADD_NEW_CONTACT_FORM
         ), "Add new contact form is not present."
 
-    def logout(self):
-        """
-        Method to log out the current user by clicking the logout button.
-        """
-
-        logger.info("Logout.")
-
-        logout_button = self.browser.find_element(*AddNewContactPageLocators.LOGOUT_BUTTON)
-        logout_button.click()
-
     def cancel_from_add_new_contact_page(self):
         """
         Method to cancel form add new page by clicking the cancel button.

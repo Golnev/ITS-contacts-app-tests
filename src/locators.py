@@ -14,6 +14,15 @@ base_url = RequestUtilities.get_base_url()
 
 
 @dataclass
+class BasePageLocators:
+    """
+    Dataclass for storing locators used on the base page.
+    """
+
+    LOGOUT_BUTTON = (By.CSS_SELECTOR, "#logout")
+
+
+@dataclass
 class LoginPageLocators:
     """
     Dataclass for storing locators used on the login page.
