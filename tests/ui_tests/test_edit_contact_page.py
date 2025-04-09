@@ -15,11 +15,11 @@ from src.pages.contact_details_page import ContactDetailsPage
 from src.pages.edit_contact_page import EditContactPage
 from src.requests_utilities import RequestUtilities
 
-pytestmark = pytest.mark.ui
 
 base_url = RequestUtilities.get_base_url()
 
 
+@pytest.mark.ui
 @pytest.mark.edit_contact_page
 @pytest.mark.usefixtures("del_all_contacts")
 class TestEditContactPage:

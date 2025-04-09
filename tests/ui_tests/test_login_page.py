@@ -12,13 +12,13 @@ from src.pages.login_page import LoginPage
 from src.pages.register_page import RegisterPage
 from src.requests_utilities import RequestUtilities
 
-pytestmark = pytest.mark.ui
 
 base_url = RequestUtilities.get_base_url()
 
 load_dotenv()
 
 
+@pytest.mark.ui
 @pytest.mark.login
 class TestLoginPage:
     """
