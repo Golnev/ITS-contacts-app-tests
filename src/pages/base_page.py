@@ -3,6 +3,7 @@ This module provides methods for interacting with the "Base" page.
 """
 
 import logging as logger
+import time
 
 from selenium import webdriver
 from selenium.common import NoSuchElementException
@@ -44,7 +45,27 @@ class BasePage:
         Retrieve the text of a visible element on the page.
         """
 
-        return WebDriverWait(self.browser, timeout).until(EC.visibility_of_element_located((how, what))).text
+        element = self.wait_for_element_ready((how, what), timeout=timeout)
+
+        return element.text
+
+    def get_visible_element_value(self, how, what, timeout: int = 10):
+        """
+        Retrieve the text of a visible element on the page.
+        """
+
+        element = self.wait_for_element_ready((how, what), timeout=timeout)
+
+        return element.get_attribute("value")
+
+    def get_list_of_elements_text(self, locator: tuple):
+        """
+        Retrieve the list of elements on the page.
+        """
+
+        rows = self.browser.find_elements(*locator)
+
+        return [row.text for row in rows]
 
     def is_url_change(self, new_endpoint: str, timeout: int = 10):
         """
@@ -72,7 +93,7 @@ class BasePage:
             )
         )
 
-    def wait_for_element_ready(self, locator, timeout=10):
+    def wait_for_element_ready(self, locator: tuple, timeout=10):
         """
         Waits for an element to become visible and enabled for interaction.
         """
@@ -82,11 +103,15 @@ class BasePage:
         )
         return self.browser.find_element(*locator)
 
-    def send_text(self, locator: tuple, text: str):
+    def send_text(self, locator: tuple, text: str, wait_timeout: float = 0):
         """
         Send text to element in form.
         """
         element = self.wait_for_element_ready(locator=locator)
+        time.sleep(wait_timeout)
+        element.clear()
+
+        WebDriverWait(self.browser, 5).until(lambda _: element.get_attribute("value") == "")
         element.send_keys(text)
 
     def click_button(self, locator: tuple):

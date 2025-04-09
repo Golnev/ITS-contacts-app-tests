@@ -3,11 +3,7 @@ This module provides methods for interacting with the "Edit Contact" page.
 """
 
 import logging as logger
-import time
 from typing import Literal
-
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.wait import WebDriverWait
 
 from src.locators import EditContactPageLocators
 from src.pages.base_page import BasePage
@@ -96,13 +92,6 @@ class EditContactPage(BasePage):
             "country": EditContactPageLocators.COUNTRY,
         }
 
-        edit_field = self.browser.find_element(*locators_dict[what])
-
-        time.sleep(1)
-        edit_field.send_keys(Keys.CONTROL + "a")
-        edit_field.send_keys(Keys.DELETE)
-        WebDriverWait(self.browser, 2).until(lambda driver: edit_field.get_attribute("value") == "")
-
-        edit_field.send_keys(data)
+        self.send_text(locator=locators_dict[what], text=data, wait_timeout=0.2)
 
         self.click_button(locator=EditContactPageLocators.SUBMIT_BUTTON)

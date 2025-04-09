@@ -77,9 +77,8 @@ class ContactListPage(BasePage):
         logger.info("Find contact by full name.")
 
         full_name = " ".join([first_name, last_name])
-        rows = self.browser.find_elements(*ContactListPageLocators.FULL_NAME_CONTACTS)
 
-        list_of_all_full_names = [row.text for row in rows]
+        list_of_all_full_names = self.get_list_of_elements_text(ContactListPageLocators.FULL_NAME_CONTACTS)
 
         assert full_name in list_of_all_full_names, f"{first_name} {last_name} not in the contact list."
 
@@ -91,9 +90,7 @@ class ContactListPage(BasePage):
 
         full_name = " ".join([first_name, last_name])
 
-        rows = self.browser.find_elements(*ContactListPageLocators.FULL_NAME_CONTACTS)
-
-        list_of_all_full_names = [row.text for row in rows]
+        list_of_all_full_names = self.get_list_of_elements_text(ContactListPageLocators.FULL_NAME_CONTACTS)
 
         assert full_name not in list_of_all_full_names, f"{first_name} {last_name} in the contact list."
 
@@ -116,7 +113,7 @@ class ContactListPage(BasePage):
         logger.info("Get first contact from list.")
 
         if self.is_element_present(*ContactListPageLocators.FIRST_CONTACT):
-            first_contact = self.browser.find_element(*ContactListPageLocators.FIRST_CONTACT)
+            first_contact = self.wait_for_element_ready(ContactListPageLocators.FIRST_CONTACT)
             return first_contact
 
         logger.info("No contacts.")

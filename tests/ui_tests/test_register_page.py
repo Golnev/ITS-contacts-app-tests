@@ -7,8 +7,6 @@ import logging as logger
 import pytest
 from faker import Faker
 from selenium import webdriver
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait
 
 from src.pages.login_page import LoginPage
 from src.pages.register_page import RegisterPage
@@ -68,7 +66,7 @@ class TestRegisterPage:
             password=user_password,
         )
 
-        WebDriverWait(browser, 10).until(EC.url_to_be(base_url + "contactList"))
+        page.is_url_change(base_url + "contactList")
 
         assert (
             page.browser.current_url == base_url + "contactList"

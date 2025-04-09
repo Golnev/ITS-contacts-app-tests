@@ -3,7 +3,6 @@ This module provides methods for interacting with the "Add New Contact" page.
 """
 
 import logging as logger
-import time
 
 from src.locators import AddNewContactPageLocators
 from src.pages.base_page import BasePage
@@ -51,9 +50,7 @@ class AddNewContactPage(BasePage):
 
         logger.info("Cancel from add new contact page")
 
-        cancel_button = self.wait_for_element_ready(AddNewContactPageLocators.CANCEL_BUTTON)
-
-        cancel_button.click()
+        self.click_button(locator=AddNewContactPageLocators.CANCEL_BUTTON)
 
     def add_new_contact(
         self,
@@ -68,8 +65,6 @@ class AddNewContactPage(BasePage):
             contact_info["firstName"],
             contact_info["lastName"],
         )
-
-        time.sleep(5)
 
         self.send_text(
             locator=AddNewContactPageLocators.FIRST_NAME,
@@ -86,7 +81,10 @@ class AddNewContactPage(BasePage):
             text=contact_info["birthdate"],
         )
 
-        self.send_text(locator=AddNewContactPageLocators.EMAIL, text=contact_info["email"])
+        self.send_text(
+            locator=AddNewContactPageLocators.EMAIL,
+            text=contact_info["email"],
+        )
 
         self.send_text(
             locator=AddNewContactPageLocators.PHONE,
@@ -98,7 +96,10 @@ class AddNewContactPage(BasePage):
             text=contact_info["street1"],
         )
 
-        self.send_text(locator=AddNewContactPageLocators.CITY, text=contact_info["city"])
+        self.send_text(
+            locator=AddNewContactPageLocators.CITY,
+            text=contact_info["city"],
+        )
 
         self.send_text(
             locator=AddNewContactPageLocators.STATE,

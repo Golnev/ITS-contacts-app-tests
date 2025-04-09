@@ -3,7 +3,6 @@ This module provides methods for interacting with the "Contact Details" page.
 """
 
 import logging as logger
-import time
 from typing import Literal
 
 from src.locators import ContactDetailsPageLocators
@@ -115,7 +114,6 @@ class ContactDetailsPage(BasePage):
             "country": ContactDetailsPageLocators.COUNTRY,
         }
 
-        time.sleep(3)
-        field_text = self.get_visible_element_text(*locators_dict[what])
+        field_text = self.get_visible_element_value(*locators_dict[what])
 
         return field_text

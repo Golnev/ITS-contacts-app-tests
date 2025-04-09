@@ -5,6 +5,7 @@ for running Selenium-based and API-based tests.
 
 import logging as logger
 import os
+import time
 
 import pytest
 from dotenv import load_dotenv
@@ -69,7 +70,9 @@ def del_all_contacts(pytestconfig, browser: webdriver.Firefox | webdriver.Chrome
         logger.info("Delete all contacts.")
         link = base_url + "contactList"
         contact_list_page = ContactListPage(browser=browser, url=link)
+        time.sleep(0.2)
         contact_list_page.open()
+        contact_list_page.is_url_change(link)
 
         while True:
             first_contact = contact_list_page.get_first_contact()
