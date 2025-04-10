@@ -10,8 +10,6 @@ import time
 import pytest
 from dotenv import load_dotenv
 from selenium import webdriver
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait
 
 from src.helpers.contacts_helper import ContactsHelper
 from src.pages.add_new_contact_page import AddNewContactPage
@@ -78,12 +76,10 @@ def del_all_contacts(pytestconfig, browser: webdriver.Firefox | webdriver.Chrome
             first_contact = contact_list_page.get_first_contact()
 
             if first_contact:
-                WebDriverWait(browser, 5).until(EC.element_to_be_clickable(first_contact))
                 first_contact.click()
                 contact_details_page = ContactDetailsPage(browser=browser, url=browser.current_url)
                 contact_details_page.delete_contact()
-                WebDriverWait(browser, 5).until(EC.staleness_of(first_contact))
-                contact_list_page.open()
+                contact_list_page.is_element_not_attached(first_contact)
             else:
                 break
 
@@ -105,7 +101,7 @@ def fixture_setup_user(browser: webdriver.Firefox | webdriver.Chrome):
     if email and password:
         page.login(email=email, password=password)
 
-    WebDriverWait(browser, 10).until(EC.url_to_be(base_url + "contactList"))
+    page.is_url_change(base_url + "contactList")
 
     return page
 
@@ -133,11 +129,11 @@ def created_contact(
     page = AddNewContactPage(browser=browser, url=add_new_contact_link)
     page.open()
 
-    WebDriverWait(browser, 10).until(EC.url_to_be(base_url + "addContact"))
+    page.is_url_change(base_url + "addContact")
 
     page.add_new_contact(contact_info=contact_info)
 
-    WebDriverWait(browser, 10).until(EC.url_to_be(base_url + "contactList"))
+    page.is_url_change(base_url + "contactList")
 
     contact_list_page = ContactListPage(browser=browser, url=browser.current_url)
 

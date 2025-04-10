@@ -81,6 +81,13 @@ class BasePage:
 
         self.browser.get(self.url)
 
+    def is_element_not_attached(self, element):
+        """
+        Check an element is no longer attached to the DOM.
+        """
+
+        return WebDriverWait(self.browser, 5).until(EC.staleness_of(element))
+
     def is_element_visible_and_enabled(self, element):
         """
         Checks if an element is visible and enabled for interaction.
