@@ -108,7 +108,12 @@ class BasePage:
         WebDriverWait(self.browser, timeout).until(
             lambda driver: self.is_element_visible_and_enabled(driver.find_element(*locator))
         )
-        return self.browser.find_element(*locator)
+
+        element = self.browser.find_element(*locator)
+
+        logger.debug("Found element with name: %s", element.accessible_name)
+
+        return element
 
     def send_text(self, locator: tuple, text: str, wait_timeout: float = 0):
         """
@@ -120,6 +125,7 @@ class BasePage:
 
         WebDriverWait(self.browser, 5).until(lambda _: element.get_attribute("value") == "")
         element.send_keys(text)
+        logger.debug("Send keys: %s", element.accessible_name)
 
     def click_button(self, locator: tuple):
         """
@@ -127,6 +133,7 @@ class BasePage:
         """
         element = self.wait_for_element_ready(locator=locator)
         element.click()
+        logger.debug("Click element")
 
     def logout(self):
         """

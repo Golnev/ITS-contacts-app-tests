@@ -53,6 +53,23 @@ def pytest_addoption(parser):
         default=False,
         help="Add arguments for docker.",
     )
+    parser.addoption(
+        "--logging_level",
+        action="store",
+        default="info",
+        choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL", "debug", "info", "warning", "error", "critical"],
+        help="Custom logging level, (DEBUG, INFO).",
+    )
+
+
+def pytest_configure(config):
+    custom_log_level = config.getoption("--logging_level")
+
+    config.option.log_cli = True
+    config.option.log_cli_level = custom_log_level.upper()
+
+    loging_format = "%(asctime)s - %(levelname)s - %(message)s"
+    config.option.log_cli_format = loging_format
 
 
 @pytest.fixture
