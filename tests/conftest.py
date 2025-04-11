@@ -73,14 +73,9 @@ def del_all_contacts(pytestconfig, browser: webdriver.Firefox | webdriver.Chrome
         contact_list_page.is_url_change(link)
 
         while True:
-            first_contact = contact_list_page.get_first_contact()
+            first_contact = contact_list_page.del_first_contact()
 
-            if first_contact:
-                first_contact.click()
-                contact_details_page = ContactDetailsPage(browser=browser, url=browser.current_url)
-                contact_details_page.delete_contact()
-                contact_list_page.is_element_not_attached(first_contact)
-            else:
+            if not first_contact:
                 break
 
 

@@ -63,6 +63,10 @@ def pytest_addoption(parser):
 
 
 def pytest_configure(config):
+    """
+    Pytest hook to configure custom logging behavior via the `--logging_level` CLI option.
+    """
+
     custom_log_level = config.getoption("--logging_level")
 
     config.option.log_cli = True

@@ -8,6 +8,7 @@ from selenium.webdriver.common.by import By
 
 from src.locators import ContactListPageLocators
 from src.pages.base_page import BasePage
+from src.pages.contact_details_page import ContactDetailsPage
 
 
 class ContactListPage(BasePage):
@@ -105,16 +106,20 @@ class ContactListPage(BasePage):
 
         self.click_button(locator=(By.XPATH, f"//table//td[contains(text(), '{full_name}')]"))
 
-    def get_first_contact(self):
+    def del_first_contact(self):
         """
-        Retrieve the first contact from the contact list table.
+        Delete the first contact from the contact list table.
         """
 
         logger.info("Get first contact from list.")
 
-        if self.is_element_present(*ContactListPageLocators.FIRST_CONTACT):
-            first_contact = self.wait_for_element_ready(ContactListPageLocators.FIRST_CONTACT)
-            return first_contact
+        if not self.is_element_present(*ContactListPageLocators.FIRST_CONTACT):
+            logger.info("No contacts.")
+            return None
 
-        logger.info("No contacts.")
-        return None
+        first_contact = self.wait_for_element_ready(ContactListPageLocators.FIRST_CONTACT)
+        first_contact.click()
+        contact_details_page = ContactDetailsPage(browser=self.browser, url=self.browser.current_url)
+        contact_details_page.delete_contact()
+        contact_details_page.is_element_not_attached(first_contact)
+        return True
