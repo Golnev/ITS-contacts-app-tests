@@ -18,12 +18,6 @@ from selenium.webdriver.firefox.service import Service as FirefoxService
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 
-from src.requests_utilities import RequestUtilities
-
-load_dotenv()
-
-base_url = RequestUtilities.get_base_url()
-
 
 def pytest_addoption(parser):
     """
@@ -60,6 +54,12 @@ def pytest_addoption(parser):
         choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL", "debug", "info", "warning", "error", "critical"],
         help="Custom logging level, (DEBUG, INFO).",
     )
+    parser.addoption(
+        "--env",
+        action="append",
+        default=[],
+        help="Override env vars.",
+    )
 
 
 def pytest_configure(config):
@@ -74,6 +74,38 @@ def pytest_configure(config):
 
     loging_format = "%(asctime)s - %(levelname)s - %(message)s"
     config.option.log_cli_format = loging_format
+
+
+def pars_env(env_items: list[str]):
+    """
+    Parses a list of environment variable strings in the format 'key=value'
+    and returns a dictionary containing the extracted key-value pairs.
+    """
+    env_dict = {}
+    for item in env_items:
+        if "=" in item:
+            key, value = item.split("=", 1)
+            env_dict[key] = value
+        else:
+            pytest.fail(f"Invalid --env format. Expected 'key=value', got: {item}")
+    return env_dict
+
+
+@pytest.fixture(scope="session", autouse=True)
+def credentials(request):
+    """
+    A pytest fixture that automatically loads environment variables from a .env file
+    and applies overrides specified via the `--env` command-line option.
+    """
+
+    load_dotenv()
+
+    overrides = pars_env(request.config.getoption("--env"))
+
+    if "email" in overrides:
+        os.environ["MY_EMAIL"] = overrides["email"]
+    if "password" in overrides:
+        os.environ["MY_PASSWORD"] = overrides["password"]
 
 
 @pytest.fixture

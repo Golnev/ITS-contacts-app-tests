@@ -5,17 +5,11 @@ This module contains UI tests for the "Login" page using Selenium WebDriver.
 import logging as logger
 
 import pytest
-from dotenv import load_dotenv
 from selenium import webdriver
 
 from src.pages.login_page import LoginPage
 from src.pages.register_page import RegisterPage
 from src.requests_utilities import RequestUtilities
-
-
-base_url = RequestUtilities.get_base_url()
-
-load_dotenv()
 
 
 @pytest.mark.ui
@@ -25,6 +19,8 @@ class TestLoginPage:
     Test suite for the "Login" page.
     """
 
+    base_url = RequestUtilities.get_base_url()
+
     logger.info("Starting tests for Login Page")
 
     def test_user_should_be_in_login_page(self, browser: webdriver.Firefox | webdriver.Chrome):
@@ -33,7 +29,7 @@ class TestLoginPage:
         """
 
         logger.info("Starting Test: user should be in login page")
-        link = base_url + "login"
+        link = self.base_url + "login"
         page = LoginPage(browser=browser, url=link)
         page.open()
         page.should_be_login_page()
@@ -47,7 +43,7 @@ class TestLoginPage:
         page = setup_user
 
         assert (
-            page.browser.current_url == base_url + "contactList"
+            page.browser.current_url == self.base_url + "contactList"
         ), f"Wrong URL after login. URL: {page.browser.current_url}"
 
     def test_user_can_go_to_register_page(self, browser: webdriver.Firefox | webdriver.Chrome):
@@ -57,7 +53,7 @@ class TestLoginPage:
         """
 
         logger.info("Starting Test: go to register page.")
-        link = base_url + "login"
+        link = self.base_url + "login"
         page = LoginPage(browser=browser, url=link)
         page.open()
 
