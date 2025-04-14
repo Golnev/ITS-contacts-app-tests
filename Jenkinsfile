@@ -11,14 +11,18 @@ pipeline {
                 withCredentials([
                     string(credentialsId: 'MY_EMAIL', variable: 'EMAIL'),
                     string(credentialsId: 'MY_PASSWORD', variable: 'PWD')
-                ])
-                sh """
-                        docker run --rm \
-                            -e email="${EMAIL}" \
-                            -e password="${PWD}" \
-                            --docker
-                            pytest --browser_name=chrome -m login
+                ]) {
+                    sh """
+                        docker run --rm test_runner \
+                            pytest \
+                            --docker \
+                            --rm \
+                            --env email="${EMAIL}" \
+                            --env password="${PWD}" \
+                            --browser_name=chrome \
+                            -m login
                     """
+                }
             }
         }
     }
