@@ -14,7 +14,7 @@ pipeline {
                 ]) {
                     sh """
                         docker run --rm \
-                            -v "\$WORKSPACE/tests/reports:/app/tests/reports" \
+                            -v "\$WORKSPACE/tests/reports:/app/tests/reports/allure-results" \
                             test_runner \
                             pytest \
                             --docker \
