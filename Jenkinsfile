@@ -13,7 +13,7 @@ pipeline {
                     string(credentialsId: 'MY_PASSWORD', variable: 'PWD')
                 ]) {
                     sh """
-                        docker run -v \$(pwd)/allure-results:/tests/reports/allure-results --rm test_runner \
+                        docker run --rm test_runner \
                             pytest \
                             --docker \
                             --rm \
