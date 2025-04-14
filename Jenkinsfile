@@ -14,12 +14,11 @@ pipeline {
                 ]) {
                     sh """
                         docker run --rm \
-                            -v "\$WORKSPACE/tests/reports:/app/tests/reports" \
                             test_runner \
                             pytest \
                             --env email="$EMAIL" \
                             --env password="$PWD" \
-                            --browser_name=firefox \
+                            --browser_name=chrome \
                             -m login \
                             --alluredir=tests/reports/allure-results
                         """
