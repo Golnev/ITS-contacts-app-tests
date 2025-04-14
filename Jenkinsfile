@@ -13,7 +13,9 @@ pipeline {
                     string(credentialsId: 'MY_PASSWORD', variable: 'PWD')
                 ]) {
                     sh """
-                        docker run --rm test_runner \
+                        docker run --rm\
+                            -v $WORKSPACE/tests/reports:/app/tests/reports \
+                            test_runner \
                             pytest \
                             --docker \
                             --rm \
