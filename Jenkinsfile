@@ -8,7 +8,7 @@ pipeline {
         }
         stage('Run Tests') {
             steps {
-                sh 'docker run --rm test_runner pytest --docker --rm -m login --env email=myemail@example.com --env password=zaq1@WSX'
+                sh 'docker run --rm test_runner pytest --docker --rm --env email=myemail@example.com --env password=zaq1@WSX --browser_name=chrome -m login'
             }
         }
     }
