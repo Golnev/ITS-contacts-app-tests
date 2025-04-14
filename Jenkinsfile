@@ -12,7 +12,7 @@ pipeline {
                     string(credentialsId: 'MY_EMAIL', variable: 'EMAIL'),
                     string(credentialsId: 'MY_PASSWORD', variable: 'PWD')
                 ]) {
-                    sh '''
+                    sh """
                         docker run --rm test_runner \
                             pytest \
                             --docker \
@@ -21,7 +21,7 @@ pipeline {
                             --env password="$PWD" \
                             --browser_name=chrome \
                             -m login
-                    '''
+                    """
                 }
             }
         }
