@@ -17,8 +17,8 @@ pipeline {
                             pytest \
                             --docker \
                             --rm \
-                            --env email="${EMAIL}" \
-                            --env password="${PWD}" \
+                            --env email="$EMAIL" \
+                            --env password="$PWD" \
                             --browser_name=chrome \
                             -m login
                     """
