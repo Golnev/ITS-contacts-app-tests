@@ -114,7 +114,7 @@ def browser(pytestconfig):
     Initializes a Selenium WebDriver instance for the specified browser.
     """
 
-    requests_cache.install_cache("webdriver_cache", expire_after=3600)
+    # requests_cache.install_cache("webdriver_cache", expire_after=3600)
 
     browser_name = pytestconfig.getoption("--browser_name")
 
