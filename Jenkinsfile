@@ -2,12 +2,16 @@ pipeline {
     agent any
     stages {
         stage('Load Creds') {
-            withCredentials([
-                string(credentialsId: 'MY_EMAIL', variable: 'MY_EMAIL'),
-                string(credentialsId: 'MY_PASSWORD', variable: 'MY_PASSWORD')
-            ]) {
-                env.MY_EMAIL = "${MY_EMAIL}"
-                env.MY_PASSWORD = "${MY_PASSWORD}"
+            steps {
+                withCredentials([
+                    string(credentialsId: 'MY_EMAIL', variable: 'MY_EMAIL'),
+                    string(credentialsId: 'MY_PASSWORD', variable: 'MY_PASSWORD')
+                ]) {
+                    script {
+                        env.MY_EMAIL = "${MY_EMAIL}"
+                        env.MY_PASSWORD = "${MY_PASSWORD}"
+                    }
+                }
             }
         }
         stage('Build Test Image') {
