@@ -19,7 +19,7 @@ pipeline {
                             pytest \
                             --env email="$EMAIL" \
                             --env password="$PWD" \
-                            --browser_name=chrome \
+                            --browser_name=firefox \
                             -m login \
                             --alluredir=tests/reports/allure-results
                         """
