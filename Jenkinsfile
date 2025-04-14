@@ -16,6 +16,7 @@ pipeline {
                         docker run --rm \
                             test_runner \
                             pytest \
+                            --docker \
                             --env email="$EMAIL" \
                             --env password="$PWD" \
                             --browser_name=chrome \
