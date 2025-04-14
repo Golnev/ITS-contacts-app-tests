@@ -92,7 +92,7 @@ def pars_env(env_items: list[str]):
 
 
 @pytest.fixture(scope="session", autouse=True)
-def credentials(request):
+def credentials(pytestconfig):
     """
     A pytest fixture that automatically loads environment variables from a .env file
     and applies overrides specified via the `--env` command-line option.
@@ -100,7 +100,7 @@ def credentials(request):
 
     load_dotenv()
 
-    overrides = pars_env(request.config.getoption("--env"))
+    overrides = pars_env(pytestconfig.getoption("--env"))
 
     if "email" in overrides:
         os.environ["MY_EMAIL"] = overrides["email"]
@@ -135,9 +135,10 @@ def browser(pytestconfig):
 
             service = FirefoxService(executable_path=GeckoDriverManager().install())
 
-        firefox_path = os.getenv("FIREFOX_PATH")
-        if firefox_path:
-            options.binary_location = firefox_path
+        if not docker_args:
+            firefox_path = os.getenv("FIREFOX_PATH")
+            if firefox_path:
+                options.binary_location = firefox_path
 
         driver = webdriver.Firefox(
             service=service,

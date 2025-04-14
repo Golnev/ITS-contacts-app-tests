@@ -1,0 +1,12 @@
+services:
+  jenkins:
+    image: jenkins/jenkins:lts-jdk17
+    container_name: jenkins_ITS
+    ports:
+      - "8585:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_ITS:/var/jenkins_ITS
+
+volumes:
+  jenkins_ITS:
