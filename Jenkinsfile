@@ -8,7 +8,7 @@ pipeline {
         }
         stage('Run Tests') {
             steps {
-                sh 'docker run --rm test_runner pytest -m --docker auth'
+                sh 'docker run --rm test_runner pytest --docker --rm -m auth'
             }
         }
     }
