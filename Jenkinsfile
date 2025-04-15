@@ -14,7 +14,6 @@ pipeline {
                 ]) {
                     sh """
                         docker run --rm \
-                            -v "\$WORKSPACE/temp/allure-results:/var/jenkins_home/workspace/ITS_contacts_app pipeline/test/reports" \
                             test_runner \
                             pytest \
                             --docker \
@@ -29,8 +28,13 @@ pipeline {
         }
         stage('Publish Allure Report') {
             steps {
-                allure includeProperties: false, jdk: '', results: [[path: 'tests/reports/allure-results']]
+                allure includeProperties: false, jdk: '', results: [[path: 'tests/reports/allure-results']], reportBuildPolicy: 'ALWAYS'
             }
+        }
+    }
+    post {
+        always {
+            archiveArtifacts artifacts: 'tests/reports/allure-results/**', allowEmptyArchive: true
         }
     }
 }
