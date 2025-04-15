@@ -1,6 +1,12 @@
 pipeline {
     agent any
     stages {
+        stage('Prepare') {
+            steps {
+                sh 'mkdir -p tests/reports/allure-results && chmod -R 777 tests/reports'
+            }
+        }
+
         stage('Build Test Image') {
             steps {
                 sh 'docker build -f tests/Dockerfile -t test_runner .'
@@ -13,7 +19,7 @@ pipeline {
                     string(credentialsId: 'MY_PASSWORD', variable: 'PWD')
                 ]) {
                     sh """
-                        docker run --rm \
+                        docker run \
                             test_runner \
                             pytest \
                             --docker \
@@ -21,6 +27,10 @@ pipeline {
                             --env password="$PWD" \
                             --browser_name=chrome \
                             -m login
+
+                        docker cp test_container:/app/tests/reports/allure-results ./tests/reports/
+                        docker rm test_container
+
                     """
                 }
             }
