@@ -1,16 +1,11 @@
-FROM python:3
+FROM jenkins/jenkins:lts-jdk17
 
-RUN apt-get update && apt-get install -y \
-    curl wget gnupg unzip ca-certificates fonts-liberation libu2f-udev \
-    firefox-esr \
-    && curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg \
-    && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list \
-    && apt-get update && apt-get install -y google-chrome-stable \
-    && rm -rf /var/lib/apt/lists/*
+USER root
 
-WORKDIR /app
+RUN apt-get update && \
+    apt-get install -y docker.io && \
+    apt-get clean
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN usermod -aG docker jenkins
 
-COPY . .
+USER jenkins
