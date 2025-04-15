@@ -15,12 +15,12 @@ pipeline {
                     sh """
                         docker run --rm \
                             test_runner \
-                            sh -c 'pytest \
-                                --docker \
-                                --env email="$EMAIL" \
-                                --env password="$PWD" \
-                                --browser_name=chrome \
-                                -m login
+                            pytest \
+                            --docker \
+                            --env email="$EMAIL" \
+                            --env password="$PWD" \
+                            --browser_name=chrome \
+                            -m login
                     """
                 }
             }
