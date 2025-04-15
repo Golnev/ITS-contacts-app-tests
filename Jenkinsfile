@@ -14,6 +14,7 @@ pipeline {
                 ]) {
                     sh """
                         docker run --rm \
+                            -v $(pwd)/tests/reports/allure-results:/app/tests/reports/allure-results \
                             test_runner \
                             pytest \
                             --docker \
