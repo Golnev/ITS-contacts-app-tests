@@ -4,16 +4,29 @@ This module provides a utility class for making HTTP requests.
 
 import logging as logger
 import os
+from dataclasses import dataclass
 
 import requests
 from dotenv import load_dotenv
 
+from src.helpers.auth_helper import with_auth_headers
 from src.hosts_config import API_HOSTS
 
 load_dotenv()
 
 
-# pylint: disable=too-many-instance-attributes
+@dataclass
+class RequestParams:
+    """
+    A data class representing parameters for an HTTP request.
+    """
+
+    endpoint: str
+    payload: dict | None = None
+    auth_extra: dict | None = None
+    expected_status_code: int = 200
+
+
 class RequestUtilities:
     """
     A utility class for sending HTTP requests and handling API responses.
@@ -30,248 +43,138 @@ class RequestUtilities:
         return base_url
 
     def __init__(self):
-        self.__env = os.getenv("ENV", "test")
-        self.base_url: str = API_HOSTS[self.__env]
-
-        self.status_code: int | None = None
-        self.expected_status_code: int | None = None
         self.url: str | None = None
-
         self.response_api = None
-        self.response_json = None
+        self.EMPTY_CONTENT_LENGTH = "0"
 
-        self.EMPTY_CONTENT_LENGTH = "0"  # pylint: disable=invalid-name
-
-    def __assert_status_code(self):
+    @staticmethod
+    def assert_status_code(status_code, expected_status_code):
         """
         Validate the status code of the latest API response.
         """
 
         logger.info("Status code check.")
-        assert self.status_code == self.expected_status_code, (
+        assert status_code == expected_status_code, (
             f"Bad status code. "
-            f"Expected status code: {self.expected_status_code}, "
-            f"actual status code: {self.status_code}"
+            f"Expected status code: {expected_status_code}, "
+            f"actual status code: {status_code}"
         )
-        logger.info("Status is %s", self.status_code)
+        logger.info("Status is %s", status_code)
 
+    def __make_request(
+        self,
+        method: str,
+        request_params: RequestParams,
+        auth_headers: dict | None = None,
+    ):
+        """
+        Perform an HTTP request to the specified API endpoint.
+        """
+
+        logger.info("Starting %s method.", method.upper())
+
+        if request_params.auth_extra and auth_headers:
+            auth_headers.update(request_params.auth_extra)
+
+        self.url = self.get_base_url() + request_params.endpoint
+        logger.info("URL: %s", self.url)
+
+        expected_status_code = request_params.expected_status_code
+
+        self.response_api = requests.request(
+            method=method,
+            url=self.url,
+            json=request_params.payload,
+            headers=auth_headers,
+            timeout=10,
+        )
+
+        status_code = self.response_api.status_code
+        self.assert_status_code(status_code=status_code, expected_status_code=expected_status_code)
+
+        if self.response_api.headers.get("Content-Length") == self.EMPTY_CONTENT_LENGTH:
+            logger.info("Response has empty body (Content-Length: 0)")
+            return None
+
+        if method != "DELETE":
+            response_json = self.response_api.json()
+            logger.info("%s API response %s", method.upper(), response_json)
+            return response_json
+
+        return None
+
+    @with_auth_headers
     def get(
         self,
-        endpoint: str,
-        headers: dict | None = None,
-        expected_status_code=200,
+        request_params: RequestParams,
+        auth_headers=None,
     ):
         """
         Perform a GET request to the specified API endpoint.
         """
 
-        logger.info("Starting GET method.")
-
-        if not headers:
-            headers = {"Content-Type": "application/json"}
-        else:
-            headers.update({"Content-Type": "application/json"})
-
-        self.url = self.base_url + endpoint
-        logger.info("URL: %s", self.url)
-
-        self.expected_status_code = expected_status_code
-
-        self.response_api = requests.get(
-            url=self.url,
-            headers=headers,
-            timeout=5,
+        return self.__make_request(
+            method="GET",
+            auth_headers=auth_headers,
+            request_params=request_params,
         )
-        self.status_code = self.response_api.status_code
-        self.__assert_status_code()
 
-        if (
-            self.response_api.headers.get("Content-Length")
-            == self.EMPTY_CONTENT_LENGTH
-        ):
-            logger.info("Response has empty body (Content-Length: 0)")
-            return None
-
-        self.response_json = self.response_api.json()
-
-        logger.info("GET API response %s", self.response_json)
-
-        return self.response_json
-
+    @with_auth_headers
     def post(
         self,
-        endpoint: str,
-        payload: dict | None = None,
-        headers: dict | None = None,
-        expected_status_code=200,
+        request_params: RequestParams,
+        auth_headers=None,
     ):
         """
         Perform a POST request to the specified API endpoint.
         """
-
-        logger.info("Starting POST method.")
-
-        if not headers:
-            headers = {"Content-Type": "application/json"}
-        else:
-            headers.update({"Content-Type": "application/json"})
-
-        self.url = self.base_url + endpoint
-        logger.info("URL: %s", self.url)
-
-        self.expected_status_code = expected_status_code
-
-        self.response_api = requests.post(
-            url=self.url,
-            json=payload,
-            headers=headers,
-            timeout=10,
+        return self.__make_request(
+            method="POST",
+            auth_headers=auth_headers,
+            request_params=request_params,
         )
 
-        self.status_code = self.response_api.status_code
-
-        self.__assert_status_code()
-
-        if (
-            self.response_api.headers.get("Content-Length")
-            == self.EMPTY_CONTENT_LENGTH
-        ):
-            logger.info("Response has empty body (Content-Length: 0)")
-            return None
-
-        if payload is None:
-            return None
-
-        self.response_json = self.response_api.json()
-
-        logger.info("POST API response %s", self.response_json)
-
-        return self.response_json
-
+    @with_auth_headers
     def put(
         self,
-        endpoint: str,
-        payload: dict | None = None,
-        headers: dict | None = None,
-        expected_status_code=200,
+        request_params: RequestParams,
+        auth_headers=None,
     ):
         """
         Perform a PUT request to the specified API endpoint.
         """
-
-        logger.info("Starting PUT method.")
-
-        if not headers:
-            headers = {"Content-Type": "application/json"}
-        else:
-            headers.update({"Content-Type": "application/json"})
-
-        self.url = self.base_url + endpoint
-        logger.info("URL: %s", self.url)
-
-        self.expected_status_code = expected_status_code
-
-        self.response_api = requests.put(
-            url=self.url,
-            json=payload,
-            headers=headers,
-            timeout=10,
+        return self.__make_request(
+            method="PUT",
+            auth_headers=auth_headers,
+            request_params=request_params,
         )
 
-        self.status_code = self.response_api.status_code
-
-        self.__assert_status_code()
-
-        if (
-            self.response_api.headers.get("Content-Length")
-            == self.EMPTY_CONTENT_LENGTH
-        ):
-            logger.info("Response has empty body (Content-Length: 0)")
-            return None
-
-        if payload is None:
-            return None
-
-        self.response_json = self.response_api.json()
-
-        logger.info("PUT API response %s", self.response_json)
-
-        return self.response_json
-
+    @with_auth_headers
     def patch(
         self,
-        endpoint: str,
-        payload: dict | None = None,
-        headers: dict | None = None,
-        expected_status_code=200,
+        request_params: RequestParams,
+        auth_headers=None,
     ):
         """
         Perform a PATCH request to the specified API endpoint.
         """
-
-        logger.info("Starting PATCH method.")
-
-        if not headers:
-            headers = {"Content-Type": "application/json"}
-        else:
-            headers.update({"Content-Type": "application/json"})
-
-        self.url = self.base_url + endpoint
-        logger.info("URL: %s", self.url)
-
-        self.expected_status_code = expected_status_code
-
-        self.response_api = requests.patch(
-            url=self.url,
-            json=payload,
-            headers=headers,
-            timeout=10,
+        return self.__make_request(
+            method="PATCH",
+            auth_headers=auth_headers,
+            request_params=request_params,
         )
 
-        self.status_code = self.response_api.status_code
-
-        self.__assert_status_code()
-
-        if (
-            self.response_api.headers.get("Content-Length")
-            == self.EMPTY_CONTENT_LENGTH
-        ):
-            logger.info("Response has empty body (Content-Length: 0)")
-            return None
-
-        if payload is None:
-            return None
-
-        self.response_json = self.response_api.json()
-
-        logger.info("PATCH API response %s", self.response_json)
-
-        return self.response_json
-
+    @with_auth_headers
     def delete(
         self,
-        endpoint: str,
-        headers: dict | None = None,
-        expected_status_code=200,
+        request_params: RequestParams,
+        auth_headers=None,
     ):
         """
         Perform a DELETE request to the specified API endpoint.
         """
-
-        logger.info("Starting DELETE method.")
-
-        if not headers:
-            headers = {"Content-Type": "application/json"}
-
-        self.url = self.base_url + endpoint
-        logger.info("URL: %s", self.url)
-
-        self.expected_status_code = expected_status_code
-
-        self.response_api = requests.delete(
-            url=self.url,
-            headers=headers,
-            timeout=10,
+        return self.__make_request(
+            method="DELETE",
+            auth_headers=auth_headers,
+            request_params=request_params,
         )
-        self.status_code = self.response_api.status_code
-        self.__assert_status_code()

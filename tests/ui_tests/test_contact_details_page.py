@@ -3,25 +3,21 @@ This module contains UI tests
 for the "Contact Details" page using Selenium WebDriver.
 """
 
-# pylint: disable=unused-argument
-
 import logging as logger
 
 import pytest
 from selenium import webdriver
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait
 
 from src.pages.contact_details_page import ContactDetailsPage
 from src.pages.contact_list_page import ContactListPage
 from src.pages.edit_contact_page import EditContactPage
 from src.requests_utilities import RequestUtilities
 
-pytestmark = pytest.mark.ui
 
 base_url = RequestUtilities.get_base_url()
 
 
+@pytest.mark.ui
 @pytest.mark.contact_details_page
 @pytest.mark.usefixtures("del_all_contacts")
 class TestContactDetailsPage:
@@ -33,9 +29,7 @@ class TestContactDetailsPage:
 
     def test_user_should_be_in_contact_details_page(
         self,
-        browser: webdriver.Firefox | webdriver.Chrome,
-        setup_user,
-        created_contact: tuple[ContactDetailsPage, tuple],
+        created_contact: tuple[ContactDetailsPage, dict],
     ):
         """
         Verifies that the user is on the "Contact Details" page.
@@ -47,11 +41,10 @@ class TestContactDetailsPage:
 
         page.should_be_contact_details_page()
 
+    @pytest.mark.usefixtures("browser")
     def test_logout_from_contact_details_page(
         self,
-        browser: webdriver.Firefox | webdriver.Chrome,
-        setup_user,
-        created_contact: tuple[ContactDetailsPage, tuple],
+        created_contact: tuple[ContactDetailsPage, dict],
     ):
         """
         Verifies that the user can log out
@@ -64,17 +57,12 @@ class TestContactDetailsPage:
 
         page.logout()
 
-        WebDriverWait(browser, 10).until(EC.url_to_be(base_url))
-
-        assert (
-            page.browser.current_url == base_url
-        ), f"Wrong URL after logout. URL: {page.browser.current_url}"
+        assert page.browser.current_url == base_url, f"Wrong URL after logout. URL: {page.browser.current_url}"
 
     def test_return_to_contact_list(
         self,
         browser: webdriver.Firefox | webdriver.Chrome,
-        setup_user,
-        created_contact: tuple[ContactDetailsPage, tuple],
+        created_contact: tuple[ContactDetailsPage, dict],
     ):
         """
         Verifies that the user can return to the contact list
@@ -87,16 +75,13 @@ class TestContactDetailsPage:
 
         page.return_to_contact_list()
 
-        contact_list_page = ContactListPage(
-            browser=browser, url=browser.current_url
-        )
+        contact_list_page = ContactListPage(browser=browser, url=browser.current_url)
         contact_list_page.should_be_contact_list_page()
 
     def test_delete_contact(
         self,
         browser: webdriver.Firefox | webdriver.Chrome,
-        setup_user,
-        created_contact: tuple[ContactDetailsPage, tuple],
+        created_contact: tuple[ContactDetailsPage, dict],
     ):
         """
         Verifies that a contact can be deleted from
@@ -109,23 +94,19 @@ class TestContactDetailsPage:
 
         page.delete_contact()
 
-        WebDriverWait(browser, 10).until(
-            EC.url_to_be(base_url + "contactList")
-        )
+        page.is_url_change(base_url + "contactList")
 
-        contact_list_page = ContactListPage(
-            browser=browser, url=browser.current_url
-        )
+        contact_list_page = ContactListPage(browser=browser, url=browser.current_url)
         contact_list_page.should_be_contact_list_page()
         contact_list_page.contact_is_not_present_in_contact_list(
-            first_name=contact_info[0], last_name=contact_info[1]
+            first_name=contact_info["firstName"],
+            last_name=contact_info["lastName"],
         )
 
     def test_user_can_go_to_edit_contact(
         self,
         browser: webdriver.Firefox | webdriver.Chrome,
-        setup_user,
-        created_contact: tuple[ContactDetailsPage, tuple],
+        created_contact: tuple[ContactDetailsPage, dict],
     ):
         """
         Verifies that the user can navigate to the "Edit Contact" page
@@ -138,11 +119,7 @@ class TestContactDetailsPage:
 
         page.go_to_edit_contact_page()
 
-        WebDriverWait(browser, 10).until(
-            EC.url_to_be(base_url + "editContact")
-        )
+        page.is_url_change(base_url + "editContact")
 
-        edit_contact_page = EditContactPage(
-            browser=browser, url=browser.current_url
-        )
+        edit_contact_page = EditContactPage(browser=browser, url=browser.current_url)
         edit_contact_page.should_be_edit_contact_page()

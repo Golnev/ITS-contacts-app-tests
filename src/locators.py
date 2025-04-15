@@ -1,11 +1,7 @@
 """
 This module contains locators for Selenium tests.
-
 The locators are used for interacting with the Login Page elements.
 """
-
-# pylint: disable=invalid-name
-
 
 from dataclasses import dataclass
 
@@ -15,6 +11,15 @@ from src.requests_utilities import RequestUtilities
 
 
 base_url = RequestUtilities.get_base_url()
+
+
+@dataclass
+class BasePageLocators:
+    """
+    Dataclass for storing locators used on the base page.
+    """
+
+    LOGOUT_BUTTON = (By.CSS_SELECTOR, "#logout")
 
 
 @dataclass

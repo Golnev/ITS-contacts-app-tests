@@ -2,14 +2,7 @@
 This module provides methods for interacting with the "Add New Contact" page.
 """
 
-# pylint: disable=too-many-arguments
-# pylint: disable=too-many-positional-arguments
-# pylint: disable=too-many-locals
-
 import logging as logger
-
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait
 
 from src.locators import AddNewContactPageLocators
 from src.pages.base_page import BasePage
@@ -36,8 +29,7 @@ class AddNewContactPage(BasePage):
         logger.info("Check contact list url.")
 
         assert (
-            self.browser.current_url
-            == AddNewContactPageLocators.ADD_NEW_CONTACT_PAGE_URL
+            self.browser.current_url == AddNewContactPageLocators.ADD_NEW_CONTACT_PAGE_URL
         ), "URL address is not correct."
 
     def should_be_add_new_contact_form(self):
@@ -51,18 +43,6 @@ class AddNewContactPage(BasePage):
             *AddNewContactPageLocators.ADD_NEW_CONTACT_FORM
         ), "Add new contact form is not present."
 
-    def logout(self):
-        """
-        Method to log out the current user by clicking the logout button.
-        """
-
-        logger.info("Logout.")
-
-        logout_button = self.browser.find_element(
-            *AddNewContactPageLocators.LOGOUT_BUTTON
-        )
-        logout_button.click()
-
     def cancel_from_add_new_contact_page(self):
         """
         Method to cancel form add new page by clicking the cancel button.
@@ -70,30 +50,11 @@ class AddNewContactPage(BasePage):
 
         logger.info("Cancel from add new contact page")
 
-        WebDriverWait(self.browser, 10).until(
-            EC.visibility_of_element_located(
-                AddNewContactPageLocators.CANCEL_BUTTON
-            )
-        )
-
-        cancel_button = self.browser.find_element(
-            *AddNewContactPageLocators.CANCEL_BUTTON
-        )
-
-        cancel_button.click()
+        self.click_button(locator=AddNewContactPageLocators.CANCEL_BUTTON)
 
     def add_new_contact(
         self,
-        first_name,
-        last_name,
-        date_of_birth,
-        email,
-        phone,
-        street_address_1,
-        city,
-        state,
-        postal_code,
-        country,
+        contact_info: dict,
     ):
         """
         Method to add new contact.
@@ -101,59 +62,58 @@ class AddNewContactPage(BasePage):
 
         logger.info(
             "Add new contact, with first name: %s, last name: %s",
-            first_name,
-            last_name,
+            contact_info["firstName"],
+            contact_info["lastName"],
         )
 
-        first_name_form = self.browser.find_element(
-            *AddNewContactPageLocators.FIRST_NAME
+        self.send_text(
+            locator=AddNewContactPageLocators.FIRST_NAME,
+            text=contact_info["firstName"],
         )
-        first_name_form.send_keys(first_name)
 
-        last_name_form = self.browser.find_element(
-            *AddNewContactPageLocators.LAST_NAME
+        self.send_text(
+            locator=AddNewContactPageLocators.LAST_NAME,
+            text=contact_info["lastName"],
         )
-        last_name_form.send_keys(last_name)
 
-        date_of_birth_form = self.browser.find_element(
-            *AddNewContactPageLocators.DATE_OF_BIRTH
+        self.send_text(
+            locator=AddNewContactPageLocators.DATE_OF_BIRTH,
+            text=contact_info["birthdate"],
         )
-        date_of_birth_form.send_keys(date_of_birth)
 
-        email_form = self.browser.find_element(
-            *AddNewContactPageLocators.EMAIL
+        self.send_text(
+            locator=AddNewContactPageLocators.EMAIL,
+            text=contact_info["email"],
         )
-        email_form.send_keys(email)
 
-        phone_form = self.browser.find_element(
-            *AddNewContactPageLocators.PHONE
+        self.send_text(
+            locator=AddNewContactPageLocators.PHONE,
+            text=str(contact_info["phone"]),
         )
-        phone_form.send_keys(str(phone))
 
-        street_address_1_form = self.browser.find_element(
-            *AddNewContactPageLocators.STREET_ADDRESS_1
+        self.send_text(
+            locator=AddNewContactPageLocators.STREET_ADDRESS_1,
+            text=contact_info["street1"],
         )
-        street_address_1_form.send_keys(street_address_1)
 
-        city_form = self.browser.find_element(*AddNewContactPageLocators.CITY)
-        city_form.send_keys(city)
-
-        state_form = self.browser.find_element(
-            *AddNewContactPageLocators.STATE
+        self.send_text(
+            locator=AddNewContactPageLocators.CITY,
+            text=contact_info["city"],
         )
-        state_form.send_keys(state)
 
-        postal_code_form = self.browser.find_element(
-            *AddNewContactPageLocators.POSTAL_CODE
+        self.send_text(
+            locator=AddNewContactPageLocators.STATE,
+            text=contact_info["stateProvince"],
         )
-        postal_code_form.send_keys(str(postal_code))
 
-        country_form = self.browser.find_element(
-            *AddNewContactPageLocators.COUNTRY
+        self.send_text(
+            locator=AddNewContactPageLocators.POSTAL_CODE,
+            text=str(contact_info["postalCode"]),
         )
-        country_form.send_keys(country)
 
-        submit_button = self.browser.find_element(
-            *AddNewContactPageLocators.SUBMIT_BUTTON
+        self.send_text(
+            locator=AddNewContactPageLocators.COUNTRY,
+            text=contact_info["country"],
         )
-        submit_button.click()
+
+        self.click_button(locator=AddNewContactPageLocators.SUBMIT_BUTTON)

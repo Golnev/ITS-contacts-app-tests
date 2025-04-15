@@ -3,7 +3,6 @@ This module provides methods for interacting with the "Contact Details" page.
 """
 
 import logging as logger
-import time
 from typing import Literal
 
 from src.locators import ContactDetailsPageLocators
@@ -33,8 +32,7 @@ class ContactDetailsPage(BasePage):
         logger.info("Check contacts details page url.")
 
         assert (
-            self.browser.current_url
-            == ContactDetailsPageLocators.CONTACT_DETAILS_PAGE_URL
+            self.browser.current_url == ContactDetailsPageLocators.CONTACT_DETAILS_PAGE_URL
         ), "URL address is not correct."
 
     def should_be_contact_details_form(self):
@@ -48,18 +46,6 @@ class ContactDetailsPage(BasePage):
             *ContactDetailsPageLocators.CONTACT_DETAILS_FORM
         ), "Contact details form is not present."
 
-    def logout(self):
-        """
-        Log out the current user from the 'Contact Details' page.
-        """
-
-        logger.info("Logout.")
-
-        logout_button = self.browser.find_element(
-            *ContactDetailsPageLocators.LOGOUT_BUTTON
-        )
-        logout_button.click()
-
     def return_to_contact_list(self):
         """
         Return to the contact list from the 'Contact Details' page.
@@ -67,10 +53,7 @@ class ContactDetailsPage(BasePage):
 
         logger.info("Return to contact list.")
 
-        return_button = self.browser.find_element(
-            *ContactDetailsPageLocators.RETURN_BUTTON
-        )
-        return_button.click()
+        self.click_button(locator=ContactDetailsPageLocators.RETURN_BUTTON)
 
     def delete_contact(self):
         """
@@ -79,10 +62,7 @@ class ContactDetailsPage(BasePage):
 
         logger.info("Deleting contact.")
 
-        delete_button = self.browser.find_element(
-            *ContactDetailsPageLocators.DELETE_BUTTON
-        )
-        delete_button.click()
+        self.click_button(locator=ContactDetailsPageLocators.DELETE_BUTTON)
 
         alert = self.browser.switch_to.alert
         alert.accept()
@@ -95,10 +75,7 @@ class ContactDetailsPage(BasePage):
 
         logger.info("Go to edit contact page.")
 
-        edit_contact_button = self.browser.find_element(
-            *ContactDetailsPageLocators.EDIT_CONTACT_BUTTON
-        )
-        edit_contact_button.click()
+        self.click_button(locator=ContactDetailsPageLocators.EDIT_CONTACT_BUTTON)
 
     def get_info(
         self,
@@ -137,7 +114,6 @@ class ContactDetailsPage(BasePage):
             "country": ContactDetailsPageLocators.COUNTRY,
         }
 
-        time.sleep(3)
-        field_text = self.get_visible_element(*locators_dict[what])
+        field_text = self.get_visible_element_value(*locators_dict[what])
 
         return field_text

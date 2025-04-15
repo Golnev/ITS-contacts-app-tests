@@ -28,9 +28,7 @@ class RegisterPage(BasePage):
         """
 
         logger.info("Check register url.")
-        assert (
-            self.browser.current_url == RegisterPageLocators.REGISTER_PAGE_URL
-        ), "URL address is not correct."
+        assert self.browser.current_url == RegisterPageLocators.REGISTER_PAGE_URL, "URL address is not correct."
 
     def should_be_register_form(self):
         """
@@ -38,43 +36,24 @@ class RegisterPage(BasePage):
         """
 
         logger.info("Check register form is present.")
-        assert self.is_element_present(
-            *RegisterPageLocators.REGISTER_FORM
-        ), "Register form is not presented."
+        assert self.is_element_present(*RegisterPageLocators.REGISTER_FORM), "Register form is not presented."
 
-    def register_new_user(
-        self, first_name: str, last_name: str, email: str, password: str
-    ):
+    def register_new_user(self, first_name: str, last_name: str, email: str, password: str):
         """
         Register a new user with the provided credentials.
         """
 
         logger.info("Starting register new user.")
 
-        first_name_form = self.browser.find_element(
-            *RegisterPageLocators.REGISTER_FIRST_NAME
-        )
-        first_name_form.send_keys(first_name)
+        self.send_text(locator=RegisterPageLocators.REGISTER_FIRST_NAME, text=first_name)
 
-        last_name_form = self.browser.find_element(
-            *RegisterPageLocators.REGISTER_LAST_NAME
-        )
-        last_name_form.send_keys(last_name)
+        self.send_text(locator=RegisterPageLocators.REGISTER_LAST_NAME, text=last_name)
 
-        email_form = self.browser.find_element(
-            *RegisterPageLocators.REGISTER_EMAIL
-        )
-        email_form.send_keys(email)
+        self.send_text(locator=RegisterPageLocators.REGISTER_EMAIL, text=email)
 
-        password_form = self.browser.find_element(
-            *RegisterPageLocators.REGISTER_PASSWORD
-        )
-        password_form.send_keys(password)
+        self.send_text(locator=RegisterPageLocators.REGISTER_PASSWORD, text=password)
 
-        register_button = self.browser.find_element(
-            *RegisterPageLocators.REGISTER_BUTTON
-        )
-        register_button.click()
+        self.click_button(locator=RegisterPageLocators.REGISTER_BUTTON)
 
     def should_be_validation_error(self):
         """
@@ -83,9 +62,7 @@ class RegisterPage(BasePage):
         """
 
         logger.info("Check validation error notification.")
-        assert self.get_visible_element(
-            *RegisterPageLocators.ERROR_NOTIFICATION
-        ).startswith(
+        assert self.get_visible_element_text(*RegisterPageLocators.ERROR_NOTIFICATION).startswith(
             "User validation failed"
         ), "Error notification is not presented."
 
@@ -97,7 +74,4 @@ class RegisterPage(BasePage):
 
         logger.info("Cancel from register page")
 
-        cancel_button = self.browser.find_element(
-            *RegisterPageLocators.CANCEL_BUTTON
-        )
-        cancel_button.click()
+        self.click_button(locator=RegisterPageLocators.CANCEL_BUTTON)

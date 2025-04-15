@@ -1,3 +1,4 @@
+---
 name: Linting
 
 on:
@@ -21,11 +22,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run pylint
-        run: pylint --disable=R0801 --ignore=.venv **/*.py
-
       - name: Run flake8
-        run: flake8 --exclude=.venv .
+        run: flake8 --exclude=.venv . --ignore=E501
 
       - name: Run pycodestyle
-        run: pycodestyle --exclude=.venv .
+        run: pycodestyle --exclude=.venv . --ignore=E501
+
+      - name: Run pylint
+        run: pylint --ignore=.venv **/*.py --disable=C0103 --disable=C0301

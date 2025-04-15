@@ -2,21 +2,18 @@
 This module contains API tests for contacts management.
 """
 
-# pylint: disable=unused-argument
-
 import logging as logger
 import pytest
 from faker.proxy import Faker
 
 from src.helpers.contacts_helper import ContactsHelper
-from src.requests_utilities import RequestUtilities
-
+from src.requests_utilities import RequestUtilities, RequestParams
 
 pytestmark = pytest.mark.api
 
 
 @pytest.mark.contacts
-def test_add_contact(auth_headers, manage_contacts):
+def test_add_contact(manage_contacts):
     """
     Test the addition of a new contact.
     """
@@ -33,7 +30,7 @@ def test_add_contact(auth_headers, manage_contacts):
 
 @pytest.mark.contacts
 @pytest.mark.negative
-def test_add_contact_without_mandatory_data(faker: Faker, auth_headers):
+def test_add_contact_without_mandatory_data(faker: Faker):
     """
     Test adding a contact without mandatory data (negative test case).
     """
@@ -43,9 +40,7 @@ def test_add_contact_without_mandatory_data(faker: Faker, auth_headers):
     payload = {
         "firstName": "",
         "lastName": "",
-        "birthdate": (
-            faker.date_of_birth(minimum_age=6, maximum_age=110)
-        ).strftime("%Y-%m-%d"),
+        "birthdate": (faker.date_of_birth(minimum_age=6, maximum_age=110)).strftime("%Y-%m-%d"),
         "email": faker.email(),
         "phone": faker.basic_phone_number(),
         "street1": faker.street_name(),
@@ -58,15 +53,15 @@ def test_add_contact_without_mandatory_data(faker: Faker, auth_headers):
 
     request_utility = RequestUtilities()
 
-    create_contact_json = request_utility.post(
+    request_params = RequestParams(
         endpoint="contacts",
         payload=payload,
-        headers=auth_headers,
         expected_status_code=400,
     )
-    assert (
-        create_contact_json is not None
-    ), "Response is None, but expected JSON response."
+    create_contact_json = request_utility.post(request_params=request_params)
+
+    assert create_contact_json is not None, "Response is None, but expected JSON response."
+
     assert (
         create_contact_json["_message"] == "Contact validation failed"
     ), "Validation without mandatory data was successful."
@@ -74,7 +69,7 @@ def test_add_contact_without_mandatory_data(faker: Faker, auth_headers):
 
 @pytest.mark.contacts
 @pytest.mark.negative
-def test_contact_with_wrong_phone_number(faker: Faker, auth_headers):
+def test_contact_with_wrong_phone_number(faker: Faker):
     """
     Test adding a contact with an invalid phone number (negative test case).
     """
@@ -84,9 +79,7 @@ def test_contact_with_wrong_phone_number(faker: Faker, auth_headers):
     payload = {
         "firstName": faker.first_name(),
         "lastName": faker.last_name(),
-        "birthdate": (
-            faker.date_of_birth(minimum_age=6, maximum_age=110)
-        ).strftime("%Y-%m-%d"),
+        "birthdate": (faker.date_of_birth(minimum_age=6, maximum_age=110)).strftime("%Y-%m-%d"),
         "email": faker.email(),
         "phone": "No phone",
         "street1": faker.street_name(),
@@ -99,28 +92,24 @@ def test_contact_with_wrong_phone_number(faker: Faker, auth_headers):
 
     request_utility = RequestUtilities()
 
-    create_contact_json = request_utility.post(
+    request_params = RequestParams(
         endpoint="contacts",
         payload=payload,
-        headers=auth_headers,
         expected_status_code=400,
     )
-    assert (
-        create_contact_json is not None
-    ), "Response is None, but expected JSON response."
+    create_contact_json = request_utility.post(request_params=request_params)
+
+    assert create_contact_json is not None, "Response is None, but expected JSON response."
 
     assert (
-        create_contact_json["message"]
-        == "Contact validation failed: phone: Phone number is invalid"
+        create_contact_json["message"] == "Contact validation failed: phone: Phone number is invalid"
     ), "Validation with string phone was successful."
 
 
 @pytest.mark.contacts
 @pytest.mark.negative
 @pytest.mark.xfail
-def test_add_contact_with_existing_last_name_and_first_name(
-    faker: Faker, auth_headers, manage_contacts
-):
+def test_add_contact_with_existing_last_name_and_first_name(faker: Faker, manage_contacts):
     """
     Test adding a contact with an existing first
     and last name (negative test case).
@@ -133,9 +122,7 @@ def test_add_contact_with_existing_last_name_and_first_name(
     payload = {
         "firstName": contact_rs_api["firstName"],
         "lastName": contact_rs_api["lastName"],
-        "birthdate": (
-            faker.date_of_birth(minimum_age=6, maximum_age=110)
-        ).strftime("%Y-%m-%d"),
+        "birthdate": (faker.date_of_birth(minimum_age=6, maximum_age=110)).strftime("%Y-%m-%d"),
         "email": faker.email(),
         "phone": faker.basic_phone_number(),
         "street1": faker.street_name(),
@@ -148,16 +135,12 @@ def test_add_contact_with_existing_last_name_and_first_name(
 
     request_utility = RequestUtilities()
 
-    request_utility.post(
-        endpoint="contacts",
-        payload=payload,
-        headers=auth_headers,
-        expected_status_code=400,
-    )
+    request_params = RequestParams(endpoint="contacts", payload=payload, expected_status_code=400)
+    request_utility.post(request_params=request_params)
 
 
 @pytest.mark.contacts
-def test_get_contacts_list(auth_headers):
+def test_get_contacts_list():
     """
     Test retrieving the list of all contacts.
     """
@@ -166,13 +149,13 @@ def test_get_contacts_list(auth_headers):
 
     contacts_helper = ContactsHelper()
 
-    contacts = contacts_helper.get_contacts(auth_headers=auth_headers)
+    contacts = contacts_helper.get_contacts()
 
     assert contacts, "Contacts list is empty"
 
 
 @pytest.mark.contacts
-def test_get_contact(auth_headers, manage_contacts):
+def test_get_contact(manage_contacts):
     """
     Test retrieving a specific contact by ID.
     """
@@ -183,19 +166,15 @@ def test_get_contact(auth_headers, manage_contacts):
     contact_id = contact_rs_api["_id"]
 
     contacts_helper = ContactsHelper()
-    contact = contacts_helper.get_contacts(
-        auth_headers=auth_headers, contact_id=contact_id
-    )
+    contact = contacts_helper.get_contacts(contact_id=contact_id)
 
-    assert (
-        contact_rs_api is not None and contact is not None
-    ), "Response is None, but expected JSON response."
+    assert contact_rs_api is not None and contact is not None, "Response is None, but expected JSON response."
     assert contact_rs_api["lastName"] == contact["lastName"]
 
 
 @pytest.mark.contacts
 @pytest.mark.negative
-def test_get_not_existing_contact(auth_headers, manage_contacts):
+def test_get_not_existing_contact(manage_contacts):
     """
     Test retrieving a non-existent contact (negative test case).
     """
@@ -206,12 +185,9 @@ def test_get_not_existing_contact(auth_headers, manage_contacts):
     contact_id = contact_rs_api["_id"]
 
     contacts_helper = ContactsHelper()
-    contacts_helper.delete_contact(
-        auth_headers=auth_headers, contact_id=contact_id
-    )
+    contacts_helper.delete_contact(contact_id=contact_id)
 
     deleted_contact = contacts_helper.get_contacts(
-        auth_headers=auth_headers,
         contact_id=contact_id,
         expected_status_code=404,
     )
@@ -220,7 +196,7 @@ def test_get_not_existing_contact(auth_headers, manage_contacts):
 
 
 @pytest.mark.contacts
-def test_update_contact(faker: Faker, auth_headers, manage_contacts):
+def test_update_contact(faker: Faker, manage_contacts):
     """
     Test updating a contact's details.
     """
@@ -246,9 +222,7 @@ def test_update_contact(faker: Faker, auth_headers, manage_contacts):
     }
 
     logger.info(
-        "Update contact with id=%s, "
-        "Update phone=%s, Update street2=%s, "
-        "Update postalCode=%s.",
+        "Update contact with id=%s, Update phone=%s, Update street2=%s, Update postalCode=%s.",
         contact_id,
         payload["phone"],
         payload["street2"],
@@ -256,12 +230,8 @@ def test_update_contact(faker: Faker, auth_headers, manage_contacts):
     )
 
     contacts_helper = ContactsHelper()
-    update_contact = contacts_helper.update(
-        auth_headers=auth_headers, payload=payload, contact_id=contact_id
-    )
-    assert (
-        update_contact is not None
-    ), "Response is None, but expected JSON response."
+    update_contact = contacts_helper.update(payload=payload, contact_id=contact_id)
+    assert update_contact is not None, "Response is None, but expected JSON response."
 
     assert contact_id == update_contact["_id"]
     assert payload["phone"] == update_contact["phone"]
@@ -271,9 +241,7 @@ def test_update_contact(faker: Faker, auth_headers, manage_contacts):
 
 @pytest.mark.contacts
 @pytest.mark.negative
-def test_update_not_existing_contact(
-    faker: Faker, auth_headers, manage_contacts
-):
+def test_update_not_existing_contact(faker: Faker, manage_contacts):
     """
     Test updating a contact that does not exist (negative test case).
     """
@@ -284,9 +252,7 @@ def test_update_not_existing_contact(
     contact_id = contact_rs_api["_id"]
 
     contacts_helper = ContactsHelper()
-    contacts_helper.delete_contact(
-        auth_headers=auth_headers, contact_id=contact_id
-    )
+    contacts_helper.delete_contact(contact_id=contact_id)
 
     payload = {
         "firstName": contact_rs_api["firstName"],
@@ -303,10 +269,7 @@ def test_update_not_existing_contact(
     }
 
     logger.info(
-        "Update contact with id=%s, "
-        "Update phone=%s, "
-        "Update street2=%s, "
-        "Update postalCode=%s.",
+        "Update contact with id=%s, Update phone=%s, Update street2=%s, Update postalCode=%s.",
         contact_id,
         payload["phone"],
         payload["street2"],
@@ -315,7 +278,6 @@ def test_update_not_existing_contact(
 
     contacts_helper = ContactsHelper()
     update_contact = contacts_helper.update(
-        auth_headers=auth_headers,
         payload=payload,
         contact_id=contact_id,
         expected_status_code=404,
@@ -326,7 +288,7 @@ def test_update_not_existing_contact(
 
 @pytest.mark.contacts
 @pytest.mark.negative
-def test_update_contact_with_wrong_data(auth_headers, manage_contacts):
+def test_update_contact_with_wrong_data(manage_contacts):
     """
     Test updating a contact with invalid data
     (negative test case).
@@ -336,11 +298,6 @@ def test_update_contact_with_wrong_data(auth_headers, manage_contacts):
 
     contact_rs_api, _ = manage_contacts()
     contact_id = contact_rs_api["_id"]
-
-    contacts_helper = ContactsHelper()
-    contacts_helper.delete_contact(
-        auth_headers=auth_headers, contact_id=contact_id
-    )
 
     payload = {
         "firstName": contact_rs_api["firstName"],
@@ -357,10 +314,7 @@ def test_update_contact_with_wrong_data(auth_headers, manage_contacts):
     }
 
     logger.info(
-        "Update contact with id=%s, "
-        "Update phone=%s, "
-        "Update street2=%s, "
-        "Update postalCode=%s.",
+        "Update contact with id=%s, Update phone=%s, Update street2=%s, Update postalCode=%s.",
         contact_id,
         payload["phone"],
         payload["street2"],
@@ -369,15 +323,12 @@ def test_update_contact_with_wrong_data(auth_headers, manage_contacts):
 
     contacts_helper = ContactsHelper()
     update_contact = contacts_helper.update(
-        auth_headers=auth_headers,
         payload=payload,
         contact_id=contact_id,
         expected_status_code=400,
     )
 
-    assert (
-        update_contact is not None
-    ), "Response is None, but expected JSON response."
+    assert update_contact is not None, "Response is None, but expected JSON response."
 
     assert (
         update_contact["message"] == "Validation failed: "
@@ -389,7 +340,7 @@ def test_update_contact_with_wrong_data(auth_headers, manage_contacts):
 
 
 @pytest.mark.contacts
-def test_update_last_name_contact(faker: Faker, auth_headers, manage_contacts):
+def test_update_last_name_contact(faker: Faker, manage_contacts):
     """
     Test updating the last name of a contact.
     """
@@ -404,27 +355,22 @@ def test_update_last_name_contact(faker: Faker, auth_headers, manage_contacts):
 
     contacts_helper = ContactsHelper()
     update_contact = contacts_helper.update(
-        auth_headers=auth_headers,
         payload=payload,
         contact_id=contact_id,
     )
-    assert (
-        update_contact is not None
-    ), "Response is None, but expected JSON response."
+    assert update_contact is not None, "Response is None, but expected JSON response."
 
     assert update_contact["_id"] == contact_id, (
-        f"Expected contact ID to be {contact_id}, "
-        f"but got {update_contact['_id']}"
+        f"Expected contact ID to be {contact_id}, " f"but got {update_contact['_id']}"
     )
 
     assert update_contact["lastName"] == update_lastname, (
-        f"Expected last name to be {update_lastname}, "
-        f"but got {update_contact['lastName']}"
+        f"Expected last name to be {update_lastname}, " f"but got {update_contact['lastName']}"
     )
 
 
 @pytest.mark.contacts
-def test_update_email_contact(faker: Faker, auth_headers, manage_contacts):
+def test_update_email_contact(faker: Faker, manage_contacts):
     """
     Test updating the email address of a contact.
     """
@@ -439,29 +385,22 @@ def test_update_email_contact(faker: Faker, auth_headers, manage_contacts):
 
     contacts_helper = ContactsHelper()
     update_contact = contacts_helper.update(
-        auth_headers=auth_headers,
         payload=payload,
         contact_id=contact_id,
     )
-    assert (
-        update_contact is not None
-    ), "Response is None, but expected JSON response."
+    assert update_contact is not None, "Response is None, but expected JSON response."
 
     assert update_contact["_id"] == contact_id, (
-        f"Expected contact ID to be {contact_id}, "
-        f"but got {update_contact['_id']}"
+        f"Expected contact ID to be {contact_id}, " f"but got {update_contact['_id']}"
     )
 
     assert update_contact["email"] == update_email, (
-        f"Expected email to be {update_email}, "
-        f"but got {update_contact['email']}"
+        f"Expected email to be {update_email}, " f"but got {update_contact['email']}"
     )
 
 
 @pytest.mark.contacts
-def test_upgrade_first_name_and_postal_code_together(
-    faker: Faker, auth_headers, manage_contacts
-):
+def test_upgrade_first_name_and_postal_code_together(faker: Faker, manage_contacts):
     """
     Test updating the first name and postal code
     of a contact simultaneously.
@@ -478,34 +417,28 @@ def test_upgrade_first_name_and_postal_code_together(
 
     contacts_helper = ContactsHelper()
     update_contact = contacts_helper.update(
-        auth_headers=auth_headers,
         payload=payload,
         contact_id=contact_id,
     )
-    assert (
-        update_contact is not None
-    ), "Response is None, but expected JSON response."
+    assert update_contact is not None, "Response is None, but expected JSON response."
 
     assert update_contact["_id"] == contact_id, (
-        f"Expected contact ID to be {contact_id}, "
-        f"but got {update_contact['_id']}"
+        f"Expected contact ID to be {contact_id}, " f"but got {update_contact['_id']}"
     )
 
     assert update_contact["firstName"] == update_firstname, (
-        f"Expected email to be {update_firstname}, "
-        f"but got {update_contact["firstName"]}"
+        f"Expected email to be {update_firstname}, " f"but got {update_contact['firstName']}"
     )
 
     assert update_contact["postalCode"] == update_postal_code, (
-        f"Expected email to be {update_postal_code}, "
-        f"but got {update_contact['postalCode']}"
+        f"Expected email to be {update_postal_code}, " f"but got {update_contact['postalCode']}"
     )
 
 
 @pytest.mark.contacts
 @pytest.mark.negative
 @pytest.mark.parametrize("phone", ["No Phone", 12345678901234567890])
-def test_update_phone_with_wrong_data(auth_headers, manage_contacts, phone):
+def test_update_phone_with_wrong_data(manage_contacts, phone):
     """
     Test updating a contact with an invalid phone number
     (negative test case).
@@ -520,15 +453,12 @@ def test_update_phone_with_wrong_data(auth_headers, manage_contacts, phone):
 
     contacts_helper = ContactsHelper()
     update_contact = contacts_helper.update(
-        auth_headers=auth_headers,
         payload=payload,
         contact_id=contact_id,
         expected_status_code=400,
     )
 
-    assert (
-        update_contact is not None
-    ), "Response is None, but expected JSON response."
+    assert update_contact is not None, "Response is None, but expected JSON response."
 
     assert (
         update_contact["_message"] == "Contact validation failed"
