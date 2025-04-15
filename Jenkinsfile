@@ -13,6 +13,7 @@ pipeline {
                     string(credentialsId: 'MY_PASSWORD', variable: 'PWD')
                 ]) {
                     sh """
+                        rm -rf tests/reports/allure-results && mkdir -p tests/reports/allure-results
                         export EMAIL=${EMAIL}
                         export PWD=${PWD}
                         docker run --rm \\
